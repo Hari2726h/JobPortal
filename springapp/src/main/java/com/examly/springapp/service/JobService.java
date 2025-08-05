@@ -25,4 +25,13 @@ public class JobService {
     public List<Job> searchJobsByKeyword(String key){
         return jobRepository.findByTitleContainingIgnoreCase(key);
     }
+    public Job updateJob(Job job,Long id){
+        Job oldJob=jobRepository.findById(id)
+                   .orElseThrow(()-> new JobNotfoundException("Job not found"));
+        oldJob.setTitle(job.getTitle());
+        oldJob.setDescription(job.getDescription());
+        oldJob.setLocation(job.getLocation());
+        oldJob.setCompanyy(job.getCompanyy());
+        return jobRepository.save(oldJob);
+    }
 }

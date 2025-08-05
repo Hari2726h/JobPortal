@@ -6,13 +6,16 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 import java.util.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 @Entity
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,9 +28,11 @@ public class User {
     private Role role;
     
     @OneToMany(mappedBy="user",cascade=CascadeType.ALL)
+    @JsonIgnore
     private List<Application> applications;
 
     @OneToMany(mappedBy="employer", cascade=CascadeType.ALL)
+    @JsonManagedReference
     private List<Company> companies;
 
 }

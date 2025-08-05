@@ -12,9 +12,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+
 @Getter
 @Setter
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -58,6 +58,7 @@ public class Job {
     }
 @ManyToOne
 @JoinColumn(name="company_id")
+@JsonIgnore
 private Company companyy;
 @OneToMany(mappedBy="job",cascade=CascadeType.ALL)
 @JsonIgnore
