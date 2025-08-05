@@ -27,7 +27,7 @@ public class JobService {
     }
     public Job updateJob(Job job,Long id){
         Job oldJob=jobRepository.findById(id)
-                   .orElseThrow(()-> new JobNotfoundException("Job not found"));
+                   .orElseThrow(()-> new JobNotfoundException("Job not found "));
         oldJob.setTitle(job.getTitle());
         oldJob.setDescription(job.getDescription());
         oldJob.setLocation(job.getLocation());

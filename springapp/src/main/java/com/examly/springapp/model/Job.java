@@ -29,6 +29,7 @@ public class Job {
     private String type;
     private LocalDate postedDate;
     private String description;
+    @ElementCollection
     private List<String> skills;
     private String salaryRange;
     private LocalDate applicationDeadline;

@@ -23,7 +23,7 @@ public class UserService {
     }
     public User updateUser(Long userId,User user){
         User oldUser=userRepository.findById(userId)
-                     .orElseThrow(()-> new RuntimeException("User not found"));
+                     .orElseThrow(()-> new UserNotFoundException("User not found"));
         
         oldUser.setEmail(user.getEmail());
         oldUser.setName(user.getName());
