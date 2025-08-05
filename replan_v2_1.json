@@ -1,0 +1,61 @@
+[
+  {
+    "step": "FIX: Correct backend test database configuration (Spring Boot/JUnit) to enable @DataJpaTest and repository/service/controller tests without requiring external MySQL",
+    "sub_steps": [
+      "Add H2 as a test scope dependency to /springapp/pom.xml for in-memory DB during backend tests only.",
+      "Verify no production code uses H2 references; keep MySQL for runtime.",
+      "Allow Spring Boot tests to auto-configure/inject H2 for JPA/repository/Service/Controller integration tests (automatic if dependency is present).",
+      "If @DataJpaTest, @SpringBootTest, or DataSource config requires test DB, ensure spring.datasource.url is omitted from src/test/resources/application.properties to force random H2 in-memory DB for tests."
+    ],
+    "files_to_add": [
+      "/home/coder/project/workspace/question_generation_service/solutions/9c3d5609-b86c-47d7-b2fb-0877f9916699/springapp/src/test/resources/application.properties"
+    ],
+    "files_to_edit": [
+      "/home/coder/project/workspace/question_generation_service/solutions/9c3d5609-b86c-47d7-b2fb-0877f9916699/springapp/pom.xml"
+    ],
+    "description": "Ensures all JUnit/JPA/Spring controller tests run with an in-memory database and do not fail due to missing MySQL instance."
+  },
+  {
+    "step": "FIX: Address Jest and ESLint config issues in frontend (React) for ES Modules and linting (v9+) support",
+    "sub_steps": [
+      "Add babel-jest and @babel/preset-env and @babel/preset-react as devDependencies in /reactapp/package.json.",
+      "Create babel.config.js in /reactapp with presets for react and env to allow Jest to run ES modules.",
+      "If missing, create jest.config.js to use babel-jest as a transformer for JS/JSX files and to auto-mock CSS/image imports.",
+      "Create a minimal .eslintrc.json in /reactapp to enable ESLint v9+ to lint React code (add recommended plugins).",
+      "If necessary, add \"eslintConfig\" entry in package.json compatible with v9+."
+    ],
+    "files_to_add": [
+      "/home/coder/project/workspace/question_generation_service/solutions/9c3d5609-b86c-47d7-b2fb-0877f9916699/reactapp/babel.config.js",
+      "/home/coder/project/workspace/question_generation_service/solutions/9c3d5609-b86c-47d7-b2fb-0877f9916699/reactapp/jest.config.js",
+      "/home/coder/project/workspace/question_generation_service/solutions/9c3d5609-b86c-47d7-b2fb-0877f9916699/reactapp/.eslintrc.json"
+    ],
+    "files_to_edit": [
+      "/home/coder/project/workspace/question_generation_service/solutions/9c3d5609-b86c-47d7-b2fb-0877f9916699/reactapp/package.json"
+    ],
+    "description": "Allows Jest to process ES modules and ensures ESLint runs with v9+ for React code."
+  },
+  {
+    "step": "Compile and test backend (Spring Boot)",
+    "sub_steps": [
+      "Navigate to /springapp, run mvn clean compile -q -Dspring.main.banner-mode=off to check for compile errors.",
+      "Run mvn test -q -Dspring.main.banner-mode=off to execute JUnit tests.",
+      "Run mvn clean install -q -Dspring.main.banner-mode=off to perform a full build and install."
+    ],
+    "files_to_add": [],
+    "files_to_edit": [],
+    "description": "Verifies backend build and test integrity. Blocks until all server-side logic and API contract is valid."
+  },
+  {
+    "step": "Install, lint, build, and test frontend (React)",
+    "sub_steps": [
+      "Navigate to /reactapp, run npm install.",
+      "Lint using npx eslint src/ --fix.",
+      "Run npm run build to check for build errors.",
+      "Run npm run test:ci to execute all Jest/RTL tests.",
+      "Verify all implementation passes required tests and compiles cleanly."
+    ],
+    "files_to_add": [],
+    "files_to_edit": [],
+    "description": "Ensures UI implementation is error-free and all described behaviors are fully validated by automatic tests."
+  }
+]

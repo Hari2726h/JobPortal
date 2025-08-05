@@ -1,0 +1,232 @@
+[
+  {
+    "step": "Read and analyze backend (Spring Boot) dependencies and structure",
+    "sub_steps": [
+      "Read /home/coder/project/workspace/question_generation_service/solutions/9c3d5609-b86c-47d7-b2fb-0877f9916699/springapp/pom.xml for dependencies: web, data-jpa, validation, mysql, lombok.",
+      "Review the generated application.properties for MySQL datasource, dialect, CORS settings.",
+      "Examine the main application class location (JobPortalApplication.java) for entry point and base package."
+    ],
+    "files_to_add": [],
+    "files_to_edit": [
+      "/home/coder/project/workspace/question_generation_service/solutions/9c3d5609-b86c-47d7-b2fb-0877f9916699/springapp/pom.xml",
+      "/home/coder/project/workspace/question_generation_service/solutions/9c3d5609-b86c-47d7-b2fb-0877f9916699/springapp/src/main/resources/application.properties"
+    ],
+    "description": "Ensure a clear understanding of required dependencies, DB, and structure before backend implementation."
+  },
+  {
+    "step": "Implement the Job entity and repository",
+    "sub_steps": [
+      "Create Job.java entity with required fields, using proper Jakarta/JPA/Lombok annotations.",
+      "Ensure 'skills' is mapped as a collection (List<String>), using @ElementCollection.",
+      "Create JobRepository.java extending JpaRepository<Job, Long>, adding method List<Job> findByTitleContainingIgnoreCase(String keyword)."
+    ],
+    "files_to_add": [
+      "/home/coder/project/workspace/question_generation_service/solutions/9c3d5609-b86c-47d7-b2fb-0877f9916699/springapp/src/main/java/com/examly/springapp/model/Job.java",
+      "/home/coder/project/workspace/question_generation_service/solutions/9c3d5609-b86c-47d7-b2fb-0877f9916699/springapp/src/main/java/com/examly/springapp/repository/JobRepository.java"
+    ],
+    "files_to_edit": [],
+    "description": "Define the main data structure and repository access pattern for jobs to support CRUD and custom queries."
+  },
+  {
+    "step": "Implement JobService for business logic",
+    "sub_steps": [
+      "Create JobService.java as @Service.",
+      "Inject JobRepository.",
+      "Implement getAllJobs(), getJobById(Long id), and searchJobsByKeyword(String keyword).",
+      "Handle 'job not found' scenario for getJobById with an exception."
+    ],
+    "files_to_add": [
+      "/home/coder/project/workspace/question_generation_service/solutions/9c3d5609-b86c-47d7-b2fb-0877f9916699/springapp/src/main/java/com/examly/springapp/service/JobService.java"
+    ],
+    "files_to_edit": [],
+    "description": "Encapsulate core business logic and bridge between repository and controller."
+  },
+  {
+    "step": "Implement JobController for REST API endpoints",
+    "sub_steps": [
+      "Create JobController.java as @RestController.",
+      "Map endpoints: GET /api/jobs, GET /api/jobs/{id}, GET /api/jobs/search.",
+      "Handle not found with 404 and correct error JSON.",
+      "Ensure correct return types, response codes, and parameter names."
+    ],
+    "files_to_add": [
+      "/home/coder/project/workspace/question_generation_service/solutions/9c3d5609-b86c-47d7-b2fb-0877f9916699/springapp/src/main/java/com/examly/springapp/controller/JobController.java"
+    ],
+    "files_to_edit": [],
+    "description": "Expose required backend functionality to the front-end API, with correct HTTP semantics."
+  },
+  {
+    "step": "Implement DataInitializer for populating sample jobs at startup",
+    "sub_steps": [
+      "Create DataInitializer.java as @Component.",
+      "Inject JobRepository or JobService.",
+      "In @PostConstruct, add at least 5 diverse job entries with all required fields.",
+      "Ensure repeated startups do not create duplicates."
+    ],
+    "files_to_add": [
+      "/home/coder/project/workspace/question_generation_service/solutions/9c3d5609-b86c-47d7-b2fb-0877f9916699/springapp/src/main/java/com/examly/springapp/config/DataInitializer.java"
+    ],
+    "files_to_edit": [],
+    "description": "Seed the database to support front-end usage and test coverage."
+  },
+  {
+    "step": "Implement backend (JUnit) test cases",
+    "sub_steps": [
+      "For entity and repository: Create/modify JobTest.java and JobRepositoryTest.java, covering field mapping, custom search methods, and edge/case-insensitivity testing.",
+      "For service: Create/modify JobServiceTest.java, testing all methods including edge/error cases.",
+      "For controller: Create/modify JobControllerTest.java, using MockMvc/WebMvcTest to test endpoints, status codes, and response formats (including 404 error).",
+      "For DataInitializer: Create DataInitializerTest.java to ensure population and field diversity.",
+      "Use mocks (Mockito) for dependencies in service/controller tests.",
+      "Only provided test cases from the Test Cases JSON."
+    ],
+    "files_to_add": [
+      "/home/coder/project/workspace/question_generation_service/solutions/9c3d5609-b86c-47d7-b2fb-0877f9916699/springapp/src/test/java/com/examly/springapp/model/JobTest.java",
+      "/home/coder/project/workspace/question_generation_service/solutions/9c3d5609-b86c-47d7-b2fb-0877f9916699/springapp/src/test/java/com/examly/springapp/repository/JobRepositoryTest.java",
+      "/home/coder/project/workspace/question_generation_service/solutions/9c3d5609-b86c-47d7-b2fb-0877f9916699/springapp/src/test/java/com/examly/springapp/service/JobServiceTest.java",
+      "/home/coder/project/workspace/question_generation_service/solutions/9c3d5609-b86c-47d7-b2fb-0877f9916699/springapp/src/test/java/com/examly/springapp/controller/JobControllerTest.java",
+      "/home/coder/project/workspace/question_generation_service/solutions/9c3d5609-b86c-47d7-b2fb-0877f9916699/springapp/src/test/java/com/examly/springapp/config/DataInitializerTest.java"
+    ],
+    "files_to_edit": [],
+    "description": "Guarantee backend API, logic, and data model compliance using only the provided test cases. Ensure 100% described coverage."
+  },
+  {
+    "step": "Read and analyze frontend (React) dependencies and structure",
+    "sub_steps": [
+      "Read /home/coder/project/workspace/question_generation_service/solutions/9c3d5609-b86c-47d7-b2fb-0877f9916699/reactapp/package.json for dependency check (e.g., axios/fetch, react, react-dom, testing-library, jest).",
+      "Check directory tree: src/, components/, App.js, index.js, etc.",
+      "Review App.css for any base variables and design conventions."
+    ],
+    "files_to_add": [],
+    "files_to_edit": [
+      "/home/coder/project/workspace/question_generation_service/solutions/9c3d5609-b86c-47d7-b2fb-0877f9916699/reactapp/package.json",
+      "/home/coder/project/workspace/question_generation_service/solutions/9c3d5609-b86c-47d7-b2fb-0877f9916699/reactapp/src/App.css"
+    ],
+    "description": "Establish knowledge of libraries, directory structure, and styling to guide component and util implementation."
+  },
+  {
+    "step": "Implement shared utility and constants files for API integration",
+    "sub_steps": [
+      "Create api.js in utils/ for API calls (axios/fetch abstraction to http://localhost:8080 endpoints).",
+      "Create constants.js for base URL and endpoints.",
+      "Add any helper functions (e.g., formatDate)."
+    ],
+    "files_to_add": [
+      "/home/coder/project/workspace/question_generation_service/solutions/9c3d5609-b86c-47d7-b2fb-0877f9916699/reactapp/src/utils/api.js",
+      "/home/coder/project/workspace/question_generation_service/solutions/9c3d5609-b86c-47d7-b2fb-0877f9916699/reactapp/src/utils/constants.js"
+    ],
+    "files_to_edit": [],
+    "description": "Ensure maintainable, reusable API logic and environment configuration for all components."
+  },
+  {
+    "step": "Implement JobListing component and its tests",
+    "sub_steps": [
+      "Create JobListing.js in components/.",
+      "Fetch jobs from /api/jobs using the API util.",
+      "Display job list with {title, company, location, type, postedDate}.",
+      "Show loading indicator, handle and display error messages.",
+      "Style according to design requirements (centered, container, spacing, CSS Vars).",
+      "Create JobListing.test.js to cover rendering, loading, error handling (mock API), field presence."
+    ],
+    "files_to_add": [
+      "/home/coder/project/workspace/question_generation_service/solutions/9c3d5609-b86c-47d7-b2fb-0877f9916699/reactapp/src/components/JobListing.js",
+      "/home/coder/project/workspace/question_generation_service/solutions/9c3d5609-b86c-47d7-b2fb-0877f9916699/reactapp/src/components/JobListing.test.js"
+    ],
+    "files_to_edit": [],
+    "description": "Allows users to see all jobs, with robust error & loading feedback. Test ensures feature parity and error handling."
+  },
+  {
+    "step": "Implement JobSearch component and its tests",
+    "sub_steps": [
+      "Create JobSearch.js in components/.",
+      "Input field + Search button; on search, call /api/jobs/search?keyword={searchTerm}.",
+      "Update parent/listing component with filtered jobs; display empty message if no results.",
+      "Make search case-insensitive.",
+      "Style input/button per requirements.",
+      "Create JobSearch.test.js for rendering, search API integration, empty result, and case-insensitivity (with detailed mocking)."
+    ],
+    "files_to_add": [
+      "/home/coder/project/workspace/question_generation_service/solutions/9c3d5609-b86c-47d7-b2fb-0877f9916699/reactapp/src/components/JobSearch.js",
+      "/home/coder/project/workspace/question_generation_service/solutions/9c3d5609-b86c-47d7-b2fb-0877f9916699/reactapp/src/components/JobSearch.test.js"
+    ],
+    "files_to_edit": [],
+    "description": "Enables users to filter job listings by keyword, with robust UI/UX and error states. Tests ensure exact behavior and edge-case handling."
+  },
+  {
+    "step": "Implement JobDetail component and its tests",
+    "sub_steps": [
+      "Create JobDetail.js in components/.",
+      "On job click (from listing), fetch details via /api/jobs/{jobId}.",
+      "Show all details (including description, skills, salary, deadline).",
+      "Include 'Back to Listings' button for navigation (lift state to App if needed).",
+      "Handle errors with proper messaging.",
+      "Style block as a detailed, visually differentiated view.",
+      "Create JobDetail.test.js for detail rendering, error display, back button, and integration with JobListing."
+    ],
+    "files_to_add": [
+      "/home/coder/project/workspace/question_generation_service/solutions/9c3d5609-b86c-47d7-b2fb-0877f9916699/reactapp/src/components/JobDetail.js",
+      "/home/coder/project/workspace/question_generation_service/solutions/9c3d5609-b86c-47d7-b2fb-0877f9916699/reactapp/src/components/JobDetail.test.js"
+    ],
+    "files_to_edit": [],
+    "description": "Supports detailed job exploration and navigation. Test ensures full field display, back navigation, and error edge-cases."
+  },
+  {
+    "step": "Integrate components and manage view state in App.js",
+    "sub_steps": [
+      "Edit App.js to manage list/search/detail state.",
+      "Render JobSearch, JobListing, and JobDetail appropriately.",
+      "Pass data and handlers (lifting state up as needed).",
+      "Ensure all navigation between listing/detail/search flows work.",
+      "Apply consistent styling and centered containers."
+    ],
+    "files_to_add": [],
+    "files_to_edit": [
+      "/home/coder/project/workspace/question_generation_service/solutions/9c3d5609-b86c-47d7-b2fb-0877f9916699/reactapp/src/App.js",
+      "/home/coder/project/workspace/question_generation_service/solutions/9c3d5609-b86c-47d7-b2fb-0877f9916699/reactapp/src/App.css"
+    ],
+    "description": "Wires up the core UI, enables component integration, and ensures a seamless job explore experience."
+  },
+  {
+    "step": "Implement frontend (React/Jest) test cases",
+    "sub_steps": [
+      "Add/modify test files for each component to exactly match provided test cases (rendering, loading, error, integration, navigation, search).",
+      "Use React Testing Library and jest mocking for API.",
+      "Integrate end-to-end flow tests between components (JobListing \u2192 JobDetail, search and list integration).",
+      "Ensure no manual RTL cleanup().",
+      "Use precise selectors (data-testid), mimic API responses and errors exactly as expected.",
+      "Coverage: ten test cases as enumerated, placed in corresponding .test.js files."
+    ],
+    "files_to_add": [
+      "/home/coder/project/workspace/question_generation_service/solutions/9c3d5609-b86c-47d7-b2fb-0877f9916699/reactapp/src/components/JobListing.test.js",
+      "/home/coder/project/workspace/question_generation_service/solutions/9c3d5609-b86c-47d7-b2fb-0877f9916699/reactapp/src/components/JobSearch.test.js",
+      "/home/coder/project/workspace/question_generation_service/solutions/9c3d5609-b86c-47d7-b2fb-0877f9916699/reactapp/src/components/JobDetail.test.js"
+    ],
+    "files_to_edit": [
+      "/home/coder/project/workspace/question_generation_service/solutions/9c3d5609-b86c-47d7-b2fb-0877f9916699/reactapp/src/App.js"
+    ],
+    "description": "Ensures required test case coverage for rendering, search, error, navigation, and API edge-cases using the React Testing Library/Jest, strictly matching provided test case specs."
+  },
+  {
+    "step": "Compile and test backend (Spring Boot)",
+    "sub_steps": [
+      "Navigate to /springapp, run mvn clean compile -q -Dspring.main.banner-mode=off to check for compile errors.",
+      "Run mvn test -q -Dspring.main.banner-mode=off to execute JUnit tests.",
+      "Run mvn clean install -q -Dspring.main.banner-mode=off to perform a full build and install."
+    ],
+    "files_to_add": [],
+    "files_to_edit": [],
+    "description": "Verifies backend build and test integrity. Blocks until all server-side logic and API contract is valid."
+  },
+  {
+    "step": "Install, lint, build, and test frontend (React)",
+    "sub_steps": [
+      "Navigate to /reactapp, run npm install.",
+      "Lint using npx eslint src/ --fix.",
+      "Run npm run build to check for build errors.",
+      "Run npm run test:ci to execute all Jest/RTL tests.",
+      "Verify all implementation passes required tests and compiles cleanly."
+    ],
+    "files_to_add": [],
+    "files_to_edit": [],
+    "description": "Ensures UI implementation is error-free and all described behaviors are fully validated by automatic tests."
+  }
+]
