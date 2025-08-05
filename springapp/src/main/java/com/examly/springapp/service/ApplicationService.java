@@ -19,4 +19,21 @@ public class ApplicationService {
      public List<Application> getAllApplications(){
       return applicationRepository.findAll();
      }
+
+     public Application getApplicationById(Long id){
+      return applicationRepository.findById(id)
+      .orElseThrow(()-> new RuntimeException("Application Not found"));
+     }
+
+     public Application updateApplication(Application application,Long id){
+      Application old=applicationRepository.findById(id)
+                     .orElseThrow(()-> new RuntimeException("Application Not found"));
+      old.setResumeUrl(application.getResumeUrl());
+      old.setStatus(application.getStatus());
+      return applicationRepository.save(old);
+     }
+
+     public void deleteApplicationById(Long id){
+      applicationRepository.deleteById(id);
+     }
 }

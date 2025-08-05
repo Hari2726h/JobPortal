@@ -3,14 +3,19 @@ package com.examly.springapp.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.examly.springapp.model.Application;
 import com.examly.springapp.service.ApplicationService;
+
+import jakarta.websocket.server.PathParam;
 
 @RestController
 @RequestMapping("/api/applications")
@@ -26,5 +31,20 @@ public class ApplicationController {
     @GetMapping
     public List<Application> getAllApplications(){
         return applicationService.getAllApplications();
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteApplicationById(@PathVariable Long id){
+        applicationService.deleteApplicationById(id);
+    }
+
+    @PutMapping("/{id}")
+    public Application updateApplication(@PathVariable Long id,@RequestBody Application application){
+       return applicationService.updateApplication(application,id);
+    }
+
+    @GetMapping("/{id}")
+    public Application getApplicationById(@PathVariable Long id){
+       return applicationService.getApplicationById(id);
     }
 }

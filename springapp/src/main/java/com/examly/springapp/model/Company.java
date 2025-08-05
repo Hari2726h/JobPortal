@@ -33,7 +33,7 @@ public class Company {
     private String description;
     private String location;
     private String industry;
-    private String website;
+    private String website; 
 
     @ManyToOne
     @JsonBackReference

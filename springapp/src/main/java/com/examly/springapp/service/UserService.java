@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.examly.springapp.exception.UserNotFoundException;
 import com.examly.springapp.model.User;
 import com.examly.springapp.repository.UserRepository;
 
@@ -20,8 +21,21 @@ public class UserService {
     public List<User> getAllUser(){
         return userRepository.findAll();
     }
+    public User updateUser(Long userId,User user){
+        User oldUser=userRepository.findById(userId)
+                     .orElseThrow(()-> new RuntimeException("User not found"));
+        
+        oldUser.setEmail(user.getEmail());
+        oldUser.setName(user.getName());
+        return userRepository.save(oldUser);
 
-    public void deleteAllUsers(){
-        userRepository.deleteAll();
-    }    
+    }
+    public User getUserById(Long id){
+        return userRepository.findById(id).orElseThrow(()->new UserNotFoundException("User not found"));
+    }
+    public void deleteUserById(Long id){
+    userRepository.deleteById(id);
+    }
+    
+     
 }
