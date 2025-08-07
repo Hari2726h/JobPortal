@@ -27,11 +27,18 @@ public class UserController {
     //     userService.createUser(user);
     //     return "User Registered Succesfully";
     // }
+    
+    // @PostMapping("/login")
+    // public String LoginUser(@RequestBody User user){
+    //     return userService.loginUser(user);
+    //     // return "User Login Succesfully";
+    // }
 
-    @GetMapping
-    public List<User> getAllUsers(){
-        return userService.getAllUser();
-    }
+
+    // @GetMapping
+    // public List<User> getAllUsers(){
+    //     return userService.getAllUser();
+    // }
     
     @DeleteMapping("/{id}")
     public void deleteUserById(@PathVariable Long id){

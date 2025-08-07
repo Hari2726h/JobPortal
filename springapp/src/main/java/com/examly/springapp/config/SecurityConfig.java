@@ -27,8 +27,9 @@
 //         return new BCryptPasswordEncoder();
 //     }
 
-//     // @Bean
-//     // public AuthenticationManager authManager(AuthenticationConfiguration config) throws Exception{
-//     //     return config.getAuthenticationManager();
-//     // }
+// //     // @Bean
+// //     // public AuthenticationManager authManager(AuthenticationConfiguration config) throws Exception{
+// //     //     return config.getAuthenticationManager();
+// //     // }
+// // }
 // }

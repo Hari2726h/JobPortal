@@ -6,10 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 // import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+// import com.examly.springapp.config.JWTUtil;
 import com.examly.springapp.exception.UserNotFoundException;
 import com.examly.springapp.model.User;
 import com.examly.springapp.repository.UserRepository;
+import java.util.Optional;
 
+// import javax.management.RuntimeErrorException;
 @Service
 public class UserService {
     @Autowired
@@ -21,9 +24,23 @@ public class UserService {
     //     user.setPassword(passwordEncoder.encode(user.getPassword()));
     //      userRepository.save(user);
     // }
-    public List<User> getAllUser(){
-        return userRepository.findAll();
-    }
+
+    // public String loginUser(User loginRequest){
+    //     Optional<User> optionalUser=userRepository.findByEmail(loginRequest.getEmail());
+    //     if(optionalUser.isEmpty()){
+    //         throw new UserNotFoundException("Invalid email");
+    //     }
+    //     User user=optionalUser.get();
+    //     if(!passwordEncoder.matches(loginRequest.getPassword(),user.getPassword())){
+    //         throw new UserNotFoundException("Invalid password");
+    //     }
+    //     return JWTUtil.generateToken(user.getEmail());
+
+    // }
+
+    // public List<User> getAllUser(){
+    //     return userRepository.findAll();
+    // }
     public User updateUser(Long userId,User user){
         User oldUser=userRepository.findById(userId)
                      .orElseThrow(()-> new UserNotFoundException("User not found"));
