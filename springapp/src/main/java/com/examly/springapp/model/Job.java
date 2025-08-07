@@ -57,6 +57,9 @@ public class Job {
         this.salaryRange= salaryRange;
         this.applicationDeadline= applicationDeadline;
     }
+
+
+    
 @ManyToOne
 @JoinColumn(name="company_id")
 @JsonIgnore

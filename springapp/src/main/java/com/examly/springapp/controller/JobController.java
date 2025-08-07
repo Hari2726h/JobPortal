@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.examly.springapp.model.Job;
-import com.examly.springapp.repository.JobRepository;
 import com.examly.springapp.service.JobService;
 
 @RestController
@@ -46,11 +45,8 @@ public class JobController {
         return jobService.updateJob(job,id);
     }
     
-    // @Autowired
-    // private JobRepository jobRepository;
-
-    // @DeleteMapping("/delete/{did}")
-    // public void deleteJobById(@PathVariable Long did){
-    //      jobRepository.deleteById(did);
-    // }
+    @DeleteMapping("/delete/{did}")
+    public void deleteJobById(@PathVariable Long did){
+         jobService.deleteJobById(did);
+    }
 }

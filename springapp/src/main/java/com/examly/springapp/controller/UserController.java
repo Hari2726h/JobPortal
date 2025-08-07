@@ -21,10 +21,12 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @PostMapping
-    public User createUser(@RequestBody User user){
-        return userService.createUser(user);
-    }
+    // @PostMapping
+    // public String registerUser(@RequestBody User user){
+    //     System.out.print(user);
+    //     userService.createUser(user);
+    //     return "User Registered Succesfully";
+    // }
 
     @GetMapping
     public List<User> getAllUsers(){

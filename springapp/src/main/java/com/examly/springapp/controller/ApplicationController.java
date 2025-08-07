@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.examly.springapp.model.Application;
 import com.examly.springapp.service.ApplicationService;
 
-import jakarta.websocket.server.PathParam;
 
 @RestController
 @RequestMapping("/api/applications")

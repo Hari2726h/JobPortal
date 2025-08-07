@@ -13,6 +13,7 @@ import com.examly.springapp.repository.JobRepository;
 public class JobService {
     @Autowired
     private JobRepository jobRepository;
+
     public Job createJob(Job job){
         return jobRepository.save(job);
     }
@@ -33,5 +34,8 @@ public class JobService {
         oldJob.setLocation(job.getLocation());
         oldJob.setCompanyy(job.getCompanyy());
         return jobRepository.save(oldJob);
+    }
+    public void deleteJobById(Long id){
+        jobRepository.deleteById(id);
     }
 }
