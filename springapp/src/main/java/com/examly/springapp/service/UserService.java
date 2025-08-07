@@ -37,10 +37,13 @@ public class UserService {
     //     return JWTUtil.generateToken(user.getEmail());
 
     // }
+    public User createUser(User user){
+        return userRepository.save(user);
+    }
 
-    // public List<User> getAllUser(){
-    //     return userRepository.findAll();
-    // }
+    public List<User> getAllUser(){
+        return userRepository.findAll();
+    }
     public User updateUser(Long userId,User user){
         User oldUser=userRepository.findById(userId)
                      .orElseThrow(()-> new UserNotFoundException("User not found"));

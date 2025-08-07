@@ -3,6 +3,7 @@ package com.examly.springapp.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,7 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.examly.springapp.model.Application;
+import com.examly.springapp.model.Role;
+import com.examly.springapp.model.User;
 import com.examly.springapp.service.ApplicationService;
+import com.examly.springapp.service.UserService;
 
 
 @RestController
@@ -22,9 +26,18 @@ public class ApplicationController {
     @Autowired
     private ApplicationService applicationService;
     
-    @PostMapping
-    public Application createApplication(@RequestBody Application application){
-        return applicationService.createApplication(application);
+    @Autowired
+    private UserService userService;
+
+    @PostMapping("/{userId}")
+    public ResponseEntity<?> createApplication(@PathVariable("userId") Long id,@RequestBody Application application){
+        User user=userService.getUserById(id);
+        if(user.getRole()==Role.USER){
+            application.setUser(user);
+            return ResponseEntity.ok(applicationService.createApplication(application));
+        }else{
+            return ResponseEntity.status(403).body("Only users can create applications");
+        }
     }
 
     @GetMapping

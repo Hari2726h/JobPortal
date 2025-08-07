@@ -23,7 +23,7 @@ public class User {
 
     private String name;
     private String email;
-    // @JsonIgnore
+    @JsonIgnore
     private String password;
     @Enumerated(EnumType.STRING)
     private Role role;
