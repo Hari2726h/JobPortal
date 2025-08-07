@@ -3,61 +3,46 @@ package com.examly.springapp.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
+import com.examly.springapp.model.Role;
 import com.examly.springapp.model.User;
 import com.examly.springapp.service.UserService;
 
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
+
     @Autowired
     private UserService userService;
 
-    // @PostMapping
-    // public String registerUser(@RequestBody User user){
-    //     System.out.print(user);
-    //     userService.createUser(user);
-    //     return "User Registered Succesfully";
-    // }
-    
-    // @PostMapping("/login")
-    // public String LoginUser(@RequestBody User user){
-    //     return userService.loginUser(user);
-    //     // return "User Login Succesfully";
-    // }
-
-    @PostMapping
-    public User createUser(@RequestBody User user){
-        return userService.createUser(user);
-    }
-
     @GetMapping
-    public List<User> getAllUsers(){
+    public List<User> getAllUsers() {
         return userService.getAllUser();
     }
-    
-    @DeleteMapping("/{id}")
-    public void deleteUserById(@PathVariable Long id){
-         userService.deleteUserById(id);
-    }
 
+    @DeleteMapping("/{id}/{adminId}")
+    public ResponseEntity<?> deleteUserById(@PathVariable Long id, @PathVariable Long adminId) {
+        User admin = userService.getUserById(adminId);
+        if (admin.getRole() == Role.ADMIN) {
+            userService.deleteUserById(id);
+            return ResponseEntity.ok("User deleted");
+        }
+        return ResponseEntity.status(403).body("Only ADMINs can delete users.");
+    }
 
     @GetMapping("/{id}")
-    public User getUserById(@PathVariable Long id){
+    public User getUserById(@PathVariable Long id) {
         return userService.getUserById(id);
     }
-    
-    @PutMapping("/{id}")
-    public User updatedUser(@RequestBody User user,@PathVariable Long id){
-        return userService.updateUser(id, user);
+
+    @PutMapping("/{id}/{adminId}")
+    public ResponseEntity<?> updatedUser(@RequestBody User user, @PathVariable Long id, @PathVariable Long adminId) {
+        User admin = userService.getUserById(adminId);
+        if (admin.getRole() == Role.ADMIN) {
+            return ResponseEntity.ok(userService.updateUser(id, user));
+        }
+        return ResponseEntity.status(403).body("Only ADMINs can update user data.");
     }
-    
 }

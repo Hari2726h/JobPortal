@@ -19,44 +19,53 @@ import com.examly.springapp.model.User;
 import com.examly.springapp.service.ApplicationService;
 import com.examly.springapp.service.UserService;
 
-
 @RestController
 @RequestMapping("/api/applications")
 public class ApplicationController {
     @Autowired
     private ApplicationService applicationService;
-    
+
     @Autowired
     private UserService userService;
 
     @PostMapping("/{userId}")
-    public ResponseEntity<?> createApplication(@PathVariable("userId") Long id,@RequestBody Application application){
-        User user=userService.getUserById(id);
-        if(user.getRole()==Role.USER){
+    public ResponseEntity<?> createApplication(@PathVariable("userId") Long id, @RequestBody Application application) {
+        User user = userService.getUserById(id);
+        if (user.getRole() == Role.USER) {
             application.setUser(user);
             return ResponseEntity.ok(applicationService.createApplication(application));
-        }else{
+        } else {
             return ResponseEntity.status(403).body("Only users can create applications");
         }
     }
 
     @GetMapping
-    public List<Application> getAllApplications(){
+    public List<Application> getAllApplications() {
         return applicationService.getAllApplications();
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteApplicationById(@PathVariable Long id){
-        applicationService.deleteApplicationById(id);
+    @DeleteMapping("/{id}/{userId}")
+    public ResponseEntity<?> deleteApplicationById(@PathVariable Long id, @PathVariable Long userId) {
+        User user = userService.getUserById(userId);
+        if (user.getRole() == Role.ADMIN || user.getRole() == Role.USER) {
+            applicationService.deleteApplicationById(id);
+            return ResponseEntity.ok("Deleted successfully");
+        }
+        return ResponseEntity.status(403).body("Only USER or ADMIN can delete applications.");
     }
 
-    @PutMapping("/{id}")
-    public Application updateApplication(@PathVariable Long id,@RequestBody Application application){
-       return applicationService.updateApplication(application,id);
+    @PutMapping("/{id}/{userId}")
+    public ResponseEntity<?> updateApplication(@PathVariable Long id, @PathVariable Long userId,
+            @RequestBody Application application) {
+        User user = userService.getUserById(userId);
+        if (user.getRole() == Role.USER) {
+            return ResponseEntity.ok(applicationService.updateApplication(application, id));
+        }
+        return ResponseEntity.status(403).body("Only USERs can update applications.");
     }
 
     @GetMapping("/{id}")
-    public Application getApplicationById(@PathVariable Long id){
-       return applicationService.getApplicationById(id);
+    public Application getApplicationById(@PathVariable Long id) {
+        return applicationService.getApplicationById(id);
     }
 }
