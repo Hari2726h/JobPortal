@@ -22,8 +22,9 @@ public class User {
     private Long id;
 
     private String name;
+    @Column(unique = true, nullable=false)
     private String email;
-    @JsonIgnore
+    // @JsonIgnore
     private String password;
     @Enumerated(EnumType.STRING)
     private Role role;

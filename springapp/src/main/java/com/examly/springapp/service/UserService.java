@@ -4,15 +4,14 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 // import org.springframework.security.crypto.password.PasswordEncoder;
+// import com.examly.springapp.config.JWTUtil;
 import org.springframework.stereotype.Service;
 
-// import com.examly.springapp.config.JWTUtil;
 import com.examly.springapp.exception.UserNotFoundException;
 import com.examly.springapp.model.User;
 import com.examly.springapp.repository.UserRepository;
-import java.util.Optional;
+// import java.util.Optional;
 
-// import javax.management.RuntimeErrorException;
 @Service
 public class UserService {
     @Autowired
@@ -20,6 +19,7 @@ public class UserService {
 
     // @Autowired
     // private PasswordEncoder passwordEncoder;
+    
     // public void createUser(User user){
     //     user.setPassword(passwordEncoder.encode(user.getPassword()));
     //      userRepository.save(user);
@@ -37,9 +37,9 @@ public class UserService {
     //     return JWTUtil.generateToken(user.getEmail());
 
     // }
-    public User createUser(User user){
-        return userRepository.save(user);
-    }
+    // public User createUser(User user){
+    //     return userRepository.save(user);
+    // }
 
     public List<User> getAllUser(){
         return userRepository.findAll();
