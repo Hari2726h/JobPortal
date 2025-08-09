@@ -1,41 +1,53 @@
 import React, { useEffect, useRef, useState } from 'react'
-import JobDetail from './JobDetail';
+import * as api from '../utils/api';
 
-const JobListing = () => {
-const[count,setCount]=useState(0);
-const foc=useRef();
-const add= ()=>{
-    setCount(count+1);
-}
-const sub= ()=>{
-    setCount(count-1);
-}
-const clear= ()=>{
-    setCount(0);
-}
-useEffect(()=>{
-    console.log("No dependency");
+const JobListing = ({setJobs,jobs=[],onSelectJob}) => {
+   const[localJobs,setLocalJobs]=useState([]);
+   const[loading,setLoading]=useState(true);
+   const[error,setError]=useState('');
+   
+   useEffect(()=>{
+let isMounted=true;
+setLoading(true);
+api.fetchJobs()
+.then((data)=>{
+    if(!isMounted) return;
+    setJobs && setJobs(data);
+    setLocalJobs(data);
+    setError('');
 })
-useEffect(()=>{
-    console.log("Empty dependency");
-    foc.current.focus();
-},[])
-useEffect(()=>{
-    console.log("Specific dependency");
-},[count])
-  return (
-    <>
-    <h1>{count}</h1>
-    <button onClick={add}>Increment</button>
-    <button onClick={sub}>Decrement</button>
-    <button onClick={clear}>clear</button>
-    <div>JobListing</div>
-    <input type="text" ref={foc}/>
-    {/* <JobDetail name="Leo" count={count}></JobDetail> */}
-
-    </>
-    // <header></header>
-  )
-}
+.catch(()=>{
+    if(!isMounted) return;
+    setError('Failed to fetch jobs');
+    setLocalJobs([]);
+})
+.finally(()=>{
+    if(isMounted) setLoading(false);
+});
+return () =>{isMounted=false; };
+   },[setJobs]);
+   if(loading) return <div data-testid="loading-indicator">Loading...</div>
+   if(error) return <div data-testid="error-message">{error}</div>
+   if(!localJobs || localJobs.length==0){
+    return <div data-testid="no-jobs-message">No jobs available</div>;
+   }
+   return (
+   <div data-testid="job-listing">
+    {localJobs.map((job)=>(
+        <div key={job.id} data-testid={`job-item-${job.id}`} onClick={()=> onSelectJob && onSelectJob(job.id)} style={{cursor: 'pointer',marginBottom: '10px'}}>
+            <h3>{job.title}</h3>
+            <p>{job.company}</p>
+            <p>{job.location}</p>
+            <p>{job.type}</p>
+            <p>{job.postedDate}</p>
+            <p>{job.description}</p>
+            <p>{job.skills}</p>
+            <p>{job.salaryRange}</p>
+            <p>{job.applicationDeadline}</p>
+            </div>
+    ))}
+   </div>
+  );
+};
 
 export default JobListing

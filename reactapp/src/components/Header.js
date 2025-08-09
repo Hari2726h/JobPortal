@@ -1,6 +1,6 @@
 import React from 'react'
 import { Navbar, Nav, Container, Form, FormControl } from 'react-bootstrap';
-import { HouseDoorFill, PeopleFill, BriefcaseFill, ChatDotsFill, BellFill } from 'react-bootstrap-icons';
+import { HouseDoorFill, PersonPlusFill, BriefcaseFill, BoxArrowInRight, BellFill } from 'react-bootstrap-icons';
 const Header = () => {
   const hoverHandlers = {
     onMouseEnter: (e) => e.currentTarget.style.setProperty('color', '#ff9800', 'important'),
@@ -24,14 +24,14 @@ const Header = () => {
               style={{ transition: '0.3s' }}
               {...hoverHandlers}>
               <HouseDoorFill size={20} className='me-1' />Home</Nav.Link>
-            <Nav.Link href='#network' className='text-light px-2 d-flex align-items-center' style={{ transition: '0.3s' }}
-              {...hoverHandlers}><PeopleFill size={20} className='me-1' />Network</Nav.Link>
             <Nav.Link href='#jobs' className='text-light px-2 d-flex align-items-center' style={{ transition: '0.3s' }}
               {...hoverHandlers}><BriefcaseFill size={20} className='me-1' />Jobs</Nav.Link>
-            <Nav.Link href='#messages' className='text-light px-2 d-flex align-items-center' style={{ transition: '0.3s' }}
-              {...hoverHandlers}><ChatDotsFill size={20} className='me-1' />Messages</Nav.Link>
             <Nav.Link href='#notification' className='text-light px-2 d-flex align-items-center' style={{ transition: '0.3s' }}
               {...hoverHandlers}><BellFill size={20} className='me-1' />Notification</Nav.Link>
+            <Nav.Link href='#messages' className='text-light px-2 d-flex align-items-center' style={{ transition: '0.3s' }}
+              {...hoverHandlers}><BoxArrowInRight size={20} className='me-1' />Login</Nav.Link>
+            <Nav.Link href='#network' className='text-light px-2 d-flex align-items-center' style={{ transition: '0.3s' }}
+              {...hoverHandlers}><PersonPlusFill size={20} className='me-1' />Register</Nav.Link>
           </Nav>
         </div>
               </Navbar.Collapse>

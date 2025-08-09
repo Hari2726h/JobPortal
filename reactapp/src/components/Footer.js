@@ -9,6 +9,7 @@ const Footer = () => {
     <footer className='bg-dark text-light py-4 mt-auto border-top border-secondary'>
       <Container>
         <Row>
+          
             <Col md={3}>
                 <h6>About</h6>
                 <ul className="list-unstyled">
