@@ -2,13 +2,16 @@ import React, { useEffect, useRef, useState } from 'react'
 import * as api from '../utils/api';
 
 const JobListing = ({setJobs,jobs=[],onSelectJob}) => {
-   const[localJobs,setLocalJobs]=useState([]);
+   const[localJobs,setLocalJobs]=useState(jobs);
    const[loading,setLoading]=useState(true);
    const[error,setError]=useState('');
    
    useEffect(()=>{
 let isMounted=true;
 setLoading(true);
+setError('');
+setLocalJobs([]);
+// Promise.resolve().then(()=>{
 api.fetchJobs()
 .then((data)=>{
     if(!isMounted) return;
@@ -24,6 +27,7 @@ api.fetchJobs()
 .finally(()=>{
     if(isMounted) setLoading(false);
 });
+// });
 return () =>{isMounted=false; };
    },[setJobs]);
    if(loading) return <div data-testid="loading-indicator">Loading...</div>
@@ -39,11 +43,11 @@ return () =>{isMounted=false; };
             <p>{job.company}</p>
             <p>{job.location}</p>
             <p>{job.type}</p>
-            <p>{job.postedDate}</p>
+            {/* <p>{job.postedDate}</p>
             <p>{job.description}</p>
             <p>{job.skills}</p>
             <p>{job.salaryRange}</p>
-            <p>{job.applicationDeadline}</p>
+            <p>{job.applicationDeadline}</p> */}
             </div>
     ))}
    </div>
