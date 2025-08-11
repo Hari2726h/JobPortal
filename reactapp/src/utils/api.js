@@ -142,7 +142,7 @@ export const deleteCompanyById = async (id, userId) => {
 
 export const createApplication = async (userId, applicationData) => {
         try {
-                const response = await applicationsApi.post(`/${userId}, applicationData`);
+                const response = await applicationsApi.post(`/${userId}`, applicationData);
                                                                                                                                                                                                                                                                                                                       return response.data;
         } catch (error) {
                 console.error('API Error in createApplication:', error);

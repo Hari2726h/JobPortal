@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.examly.springapp.model.Job;
 import com.examly.springapp.service.JobService;
 
-// @CrossOrigin(origins = "")
 @RestController
 @RequestMapping("/api/jobs")
 public class JobController {

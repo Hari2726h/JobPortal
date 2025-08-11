@@ -21,15 +21,19 @@ const Profile = () => {
             try {
                 const data = await getUserById(storedUser.id);
                 setUserData(data);
-                setLoading(false);
             } catch {
                 setError('Failed to load profile information.');
+            } finally {
                 setLoading(false);
             }
         };
 
         fetchProfile();
     }, [storedUser, navigate]);
+
+    const handleRequestUpdate = () => {
+        alert('Please contact support@example.com to request profile updates.');
+    };
 
     if (loading) {
         return (
@@ -75,9 +79,16 @@ const Profile = () => {
                                 </div>
                             )}
 
-                            <Button variant="primary" className="me-2" onClick={() => navigate('/edit-profile')}>
-                                Edit Profile
-                            </Button>
+                            {userData?.role === 'admin' ? (
+                                <Button variant="primary" className="me-2" onClick={() => navigate('/edit-profile')}>
+                                    Edit Profile
+                                </Button>
+                            ) : (
+                                <Button variant="outline-primary" className="me-2" onClick={handleRequestUpdate}>
+                                    Request Profile Update
+                                </Button>
+                            )}
+
                             <Button variant="secondary" onClick={() => navigate('/')}>
                                 Back to Home
                             </Button>
@@ -90,5 +101,3 @@ const Profile = () => {
 };
 
 export default Profile;
-
-                 

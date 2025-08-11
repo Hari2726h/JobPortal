@@ -9,6 +9,7 @@ const ApplicationPage = () => {
     const [job, setJob] = useState(null);
     const [loadingJob, setLoadingJob] = useState(true);
     const [errorJob, setErrorJob] = useState('');
+
     const [coverLetter, setCoverLetter] = useState('');
     const [resumeLink, setResumeLink] = useState('');
     const [loadingSubmit, setLoadingSubmit] = useState(false);
@@ -19,7 +20,6 @@ const ApplicationPage = () => {
         const loadJob = async () => {
             try {
                 const data = await api.fetchJobById(jobId);
-                if (!data) throw new Error();
                 setJob(data);
             } catch {
                 setErrorJob('Failed to load job details.');
@@ -44,14 +44,14 @@ const ApplicationPage = () => {
             return;
         }
 
-        if (!job?.id) {
+        if (!job || !job.id) {
             setErrorSubmit('Job information is missing.');
             setLoadingSubmit(false);
             return;
         }
 
         const applicationData = {
-            jobId: job.id,
+            job: { id: job.id },
             coverLetter,
             resumeLink,
             appliedDate: new Date().toISOString(),
@@ -62,7 +62,10 @@ const ApplicationPage = () => {
             setSuccess('Application submitted successfully!');
             setCoverLetter('');
             setResumeLink('');
-            setTimeout(() => navigate('/'), 1500);
+
+            setTimeout(() => {
+                navigate('/');
+            }, 1500);
         } catch {
             setErrorSubmit('Failed to submit application.');
         } finally {

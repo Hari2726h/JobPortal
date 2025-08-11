@@ -1,77 +1,38 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { Card, Spinner, Alert, Button } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 import * as api from '../utils/api';
-import { Form, Button, Spinner, Alert, Card } from 'react-bootstrap';
 
-const ApplicationPage = () => {
-  const { jobId } = useParams();
+const AppliedJobsPage = () => {
   const navigate = useNavigate();
-  const [job, setJob] = useState(null);
-  const [loadingJob, setLoadingJob] = useState(true);
-  const [errorJob, setErrorJob] = useState('');
-
-  const [coverLetter, setCoverLetter] = useState('');
-  const [resumeLink, setResumeLink] = useState('');
-  const [loadingSubmit, setLoadingSubmit] = useState(false);
-  const [errorSubmit, setErrorSubmit] = useState('');
-  const [success, setSuccess] = useState('');
+  const [appliedJobs, setAppliedJobs] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
   useEffect(() => {
-    const loadJob = async () => {
+    const fetchAppliedJobs = async () => {
       try {
-        const data = await api.fetchJobById(jobId);
-        setJob(data);
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (!user) {
+          navigate('/login');
+          return;
+        }
+        const data = await api.fetchAppliedJobs(user.id);
+        setAppliedJobs(data);
       } catch {
-        setErrorJob('Failed to load job details.');
+        console.error('Erorr fetching applied jobs',error.message || error.response);
+        setError('Failed to load applied jobs.');
       } finally {
-        setLoadingJob(false);
+        setLoading(false);
       }
     };
-    loadJob();
-  }, [jobId]);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoadingSubmit(true);
-    setErrorSubmit('');
-    setSuccess('');
-
-    const loggedInUser = JSON.parse(localStorage.getItem('user'));
-    if (!loggedInUser) {
-      alert('Please log in before applying.');
-      navigate('/login');
-      return;
-    }
-
-    const applicationData = {
-      jobId: job.id,
-      coverLetter,
-      resumeLink,
-      appliedDate: new Date().toISOString(),
-    };
-
-    try {
-      await api.createApplication(loggedInUser.id, applicationData);
-      setSuccess('Application submitted successfully!');
-      setCoverLetter('');
-      setResumeLink('');
-
-      // Redirect to home after short delay
-      setTimeout(() => {
-        navigate('/');
-      }, 1500);
-    } catch {
-      setErrorSubmit('Failed to submit application.');
-    } finally {
-      setLoadingSubmit(false);
-    }
-  };
-
+    fetchAppliedJobs();
+  }, [navigate]);
 
   return (
     <>
-      {/* Banner */}
-      <section className="py-4 text-light"
+      <section
+        className="py-4 text-light"
         style={{
           background: 'linear-gradient(135deg, #0d6efd, #001f3f)',
           minHeight: '150px',
@@ -80,71 +41,57 @@ const ApplicationPage = () => {
         }}
       >
         <div className="container">
-          <h2 className="fw-bold">Apply for Job</h2>
-          <p className="mb-0">Submit your application below</p>
-        </div>    </section>
+          <h2 className="fw-bold">My Applied Jobs</h2>
+          <p className="mb-0">Track all the jobs you have applied for</p>
+        </div>
+      </section>
 
       <div className="container my-4">
-        {loadingJob && (
+        {loading && (
           <div className="text-center my-5">
             <Spinner animation="border" variant="primary" />
-            <p className="mt-3">Loading job details...</p>
+            <p className="mt-3">Loading applied jobs...</p>
           </div>
         )}
 
-        {errorJob && <Alert variant="danger">{errorJob}</Alert>}
+        {error && <Alert variant="danger">{error}</Alert>}
 
-        {job && (
-          <Card className="shadow-sm border-0 mb-4">
+        {!loading && !error && appliedJobs.length === 0 && (
+          <Alert variant="info" className="text-center">
+            You haven’t applied for any jobs yet.{' '}
+            <Button variant="link" onClick={() => navigate('/')}>
+              Browse Jobs
+            </Button>
+          </Alert>
+        )}
+
+        {appliedJobs.map((job) => (
+          <Card key={job.id} className="shadow-sm border-0 mb-3">
             <Card.Body>
-              <h4 className="fw-bold text-primary">{job.title}</h4>
-              <p className="mb-1"><strong>Company:</strong> {job.company}</p>
-              <p className="mb-1"><strong>Location:</strong> {job.location}</p>
-              <p><strong>Description:</strong> {job.description}</p>
-            </Card.Body>
-          </Card>)}
-
-        {/* Application Form */}
-        <Card className="shadow-sm border-0">
-          <Card.Body>
-            <h5 className="fw-bold mb-3">Application Form</h5>
-            {errorSubmit && <Alert variant="danger">{errorSubmit}</Alert>}
-            {success && <Alert variant="success">{success}</Alert>}
-
-            <Form onSubmit={handleSubmit}>
-              <Form.Group className="mb-3">
-                <Form.Label>Cover Letter</Form.Label>
-                <Form.Control as="textarea"
-                  rows={5}
-                  placeholder="Write your cover letter here..."
-                  value={coverLetter}
-                  onChange={(e) => setCoverLetter(e.target.value)}
-                  required
-                />
-              </Form.Group>
-
-              <Form.Group className="mb-3">
-                <Form.Label>Resume Link</Form.Label>
-                <Form.Control type="url"
-                  placeholder="Paste your resume link (Google Drive, Dropbox, etc.)"
-                  value={resumeLink}
-                  onChange={(e) => setResumeLink(e.target.value)}
-                  required />
-              </Form.Group>
-
-              <Button type="submit"
-                variant="primary"
-                className="fw-semibold"
-                disabled={loadingSubmit}
+              <h5 className="fw-bold text-primary">{job.title}</h5>
+              <p className="mb-1">
+                <strong>Company:</strong> {job.company}
+              </p>
+              <p className="mb-1">
+                <strong>Location:</strong> {job.location}
+              </p>
+              <p>
+                <strong>Applied Date:</strong>{' '}
+                {new Date(job.appliedDate).toLocaleDateString()}
+              </p>
+              <Button
+                variant="outline-primary"
+                size="sm"
+                onClick={() => navigate(`/jobDetail/${ job.id }`)}
               >
-                {loadingSubmit ? 'Submitting...' : 'Submit Application'}
+                View Job
               </Button>
-            </Form>
-          </Card.Body>
-        </Card>
+            </Card.Body>
+          </Card>
+        ))}
       </div>
     </>
   );
 };
 
-export default ApplicationPage;
+export default AppliedJobsPage;
