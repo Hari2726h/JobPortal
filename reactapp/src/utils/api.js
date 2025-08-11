@@ -19,11 +19,20 @@ export const fetchJobs = async () => {
                 throw error;
         }
 };
+export const createJob = async (jobData) => {
+        try {
+                const response = await jobsApi.post('', jobData);
+                return response.data;
+        } catch (error) {
+                console.error('API Error in createJob:', error);
+                throw error;
+        }
+};
 
 export const fetchJobById = async (id) => {
         try {
                 const response = await jobsApi.get(`/${id}`);
-                                return response.data;
+                return response.data;
         } catch (error) {
                 console.error('API Error in fetchJobById:', error);
                 throw error;
@@ -36,6 +45,16 @@ export const searchJobs = async (keyword) => {
                 return response.data;
         } catch (error) {
                 console.error('API Error in searchJobs:', error);
+                throw error;
+        }
+};
+
+export const getJobsByCompany = async (companyId) => {
+        try {
+                const response = await jobsApi.get(`/company/${companyId}`);
+                return response.data;
+        } catch (error) {
+                console.error('API Error in getJobsByCompany:', error);
                 throw error;
         }
 };
@@ -72,7 +91,7 @@ export const loginUser = async (userData) => {
 
 export const deleteUserById = async (id, adminId) => {
         try {
-                const response = await usersApi.delete(`/${id}/${ adminId }`);
+                const response = await usersApi.delete(`/${id}/${adminId}`);
                 return response.data;
         } catch (error) {
                 console.error('API Error in deleteUserById:', error);
@@ -83,7 +102,7 @@ export const deleteUserById = async (id, adminId) => {
 export const getUserById = async (id) => {
         try {
                 const response = await usersApi.get(`/${id}`);
-                                                                                                                                                                                  return response.data;
+                return response.data;
         } catch (error) {
                 console.error('API Error in getUserById:', error);
                 throw error;
@@ -92,7 +111,7 @@ export const getUserById = async (id) => {
 
 export const updateUser = async (id, adminId, userData) => {
         try {
-                const response = await usersApi.put(`/${id}/${ adminId }, userData`);
+                const response = await usersApi.put(`/${id}/${adminId}`, userData);
                 return response.data;
         } catch (error) {
                 console.error('API Error in updateUser:', error);
@@ -100,15 +119,21 @@ export const updateUser = async (id, adminId, userData) => {
         }
 };
 
-export const createCompany = async (userId, companyData) => {
+export const loginCompany = async ({ email, password }) => {
         try {
-                const response = await companiesApi.post(`/create/${ userId }, companyData`);
+                const response = await companiesApi.post('/login', { email, password });
                 return response.data;
         } catch (error) {
-                console.error('API Error in createCompany:', error);
+                console.error('API Error in loginCompany:', error);
                 throw error;
         }
 };
+
+export const createCompany = async (userId, companyData) => {
+        const response = await companiesApi.post(`/create/${userId}`, companyData);
+        return response.data;
+};
+
 
 export const getAllCompanies = async () => {
         try {
@@ -123,16 +148,15 @@ export const getAllCompanies = async () => {
 export const getCompanyById = async (companyId) => {
         try {
                 const response = await companiesApi.get(`/${companyId}`);
-                                                                                                                                                                                                                                                                          return response.data;
+                return response.data;
         } catch (error) {
                 console.error('API Error in getCompanyById:', error);
                 throw error;
         }
 };
-
 export const deleteCompanyById = async (id, userId) => {
         try {
-                const response = await companiesApi.delete(`/${id}/${ userId }`);
+                const response = await companiesApi.delete(`/${id}/${userId}`);
                 return response.data;
         } catch (error) {
                 console.error('API Error in deleteCompanyById:', error);
@@ -143,7 +167,7 @@ export const deleteCompanyById = async (id, userId) => {
 export const createApplication = async (userId, applicationData) => {
         try {
                 const response = await applicationsApi.post(`/${userId}`, applicationData);
-                                                                                                                                                                                                                                                                                                                      return response.data;
+                return response.data;
         } catch (error) {
                 console.error('API Error in createApplication:', error);
                 throw error;
@@ -163,16 +187,26 @@ export const getAllApplications = async () => {
 export const getApplicationById = async (id) => {
         try {
                 const response = await applicationsApi.get(`/${id}`);
-                                                                                                                                                                                                                                                                                                                                                                  return response.data;
+                return response.data;
         } catch (error) {
                 console.error('API Error in getApplicationById:', error);
                 throw error;
         }
 };
 
+export const getApplicationsByCompany = async (companyId) => {
+        try {
+                const response = await applicationsApi.get(`/company/${companyId}`);
+                return response.data;
+        } catch (error) {
+                console.error('API Error in getApplicationsByCompany:', error);
+                throw error;
+        }
+};
+
 export const fetchAppliedJobs = async (userId) => {
         try {
-                const response = await applicationsApi.get(`/user/${ userId }`);
+                const response = await applicationsApi.get(`/user/${userId}`);
                 return response.data;
         } catch (error) {
                 console.error('API Error in fetchAppliedJobs:', error);
@@ -180,9 +214,10 @@ export const fetchAppliedJobs = async (userId) => {
         }
 };
 
+
 export const deleteApplicationById = async (id, userId) => {
         try {
-                const response = await applicationsApi.delete(`/${id}/${ userId }`);
+                const response = await applicationsApi.delete(`/${id}/${userId}`);
                 return response.data;
         } catch (error) {
                 console.error('API Error in deleteApplicationById:', error);
@@ -192,11 +227,10 @@ export const deleteApplicationById = async (id, userId) => {
 
 export const updateApplication = async (id, userId, applicationData) => {
         try {
-                const response = await applicationsApi.put(`/${id}/${ userId }`, applicationData);
+                const response = await applicationsApi.put(`/${id}/${userId}`, applicationData);
                 return response.data;
         } catch (error) {
                 console.error('API Error in updateApplication:', error);
                 throw error;
         }
 };
-

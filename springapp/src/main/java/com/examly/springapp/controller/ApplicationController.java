@@ -75,6 +75,12 @@ public class ApplicationController {
         }
         return ResponseEntity.status(403).body("Only USER or ADMIN can view applications.");
     }
+    @GetMapping("/company/{companyId}")
+    public ResponseEntity<?> getApplicationsByCompany(@PathVariable Long companyId) {
+        List<Application> applications = applicationService.getApplicationsByCompanyId(companyId);
+            return ResponseEntity.ok(applications);
+            }
+            
 
     @DeleteMapping("/{id}/{userId}")
     public ResponseEntity<?> deleteApplicationById(@PathVariable Long id, @PathVariable Long userId) {

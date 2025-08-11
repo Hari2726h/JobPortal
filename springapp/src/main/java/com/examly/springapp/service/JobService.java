@@ -23,6 +23,10 @@ public class JobService {
     public Job getJobById(Long id){
         return jobRepository.findById(id).orElseThrow(()-> new JobNotfoundException("Job not found with id: "+id));
     }
+    public List<Job> getJobsByCompanyId(Long companyId){
+            return jobRepository.findByCompanyyId(companyId);
+            }
+            
     public List<Job> searchJobsByKeyword(String key){
         return jobRepository.findByTitleContainingIgnoreCase(key);
     }

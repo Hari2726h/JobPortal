@@ -45,6 +45,13 @@ public class JobController {
     public Job updatedJob(@RequestBody Job job,@PathVariable Long id){
         return jobService.updateJob(job,id);
     }
+
+    @GetMapping("/company/{companyId}")
+    public ResponseEntity<List<Job>> getJobsByCompany(@PathVariable Long companyId) {
+        List<Job> jobs = jobService.getJobsByCompanyId(companyId);
+            return ResponseEntity.ok(jobs);
+            }
+
     
     @DeleteMapping("/delete/{did}")
     public void deleteJobById(@PathVariable Long did){
