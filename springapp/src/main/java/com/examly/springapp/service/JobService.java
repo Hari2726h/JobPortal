@@ -13,7 +13,7 @@ import com.examly.springapp.repository.JobRepository;
 public class JobService {
     @Autowired
     private JobRepository jobRepository;
-
+    
     public Job createJob(Job job){
         return jobRepository.save(job);
     }

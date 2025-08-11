@@ -1,38 +1,219 @@
 import axios from 'axios';
 
-const API_BASE_URL='https://8080-cdebacccbffbdbcabdecffaffdabdbbe.premiumproject.examly.io/api/jobs';
+const JOBS_API_BASE_URL = 'https://8080-cdebacccbffbdbcabdecffaffdabdbbe.premiumproject.examly.io/api/jobs';
+const USERS_API_BASE_URL = 'https://8080-cdebacccbffbdbcabdecffaffdabdbbe.premiumproject.examly.io/api/users';
+const COMPANIES_API_BASE_URL = 'https://8080-cdebacccbffbdbcabdecffaffdabdbbe.premiumproject.examly.io/api/companies';
+const APPLICATIONS_API_BASE_URL = 'https://8080-cdebacccbffbdbcabdecffaffdabdbbe.premiumproject.examly.io/api/applications';
 
-const api= axios.create({
-    baseURL: API_BASE_URL,
-    headers: {'Content-Type':'application/json'},
+const jobsApi = axios.create({
+        baseURL: JOBS_API_BASE_URL,
+            headers: { 'Content-Type': 'application/json' },
 });
 
-export const fetchJobs=async()=>{
-    try{
-    const response=await api.get('');
-    return response.data;
-    }
-    catch(error){
-        console.log('API Error',error);
-        throw error;
-    }
-};
-export const fetchJobById = async(id)=>{
-    try{
-      const response=await api.get(`/${id}`);
-      return response.data;
-    }catch(error){
-    console.error('API Error in fetchJobById: ',error);
-    throw error;
-    }
-};
+const usersApi = axios.create({
+        baseURL: USERS_API_BASE_URL,
+            headers: { 'Content-Type': 'application/json' },
+});
 
-export const searchJobs=async(keyword)=>{
-    try{
-        const response=await api.get('/search',{params: {keyword}});
-        return response.data;
-    }catch(error){
-        console.error('API Error in searchJobs: ',error);
-        throw error;
-    }
-};
+const companiesApi = axios.create({
+        baseURL: COMPANIES_API_BASE_URL,
+            headers: { 'Content-Type': 'application/json' },
+});
+
+const applicationsApi = axios.create({
+        baseURL: APPLICATIONS_API_BASE_URL,
+            headers: { 'Content-Type': 'application/json' },
+});
+
+/* ---------------- Existing Job APIs ---------------- */
+export const fetchJobs = async () => {
+        try {
+                    const response = await jobsApi.get('');
+                            return response.data;
+        } catch (error) {
+                    console.log('API Error', error);
+                            throw error;
+        }
+    };
+
+    export const fetchJobById = async (id) => {
+            try {
+                        const response = await jobsApi.get(`/${id}`);
+                                return response.data;
+            } catch (error) {
+                        console.error('API Error in fetchJobById: ', error);
+                                throw error;
+            }
+        };
+
+        export const searchJobs = async (keyword) => {
+                try {
+                            const response = await jobsApi.get('/search', { params: { keyword } });
+                                    return response.data;
+                } catch (error) {
+                            console.error('API Error in searchJobs: ', error);
+                                    throw error;
+                }
+            };
+
+            /* ---------------- Existing User APIs ---------------- */
+            export const getAllUsers = async () => {
+                    try {
+                                const response = await usersApi.get('');
+                                        return response.data;
+                    } catch (error) {
+                                console.error('API Error in getAllUsers:', error);
+                                        throw error;
+                    }
+                };
+
+                export const registerUser = async (userData) => {
+                        try {
+                                    const response = await usersApi.post('/register', userData);
+                                            return response.data;
+                        } catch (error) {
+                                    console.error('API Error in registerUser:', error);
+                                            throw error;
+                        }
+                    };
+
+                    export const loginUser = async (userData) => {
+                            try {
+                                        const response = await usersApi.post('/login', userData);
+                                                return response.data;
+                            } catch (error) {
+                                        console.error('API Error in loginUser:', error);
+                                                throw error;
+                            }
+                        };
+
+                        export const deleteUserById = async (id, adminId) => {
+                                try {
+                                            const response = await usersApi.delete(`/${id}/${adminId}`);
+                                                    return response.data;
+                                } catch (error) {
+                                            console.error('API Error in deleteUserById:', error);
+                                                    throw error;
+                                }
+                            };
+
+                            export const getUserById = async (id) => {
+                                    try {
+                                                const response = await usersApi.get(`/${id}`);
+                                                        return response.data;
+                                    } catch (error) {
+                                                console.error('API Error in getUserById:', error);
+                                                        throw error;
+                                    }
+                                };
+
+                                export const updateUser = async (id, adminId, userData) => {
+                                        try {
+                                                    const response = await usersApi.put(`/${id}/${adminId}`, userData);
+                                                            return response.data;
+                                        } catch (error) {
+                                                    console.error('API Error in updateUser:', error);
+                                                            throw error;
+                                        }
+                                    };
+
+                                    /* ---------------- New Company APIs ---------------- */
+                                    export const createCompany = async (userId, companyData) => {
+                                            try {
+                                                        const response = await companiesApi.post(`/create/${userId}`, companyData);
+                                                                return response.data;
+                                            } catch (error) {
+                                                        console.error('API Error in createCompany:', error);
+                                                                throw error;
+                                            }
+                                        };
+
+                                        export const getAllCompanies = async () => {
+                                                try {
+                                                            const response = await companiesApi.get('');
+                                                                    return response.data;
+                                                } catch (error) {
+                                                            console.error('API Error in getAllCompanies:', error);
+                                                                    throw error;
+                                                }
+                                            };
+
+                                            export const getCompanyById = async (companyId) => {
+                                                    try {
+                                                                const response = await companiesApi.get(`/${companyId}`);
+                                                                        return response.data;
+                                                    } catch (error) {
+                                                                console.error('API Error in getCompanyById:', error);
+                                                                        throw error;
+                                                    }
+                                                };
+
+                                                export const deleteCompanyById = async (id, userId) => {
+                                                        try {
+                                                                    const response = await companiesApi.delete(`/${id}/${userId}`);
+                                                                            return response.data;
+                                                        } catch (error) {
+                                                                    console.error('API Error in deleteCompanyById:', error);
+                                                                            throw error;
+                                                        }
+                                                    };
+
+                                                    /* ---------------- New Application APIs ---------------- */
+                                                    export const createApplication = async (userId, applicationData) => {
+                                                            try {
+                                                                        const response = await applicationsApi.post(`/${userId}`, applicationData);
+                                                                                return response.data;
+                                                            } catch (error) {
+                                                                        console.error('API Error in createApplication:', error);
+                                                                                throw error;
+                                                            }
+                                                        };
+
+                                                        export const getAllApplications = async () => {
+                                                                try {
+                                                                            const response = await applicationsApi.get('');
+                                                                                    return response.data;
+                                                                } catch (error) {
+                                                                            console.error('API Error in getAllApplications:', error);
+                                                                                    throw error;
+                                                                }
+                                                            };
+
+                                                            export const getApplicationById = async (id) => {
+                                                                    try {
+                                                                                const response = await applicationsApi.get(`/${id}`);
+                                                                                        return response.data;
+                                                                    } catch (error) {
+                                                                                console.error('API Error in getApplicationById:', error);
+                                                                                        throw error;
+                                                                    }
+                                                                };
+                                                                export const fetchAppliedJobs = async (userId) => {
+                                                                        try {
+                                                                                    const res = await applicationsApi.get(`/user/${userId}`);
+                                                                                            return res.data;
+                                                                        } catch (err) {
+                                                                                    console.error('API Error in fetchAppliedJobs:', err);
+                                                                                            throw err;
+                                                                        }
+                                                                    };
+
+                                                                    export const deleteApplicationById = async (id, userId) => {
+                                                                            try {
+                                                                                        const response = await applicationsApi.delete(`/${id}/${userId}`);
+                                                                                                return response.data;
+                                                                            } catch (error) {
+                                                                                        console.error('API Error in deleteApplicationById:', error);
+                                                                                                throw error;
+                                                                            }
+                                                                        };
+
+                                                                        export const updateApplication = async (id, userId, applicationData) => {
+                                                                                try {
+                                                                                            const response = await applicationsApi.put(`/${id}/${userId}`, applicationData);
+                                                                                                    return response.data;
+                                                                                } catch (error) {
+                                                                                            console.error('API Error in updateApplication:', error);
+                                                                                                    throw error;
+                                                                                }
+                                                                            };
