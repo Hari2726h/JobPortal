@@ -1,41 +1,50 @@
 import React, { useState } from 'react';
-import JobListing from './components/JobListing';
+import { BrowserRouter, Routes, Route, useNavigate, useParams } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
-import { Routes, BrowserRouter, Route, useNavigate, useParams } from 'react-router-dom';
+import HomePage from './pages/HomePage';
 import JobDetail from './components/JobDetail';
-import JobSearch from './components/JobSearch';
+import JobDetails from './components/JobDetails';
+import Login from './pages/Login';
+import Register from './pages/Register';
+import ApplicationPage from './pages/ApplicationPage';
+import Profile from './pages/Profile';
+import AppliedJobsPage from './pages/AppliedJobsPage';
 
-function JobListingPage({ jobs, setJobs }) {
-  const navigate = useNavigate();
-  return (
-    <div style={{maxWidth: '900px',margin:'0 auto',padding:'20px'}}>
-      <section style={{textAlign: 'center',marginBottom:'20px'}}>
-        <h1 style={{fontSize:'2rem',marginBottom:'10px'}}>Find your Dream Job</h1>
-        <p style={{color:'#555'}}>Browse through the latest openings and apply in a click.</p>
-      </section>
-      <JobListing jobs={jobs} setJobs={setJobs} onSelectJob={(id)=> navigate(`/jobs/${id}`)}/>
-    </div>
-  );
-};
 function JobDetailPage() {
-  const { jobId } = useParams();
-  const navigate = useNavigate();
-  return <JobDetail jobId={jobId} onBack={()=>navigate('/')}/>;  
+const { jobId } = useParams();
+const navigate = useNavigate();
+return <JobDetail jobId={jobId} onBack={() => navigate('/')} />;
+}
+
+function JobDetailsPage() {
+const { jobId } = useParams();
+const navigate = useNavigate();
+return <JobDetails jobId={jobId} onBack={() => navigate('/')} />;
 }
 
 function App() {
-  const [jobs, setJobs] = useState([]);
-  return (
-    <BrowserRouter>
-      <Header setJobs={setJobs} />
-      <Routes>
-        <Route path='/' element={<JobListingPage jobs={jobs} setJobs={setJobs} />} />
-        <Route path='/jobs/:jobId' element={<JobDetailPage />} />
-      </Routes>
-      <Footer />
-    </BrowserRouter>
-  );
+const [jobs, setJobs] = useState([]);
+
+return (
+<BrowserRouter>
+<Header setJobs={setJobs} />
+<Routes>
+<Route path="/" element={<HomePage jobs={jobs} setJobs={setJobs} />} />
+<Route path="/apply/:jobId" element={<ApplicationPage />} />
+<Route path="/applied-jobs" element={<AppliedJobsPage />} />
+
+<Route path="/jobs/:jobId" element={<JobDetailPage />} />
+
+<Route path="/jobDetail/:jobId" element={<JobDetailsPage />} />
+
+<Route path="/login" element={<Login />} />
+<Route path="/register" element={<Register />} />
+<Route path="/profile" element={<Profile />} />
+</Routes>
+<Footer />
+</BrowserRouter>
+);
 }
 
 export default App;
