@@ -12,13 +12,11 @@ setLoading(true);
 setError('');
 setJob(null);
 
-// Promise.resolve().then(()=>{
 api.fetchJobById(jobId)
 .then((data)=>{
     if(!isMounted) return;
     setJob(data);
     setError('');
-    // setJob(null);
 })
 .catch((error)=>{
     if(!isMounted) return;
@@ -28,13 +26,17 @@ api.fetchJobById(jobId)
 .finally(()=>{
     if(isMounted) setLoading(false);
 });
-// });
+
 return () =>{isMounted=false; };
    },[jobId]);
    if(loading) return <div data-testid="detail-loading">Loading job details...</div>;
    if(error) return <div data-testid="detail-error">{error}</div>;
    if(!job){
     return null; }
+    const handleApply=(e,jobTitle)=>{
+        e.stopPropagation();
+        alert(`Applied succesfully for "${jobTitle}"`)
+    }
    return (
    <div data-testid="job-detail">
     <button data-testid="back-button" onClick={onBack}>Back to Listings</button>
@@ -53,7 +55,23 @@ return () =>{isMounted=false; };
             </p>
             <p><strong>Salary Range:</strong> {job.salaryRange}</p>
             <p><strong>Application Deadline:</strong> {job.applicationDeadline}</p>
-          
+            <button
+                    onClick={(e)=> handleApply(e,job.title)}
+                    style={{
+                        padding: '8px 16px',
+                        backgroundColor: '#007bff',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '4px',
+                        cursor: 'pointer',
+                        fontSize: '14px',
+                        fontWeight: 'bold',
+                        transition: 'background-color 0.2s ease'
+                        
+                    }}
+                    onMouseEnter={(e)=>e.target.style.backgroundColor='#0056b3'}
+                    onMouseLeave={(e)=>e.target.style.backgroundColor='#007bff'}
+                    >Apply</button>
             </div>
    
   );

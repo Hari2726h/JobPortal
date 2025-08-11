@@ -8,7 +8,7 @@ const JobSearch = ({setJobs}) => {
    const[empty,setEmpty]=useState(false);
     
    const handleSearch=()=>{
-    // if(!query.trim()) return;
+    if(!query.trim()) return;
     setLoading(true);
     setError('');
     setEmpty(false);
