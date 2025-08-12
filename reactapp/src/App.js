@@ -12,6 +12,7 @@ import Profile from './pages/Profile';
 import AppliedJobsPage from './pages/AppliedJobsPage';
 
 import CompanyLogin from './company/CompanyLogin'; 
+import ApplicationsPage from './company/ApplicationsPage'; 
 import CompanyRegister from './company/CompanyRegister';
 import CompanyDashboard from './company/CompanyDashboard';
 
@@ -43,7 +44,7 @@ return (
 <Route path="/company/post-job" element={<PostJob />} />
 <Route path="/company/dashboard" element={<CompanyDashboard />} />
 <Route path="/applied-jobs" element={<AppliedJobsPage />} />
-
+<Route path="/company/job/:jobId/applications" element={<ApplicationsPage />} />
 <Route path="/jobs/:jobId" element={<JobDetailPage />} />
 
 <Route path="/jobDetail/:jobId" element={<JobDetailsPage />} />

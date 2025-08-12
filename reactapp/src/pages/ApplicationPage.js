@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import * as api from '../utils/api';
 import { Form, Button, Spinner, Alert, Card } from 'react-bootstrap';
+import { CheckCircleFill, ExclamationCircleFill } from 'react-bootstrap-icons';
 
 const ApplicationPage = () => {
     const { jobId } = useParams();
@@ -76,65 +77,88 @@ const ApplicationPage = () => {
     return (
         <>
             <section
-                className="py-4 text-light"
+                className="py-5 text-light"
                 style={{
                     background: 'linear-gradient(135deg, #0d6efd, #001f3f)',
-                    minHeight: '150px',
+                    minHeight: '180px',
                     display: 'flex',
                     alignItems: 'center',
+                    boxShadow: '0 4px 12px rgb(13 110 253 / 0.5)',
+                    marginBottom: '2rem',
                 }}
             >
                 <div className="container">
-                    <h2 className="fw-bold">Apply for Job</h2>
-                    <p className="mb-0">Submit your application below</p>
+                    <h1 className="fw-bold display-5 mb-2">Apply for Job</h1>
+                    <p className="lead mb-0">Submit your application below to take the next step in your career.</p>
                 </div>
             </section>
 
-            <div className="container my-4">
+            <div className="container" style={{ maxWidth: '720px' }}>
                 {loadingJob && (
                     <div className="text-center my-5">
-                        <Spinner animation="border" variant="primary" />
-                        <p className="mt-3">Loading job details...</p>
+                        <Spinner animation="border" variant="primary" role="status" />
+                        <p className="mt-3 fs-5 text-secondary">Loading job details...</p>
                     </div>
                 )}
 
-                {errorJob && <Alert variant="danger">{errorJob}</Alert>}
+                {errorJob && (
+                    <Alert variant="danger" className="d-flex align-items-center">
+                        <ExclamationCircleFill className="me-2" />
+                        {errorJob}
+                    </Alert>
+                )}
 
                 {job && (
                     <Card className="shadow-sm border-0 mb-4">
                         <Card.Body>
-                            <h4 className="fw-bold text-primary">{job.title}</h4>
+                            <h3 className="fw-bold text-primary mb-3">{job.title}</h3>
                             <p className="mb-1"><strong>Company:</strong> {job.company}</p>
                             <p className="mb-1"><strong>Location:</strong> {job.location}</p>
-                            <p><strong>Description:</strong> {job.description}</p>
+                            <hr />
+                            <p className="mb-0"><strong>Description:</strong></p>
+                            <p className="text-muted" style={{ whiteSpace: 'pre-line' }}>{job.description}</p>
                         </Card.Body>
                     </Card>
                 )}
 
                 <Card className="shadow-sm border-0">
                     <Card.Body>
-                        <h5 className="fw-bold mb-3">Application Form</h5>
-                        {errorSubmit && <Alert variant="danger">{errorSubmit}</Alert>}
-                        {success && <Alert variant="success">{success}</Alert>}
+                        <h4 className="fw-bold mb-4 border-bottom pb-2">Application Form</h4>
 
-                        <Form onSubmit={handleSubmit}>
-                            <Form.Group className="mb-3">
-                                <Form.Label>Cover Letter</Form.Label>
+                        {errorSubmit && (
+                            <Alert variant="danger" className="d-flex align-items-center">
+                                <ExclamationCircleFill className="me-2" />
+                                {errorSubmit}
+                            </Alert>
+                        )}
+
+                        {success && (
+                            <Alert variant="success" className="d-flex align-items-center">
+                                <CheckCircleFill className="me-2" />
+                                {success}
+                            </Alert>
+                        )}
+
+                        <Form onSubmit={handleSubmit} noValidate>
+                            <Form.Group className="mb-4" controlId="coverLetter">
+                                <Form.Label className="fw-semibold">Cover Letter</Form.Label>
                                 <Form.Control
                                     as="textarea"
-                                    rows={5}
-                                    placeholder="Write your cover letter here..."
+                                    rows={6}
+                                    placeholder="Introduce yourself and explain why you're a good fit..."
                                     value={coverLetter}
                                     onChange={(e) => setCoverLetter(e.target.value)}
                                     required
+                                    minLength={50}
                                 />
+                                <Form.Text className="text-muted">Minimum 50 characters recommended.</Form.Text>
                             </Form.Group>
 
-                            <Form.Group className="mb-3">
-                                <Form.Label>Resume Link</Form.Label>
+                            <Form.Group className="mb-4" controlId="resumeLink">
+                                <Form.Label className="fw-semibold">Resume Link</Form.Label>
                                 <Form.Control
                                     type="url"
-                                    placeholder="Paste your resume link (Google Drive, Dropbox, etc.)"
+                                    placeholder="Google Drive, Dropbox, or any public link"
                                     value={resumeLink}
                                     onChange={(e) => setResumeLink(e.target.value)}
                                     required
@@ -144,10 +168,25 @@ const ApplicationPage = () => {
                             <Button
                                 type="submit"
                                 variant="primary"
-                                className="fw-semibold"
+                                className="fw-semibold w-100"
                                 disabled={loadingSubmit}
+                                style={{ fontSize: '1.1rem', padding: '0.65rem' }}
                             >
-                                {loadingSubmit ? 'Submitting...' : 'Submit Application'}
+                                {loadingSubmit ? (
+                                    <>
+                                        <Spinner
+                                            as="span"
+                                            animation="border"
+                                            size="sm"
+                                            role="status"
+                                            aria-hidden="true"
+                                            className="me-2"
+                                        />
+                                        Submitting...
+                                    </>
+                                ) : (
+                                    'Submit Application'
+                                )}
                             </Button>
                         </Form>
                     </Card.Body>

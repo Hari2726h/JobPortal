@@ -1,0 +1,71 @@
+@keyframes fadeSlideUp {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animated-fade-slide {
+    opacity: 0;
+    animation-name: fadeSlideUp;
+    animation-duration: 0.8s;
+    animation-fill-mode: forwards;
+    animation-timing-function: ease;
+}
+
+.badge-pill-hover {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.badge-pill-hover:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 10px rgba(255, 193, 7, 0.6);
+    z-index: 1;
+}
+
+.animated-delay-1 {
+    animation-delay: 0.3s;
+}
+
+.animated-delay-2 {
+    animation-delay: 0.6s;
+}
+
+.animated-delay-3 {
+    animation-delay: 0.9s;
+}
+
+.badge-pill {
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.15s ease;
+    user-select: none;
+}
+
+.badge-pill:active {
+    transform: scale(0.95);
+}
+
+.category-badge {
+    transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.category-badge:hover {
+    transform: scale(1.1);
+    filter: brightness(1.1);
+    cursor: pointer;
+}
+.clickable {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+        will-change: transform;
+        }
+
+        .clickable:hover {
+          transform: translateY(-6px) scale(1.03);
+            box-shadow: 0 10px 20px rgba(13, 110, 253, 0.3); 
+              cursor: pointer;
+              }
+              

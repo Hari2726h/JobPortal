@@ -18,7 +18,6 @@ const PostJob = () => {
         if (!company) {
             navigate('/company/login');
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const handleSubmit = async (e) => {
@@ -37,11 +36,10 @@ const PostJob = () => {
                 title,
                 location,
                 description,
-                companyy: { id: company.id }, // match backend field name
-                postedDate: new Date().toISOString().split('T')[0], // YYYY-MM-DD
+                companyy: { id: company.id }, 
+                postedDate: new Date().toISOString().split('T')[0], 
             };
-
-            await api.createJob(jobData);
+            await api.createJobForCompany(company.id, jobData);
             setSuccess('Job posted successfully!');
             setTimeout(() => {
                 navigate('/company/dashboard');

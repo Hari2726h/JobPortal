@@ -163,6 +163,16 @@ export const deleteCompanyById = async (id, userId) => {
                 throw error;
         }
 };
+export const deleteJob = async (jobId) => {
+        try {
+                const response = await jobsApi.delete(`/delete/${jobId}`);
+                return response.data;
+        } catch (error) {
+                console.error('API Error in deleteJob:', error);
+                throw error;
+        }
+};
+
 
 export const createApplication = async (userId, applicationData) => {
         try {

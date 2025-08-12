@@ -22,11 +22,11 @@ public class Application {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    private String coverLetter;
     private String resumeUrl;
     private String status;
     private LocalDate appliedDate;
-
+  
     @ManyToOne
     private User user;
 

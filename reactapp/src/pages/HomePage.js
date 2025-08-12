@@ -3,6 +3,7 @@ import * as api from '../utils/api';
 import { Card, Button, Spinner, Alert, Badge, Carousel } from 'react-bootstrap';
 import { BriefcaseFill, GeoAltFill, CurrencyDollar, Building } from 'react-bootstrap-icons';
 import { useNavigate } from 'react-router-dom';
+import './HomePage.css';
 
 const jobCategories = [
       { id: 1, name: 'Software Development' },
@@ -13,10 +14,21 @@ const jobCategories = [
       { id: 6, name: 'Education' },
 ];
 
+const categoryFilters = {
+      'Software Development': ['developer', 'software', 'engineer', 'frontend', 'backend', 'fullstack', 'programmer'],
+      Marketing: ['marketing', 'seo', 'content', 'social media'],
+      Design: ['designer', 'design', 'ui', 'ux', 'graphic'],
+      Finance: ['finance', 'accountant', 'financial', 'analyst'],
+      Healthcare: ['health', 'medical', 'doctor', 'nurse'],
+      Education: ['teacher', 'education', 'tutor', 'trainer'],
+};
+
 const HomePage = ({ jobs, setJobs }) => {
       const [loading, setLoading] = useState(true);
       const [error, setError] = useState('');
       const [companies, setCompanies] = useState([]);
+      const [filteredJobs, setFilteredJobs] = useState([]);
+      const [activeCategory, setActiveCategory] = useState(null);
       const navigate = useNavigate();
 
       useEffect(() => {
@@ -24,12 +36,14 @@ const HomePage = ({ jobs, setJobs }) => {
 
             if (jobs && jobs.length > 0) {
                   setLoading(false);
+                  setFilteredJobs(jobs);
             } else {
                   api.fetchJobs()
                         .then((data) => {
                               if (isMounted) {
                                     setJobs(data);
                                     setLoading(false);
+                                    setFilteredJobs(data);
                               }
                         })
                         .catch(() => {
@@ -52,64 +66,73 @@ const HomePage = ({ jobs, setJobs }) => {
       }, [jobs, setJobs]);
 
       const handleCategoryClick = (categoryName) => {
-            navigate();
+            setActiveCategory(categoryName);
+            const keywords = categoryFilters[categoryName] || [];
+            if (keywords.length === 0) {
+                  setFilteredJobs(jobs);
+                  return;
+            }
+            const filtered = jobs.filter(job => {
+                  if (!job.title) return false;
+                  const titleLower = job.title.toLowerCase();
+                  return keywords.some(keyword => titleLower.includes(keyword.toLowerCase()));
+            });
+            setFilteredJobs(filtered);
       };
+
+      const fallbackCompanies = [
+            {
+                  id: 'g1',
+                  name: 'Google',
+                  logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg',
+            },
+            {
+                  id: 'a1',
+                  name: 'Amazon',
+                  logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg',
+            },
+            {
+                  id: 'm1',
+                  name: 'Microsoft',
+                  logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg',
+            },
+            {
+                  id: 'f1',
+                  name: 'Facebook',
+                  logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/0/05/Facebook_Logo_(2019).png',
+            },
+      ];
 
       return (
             <>
                   <section
-                        className="py-5 text-light"
+                        className="py-5 text-light text-center"
                         style={{
                               background: 'linear-gradient(135deg, #0d6efd, #001f3f)',
                               minHeight: '250px',
                               display: 'flex',
                               alignItems: 'center',
+                              flexDirection: 'column',
+                              justifyContent: 'center',
                         }}
                   >
-                        <div className="container text-center">
-                              <h1 className="fw-bold display-5 mb-3">
-                                    Find Your <span className="text-warning">Dream Job</span>
-                              </h1>
-                              <p className="lead mb-4">
-                                    Explore thousands of job opportunities and take the next step in your career.
-                              </p>
-                              <Button
-                                    variant="warning"
-                                    size="lg"
-                                    className="fw-semibold shadow-sm"
-                                    onClick={() =>
-                                          window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })
-                                    }
-                              >
-                                    Browse Jobs
-                              </Button>
-                        </div>
+                        <h1 className="fw-bold display-5 mb-3 animated-fade-slide animated-delay-1">
+                              Find Your <span className="text-warning">Dream Job</span>
+                        </h1>
+                        <p className="lead mb-4 animated-fade-slide animated-delay-2">
+                              Explore thousands of job opportunities and take the next step in your career.
+                        </p>
+                        <Button
+                              variant="warning"
+                              size="lg"
+                              className="fw-semibold shadow-sm animated-fade-slide animated-delay-3"
+                              onClick={() =>
+                                    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })
+                              }
+                        >
+                              Browse Jobs
+                        </Button>
                   </section>
-                  {companies.length > 0 && (
-                        <section className="container my-5">
-                              <h3 className="mb-4 text-center">Top Hiring Companies</h3>
-                              <Carousel indicators={false} interval={3000} controls={companies.length > 1}>
-                                    {companies.map((company) => (
-                                          <Carousel.Item key={company.id}>
-                                                <div className="d-flex justify-content-center align-items-center" style={{ height: 120 }}>
-                                                      {company.logoUrl ? (
-                                                            <img
-                                                                  src={company.logoUrl}
-                                                                  alt={company.name}
-                                                                  style={{ maxHeight: 100, maxWidth: '100%', objectFit: 'contain' }}
-                                                            />
-                                                      ) : (
-                                                            <Building size={80} />
-                                                      )}
-                                                </div>
-                                                <Carousel.Caption>
-                                                      <h5>{company.name}</h5>
-                                                </Carousel.Caption>
-                                          </Carousel.Item>
-                                    ))}
-                              </Carousel>
-                        </section>
-                  )}
 
                   <section className="container my-5">
                         <h3 className="mb-4 text-center">Browse by Job Categories</h3>
@@ -117,8 +140,9 @@ const HomePage = ({ jobs, setJobs }) => {
                               {jobCategories.map((cat) => (
                                     <Badge
                                           key={cat.id}
-                                          bg="primary"
+                                          bg={activeCategory === cat.name ? 'warning' : 'primary'}
                                           pill
+                                          className="badge-pill-hover"
                                           style={{ cursor: 'pointer', padding: '10px 20px', fontSize: '1rem' }}
                                           onClick={() => handleCategoryClick(cat.name)}
                                           title={`Browse jobs in ${cat.name}`}
@@ -126,6 +150,20 @@ const HomePage = ({ jobs, setJobs }) => {
                                           {cat.name}
                                     </Badge>
                               ))}
+                              <Badge
+                                    bg={!activeCategory ? 'warning' : 'primary'}
+                                    pill
+                                    className="badge-pill-hover"
+                                    style={{ cursor: 'pointer', padding: '10px 20px', fontSize: '1rem' }}
+                                    onClick={() => {
+                                          setActiveCategory(null);
+                                          setFilteredJobs(jobs);
+                                    }}
+                                    title="Show all jobs"
+                              >
+                                    All
+                              </Badge>
+
                         </div>
                   </section >
 
@@ -143,14 +181,14 @@ const HomePage = ({ jobs, setJobs }) => {
                               </Alert>
                         )}
 
-                        {!loading && !error && jobs.length === 0 && (
-                              <p className="text-center text-muted">No jobs available at the moment.</p>
+                        {!loading && !error && filteredJobs.length === 0 && (
+                              <p className="text-center text-muted">No jobs available in this category.</p>
                         )}
 
                         <div className="row">
                               {!loading &&
                                     !error &&
-                                    jobs.map((job) => (
+                                    filteredJobs.map((job) => (
                                           <div className="col-md-4 mb-4" key={job.id}>
                                                 <Card
                                                       className="shadow-sm border-0 h-100 clickable"
@@ -166,10 +204,12 @@ const HomePage = ({ jobs, setJobs }) => {
                                                                   <GeoAltFill className="me-1 text-secondary" />
                                                                   {job.location}
                                                             </div>
-                                                            <div className="mb-3">
-                                                                  <CurrencyDollar className="me-1 text-success" />
-                                                                  {job.salary || 'Not specified'}
+                                                            <div className="mb-3 text-success" style={{ fontWeight: '600' }}>
+                                                                  <CurrencyDollar className="me-1" />
+                                                                  {job.salary && job.salary.trim() !== '' ? job.salary : 'Not specified'}
                                                             </div>
+
+
                                                             <Card.Text className="text-truncate">{job.description}</Card.Text>
                                                             <Button
                                                                   variant="primary"
@@ -184,6 +224,31 @@ const HomePage = ({ jobs, setJobs }) => {
                                                 </Card>
                                           </div>
                                     ))}
+                              {(companies.length > 0 || fallbackCompanies.length > 0) && (
+                                    <section className="container my-5">
+                                          <h3 className="mb-4 text-center">Top Hiring Companies</h3>
+                                          <Carousel
+                                                indicators={false}
+                                                interval={3000}
+                                                controls={(companies.length || fallbackCompanies.length) > 1}
+                                          >
+                                                {(companies.length ? companies : fallbackCompanies).map((company) => (
+                                                      <Carousel.Item key={company.id}>
+                                                            <div className="d-flex justify-content-center align-items-center" style={{ height: 120 }}>
+                                                                  {company.logoUrl ? (
+                                                                        <img
+                                                                              src={company.logoUrl}
+                                                                              style={{ maxHeight: 100, maxWidth: '100%', objectFit: 'contain' }}
+                                                                        />
+                                                                  ) : (
+                                                                        <Building size={80} />
+                                                                  )}
+                                                            </div>
+                                                      </Carousel.Item>
+                                                ))}
+                                          </Carousel>
+                                    </section>
+                              )}
                         </div>
                   </div>
             </>

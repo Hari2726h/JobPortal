@@ -75,6 +75,7 @@ const JobListing = ({ setJobs, jobs = [], onSelectJob }) => {
                     <p>{job.company}</p>
                     <p>{job.location}</p>
                     <p>{job.type}</p>
+                    <p>{job.salaryRange}</p>
                     <button
                         onClick={(e) => handleApply(e, job.title)}
                         style={{
