@@ -23,7 +23,11 @@ import com.examly.springapp.service.JobService;
 public class JobController {
     @Autowired
     private JobService jobService;
-    
+    @PostMapping("/company/{companyId}")
+    public Job createJobForCompany(@PathVariable Long companyId, @RequestBody Job job) {
+            return jobService.createJobForCompany(job, companyId);
+            }
+            
     
     @PostMapping
     public Job createJob(@RequestBody Job job){

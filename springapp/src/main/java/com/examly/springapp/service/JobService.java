@@ -6,13 +6,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.examly.springapp.exception.JobNotfoundException;
+import com.examly.springapp.model.Company;
 import com.examly.springapp.model.Job;
+import com.examly.springapp.repository.CompanyRepository;
 import com.examly.springapp.repository.JobRepository;
 
 @Service
 public class JobService {
     @Autowired
     private JobRepository jobRepository;
+    @Autowired
+    private CompanyRepository companyRepository;
     
     public Job createJob(Job job){
         return jobRepository.save(job);
@@ -26,6 +30,14 @@ public class JobService {
     public List<Job> getJobsByCompanyId(Long companyId){
             return jobRepository.findByCompanyyId(companyId);
             }
+    public Job createJobForCompany(Job job, Long companyId) {
+            Company company = companyRepository.findById(companyId)
+                    .orElseThrow(() -> new RuntimeException("Company not found"));
+
+                        job.setCompanyy(company); 
+                            return jobRepository.save(job);
+                            }
+                            
             
     public List<Job> searchJobsByKeyword(String key){
         return jobRepository.findByTitleContainingIgnoreCase(key);

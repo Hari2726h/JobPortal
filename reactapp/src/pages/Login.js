@@ -5,7 +5,7 @@ import * as api from '../utils/api';
 import { BoxArrowInRight } from 'react-bootstrap-icons';
 
 const Login = () => {
-    const [loginType, setLoginType] = useState('user'); // 'user' or 'company'
+    const [loginType, setLoginType] = useState('user');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -18,11 +18,11 @@ const Login = () => {
             if (loginType === 'user') {
                 const user = await api.loginUser({ email, password });
                 localStorage.setItem('user', JSON.stringify(user));
-                navigate('/'); // user dashboard route
+                navigate('/'); 
             } else {
                 const company = await api.loginCompany({ email, password });
                 localStorage.setItem('company', JSON.stringify(company));
-                navigate('/company/dashboard'); // company dashboard route
+                navigate('/company/dashboard');
             }
         } catch (err) {
             setError('Invalid email or password');

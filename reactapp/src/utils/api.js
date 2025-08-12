@@ -224,6 +224,16 @@ export const deleteApplicationById = async (id, userId) => {
                 throw error;
         }
 };
+export const createJobForCompany = async (companyId, jobData) => {
+        try {
+                const response = await jobsApi.post(`/company/${companyId}`, jobData);
+                return response.data;
+        } catch (error) {
+                console.error('API Error in createJobForCompany:', error);
+                throw error;
+        }
+};
+
 
 export const updateApplication = async (id, userId, applicationData) => {
         try {

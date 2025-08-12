@@ -43,15 +43,13 @@ public class CompanyController {
     @PostMapping("/login")
     public ResponseEntity<?> loginCompany(@RequestBody Map<String, String> loginData) {
         String email = loginData.get("email");
-            String password = loginData.get("password");
-                Company company = companyService.loginCompany(email, password);
-                    if (company == null) {
-                            return ResponseEntity.status(401).body("Invalid credentials or not an EMPLOYER");
-                                }
-                                    return ResponseEntity.ok(company);
-                                    }
-                                    
-    
+        String password = loginData.get("password");
+        Company company = companyService.loginCompany(email, password);
+        if (company == null) {
+            return ResponseEntity.status(401).body("Invalid credentials or not an EMPLOYER");
+        }
+        return ResponseEntity.ok(company);
+    }
 
     @GetMapping
     public List<Company> getAllCompanies() {
@@ -72,5 +70,4 @@ public class CompanyController {
         }
         return ResponseEntity.status(403).body("Only EMPLOYERs can delete companies.");
     }
-
 }
