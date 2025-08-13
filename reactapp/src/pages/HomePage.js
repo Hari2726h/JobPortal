@@ -206,8 +206,8 @@ const HomePage = ({ jobs, setJobs }) => {
                                                             </div>
                                                             <div className="mb-3 text-success" style={{ fontWeight: '600' }}>
                                                                   <CurrencyDollar className="me-1" />
-                                                                  {job.salary && job.salary.trim() !== '' ? job.salary : 'Not specified'}
-                                                            </div>
+                                                                 {job.salaryRange && job.salaryRange.trim() !== '' ? job.salaryRange : 'Not specified'}
+                                                                                                                             </div>
 
 
                                                             <Card.Text className="text-truncate">{job.description}</Card.Text>

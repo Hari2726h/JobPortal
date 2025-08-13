@@ -1,16 +1,34 @@
+import { motion } from "framer-motion";
 import React, { useEffect, useState } from 'react';
-import { Container, Card, Button, ListGroup, Alert, Spinner, Modal, Badge, Row, Col } from 'react-bootstrap';
-import { BriefcaseFill, PeopleFill, PlusCircleFill, TrashFill, BoxArrowRight, ClipboardCheck } from 'react-bootstrap-icons';
+import {
+    Container,
+    Card,
+    Button,
+    Badge,
+    Spinner,
+    Alert,
+    Row,
+    Col,
+    Modal
+} from 'react-bootstrap';
+import {
+    BriefcaseFill,
+    PeopleFill,
+    PlusCircleFill,
+    TrashFill,
+    BoxArrowRight,
+    BarChartFill
+} from 'react-bootstrap-icons';
 import * as api from '../utils/api';
 import { useNavigate } from 'react-router-dom';
 
 const CompanyDashboard = () => {
     const [jobs, setJobs] = useState([]);
     const [applications, setApplications] = useState([]);
-    const [errorJobs, setErrorJobs] = useState('');
-    const [errorApplications, setErrorApplications] = useState('');
     const [loadingJobs, setLoadingJobs] = useState(false);
     const [loadingApplications, setLoadingApplications] = useState(false);
+    const [errorJobs, setErrorJobs] = useState('');
+    const [errorApplications, setErrorApplications] = useState('');
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [jobToDelete, setJobToDelete] = useState(null);
 
@@ -71,7 +89,7 @@ const CompanyDashboard = () => {
         if (!jobToDelete) return;
         try {
             await api.deleteJob(jobToDelete.id);
-            setJobs((prev) => prev.filter((job) => job.id !== jobToDelete.id));
+            setJobs(prev => prev.filter(j => j.id !== jobToDelete.id));
         } catch {
             alert('Failed to delete job. Please try again later.');
         } finally {
@@ -82,52 +100,47 @@ const CompanyDashboard = () => {
 
     if (!company) return null;
 
+    const totalJobs = jobs.length;
+    const totalApplications = applications.length;
+    const avgApplications = totalJobs > 0 ? (totalApplications / totalJobs).toFixed(1) : 0;
     return (
-        <Container className="my-5">
-            <div className="d-flex justify-content-between align-items-center mb-4">
-                <div>
-                    <h2 className="fw-bold text-primary mb-0">Welcome, {company.name || company.companyName}</h2>
-                    <p className="text-muted mb-0">Manage your job postings and track applications.</p>
-                </div>
-                <Button variant="outline-danger" onClick={handleLogout}>
-                    <BoxArrowRight className="me-2" /> Logout
-                </Button>
-            </div>
-
-            <Row className="mb-4">
-                <Col md={4}>
-                    <Card className="shadow-sm border-0 text-center p-3">
-                        <BriefcaseFill size={28} className="text-primary mb-2" />
-                        <h4 className="fw-bold">{jobs.length}</h4>
-                        <p className="text-muted mb-0">Active Jobs</p>
-                    </Card>
-                </Col>
-                <Col md={4}>
-                    <Card className="shadow-sm border-0 text-center p-3">
-                        <PeopleFill size={28} className="text-success mb-2" />
-                        <h4 className="fw-bold">{applications.length}</h4>
-                        <p className="text-muted mb-0">Total Applications</p>
-                    </Card>
-                </Col>
-                <Col md={4}>
-                    <Card className="shadow-sm border-0 text-center p-3">
-                        <ClipboardCheck size={28} className="text-warning mb-2" />
-                        <h4 className="fw-bold">{applications.filter(a => a.status === 'Reviewed').length}</h4>
-                        <p className="text-muted mb-0">Reviewed Applications</p>
-                    </Card>
-                </Col>
-            </Row>
-
-            <Card className="mb-5 shadow-sm border-0">
-                <Card.Header className="d-flex justify-content-between align-items-center bg-primary text-white">
-                    <h5 className="mb-0"><BriefcaseFill className="me-2" /> Posted Jobs</h5>
-                    <Button variant="light" onClick={() => navigate('/company/post-job')}>
-                        <PlusCircleFill className="me-1" /> Post New Job
+        <>
+            <section
+                className="text-light text-center py-5 mb-4"
+                style={{
+                    background: 'linear-gradient(135deg, #0d6efd, #001f3f)',
+                }}
+            >
+                <Container>
+                    <h2 className="fw-bold mb-2">Welcome, {company.name || company.companyName}</h2>
+                    <p className="lead mb-3">Manage your job postings and track applications</p>
+                    <Button variant="outline-light" onClick={handleLogout}>
+                        <BoxArrowRight className="me-2" />
+                        Logout
                     </Button>
-                </Card.Header>
-                <Card.Body>
+                </Container>
+            </section>
+
+            <Container className="py-4">
+
+                <div className="mb-5">
+                    <div className="d-flex justify-content-between align-items-center mb-4">
+                        <h4 className="fw-bold d-flex align-items-center gap-2">
+                            <BriefcaseFill /> Posted Jobs
+                        </h4>
+                        <Button
+                            variant="warning"
+                            onClick={() => navigate('/company/post-job')}
+                            className="fw-semibold"
+                        >
+                            <PlusCircleFill /> Post New Job
+                        </Button>
+                    </div>
+
                     {loadingJobs ? (
-                        <div className="text-center py-4"><Spinner animation="border" /></div>
+                        <div className="text-center py-5">
+                            <Spinner animation="border" variant="primary" />
+                        </div>
                     ) : errorJobs ? (
                         <>
                             <Alert variant="danger">{errorJobs}</Alert>
@@ -136,56 +149,69 @@ const CompanyDashboard = () => {
                             </div>
                         </>
                     ) : jobs.length === 0 ? (
-                        <Alert variant="info" className="text-center">No jobs posted yet. Click “Post New Job” to add one.</Alert>
+                        <Alert variant="info" className="text-center py-4">
+                            No jobs posted yet. Click “Post New Job” to add one.
+                        </Alert>
                     ) : (
-                        <ListGroup variant="flush">
-                            {jobs.map((job) => (
-                                <ListGroup.Item
-                                    key={job.id}
-                                    className="d-flex justify-content-between align-items-start p-3"
-                                    style={{ borderRadius: '6px', transition: 'background 0.2s' }}
-
-                                    onMouseEnter={(e) => e.currentTarget.style.background = '#f8f9fa'}
-                                    onMouseLeave={(e) => e.currentTarget.style.background = 'white'}
-                                >
-                                    <div className="flex-grow-1">
-                                        <h6 className="fw-bold mb-1">{job.title}</h6>
-                                        <small className="text-muted">{job.location}</small>
-                                        <p className="mb-1 text-truncate" style={{ maxWidth: '500px' }}>
-                                            {job.description.length > 150 ? job.description.slice(0, 150) + '...' : job.description}
-                                        </p>
-                                    </div>
-                                    <div className="text-nowrap">
-                                        <Button
-                                            variant="outline-primary"
-                                            size="sm"
-                                            onClick={() => navigate(`/company/job/${job.id}/applications`, { state: { jobTitle: job.title } })}
-                                            className="me-2"
-                                        >
-                                            <PeopleFill className="me-1" /> Applications
-                                            {job.applicationsCount > 0 && (
-                                                <Badge bg="secondary" className="ms-1">{job.applicationsCount}</Badge>
-                                            )}
-                                        </Button>
-
-                                        <Button variant="outline-danger" size="sm" onClick={() => confirmDeleteJob(job)}>
-                                            <TrashFill className="me-1" /> Delete
-                                        </Button>
-                                    </div>
-                                </ListGroup.Item>
+                        <Row className="g-4">
+                            {jobs.map((job, index) => (
+                                <Col key={job.id} xs={12} sm={6} lg={4}>
+                                    <motion.div
+                                        initial={{ opacity: 0, y: 30 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ delay: index * 0.1 }}
+                                        whileHover={{ scale: 1.03 }}
+                                    >
+                                        <Card className="border-0 shadow-lg rounded-4 h-100 p-3">
+                                            <div className="mb-2 d-flex align-items-center gap-2">
+                                                <BriefcaseFill className="text-primary" />
+                                                <h6 className="fw-bold mb-0">{job.title}</h6>
+                                            </div>
+                                            <small className="text-muted">{job.location}</small>
+                                            <p className="text-truncate mt-2">
+                                                {job.description.length > 100
+                                                    ? job.description.slice(0, 100) + "..."
+                                                    : job.description}
+                                            </p>
+                                            <div className="mt-auto d-flex justify-content-between">
+                                                <Button
+                                                    variant="outline-primary"
+                                                    size="sm"
+                                                    onClick={() =>
+                                                        navigate(`/company/job/${job.id}/applications`, {
+                                                            state: { jobTitle: job.title }
+                                                        })
+                                                    }
+                                                >
+                                                    <PeopleFill /> Applications{" "}
+                                                    {job.applicationsCount > 0 && (
+                                                        <Badge bg="secondary">{job.applicationsCount}</Badge>
+                                                    )}
+                                                </Button>
+                                                <Button
+                                                    variant="outline-danger"
+                                                    size="sm"
+                                                    onClick={() => confirmDeleteJob(job)}
+                                                >
+                                                    <TrashFill /> Delete
+                                                </Button>
+                                            </div>
+                                        </Card>
+                                    </motion.div>
+                                </Col>
                             ))}
-                        </ListGroup>
+                        </Row>
                     )}
-                </Card.Body>
-            </Card>
+                </div>
 
-            <Card className="shadow-sm border-0">
-                <Card.Header className="bg-secondary text-white">
-                    <h5 className="mb-0"><PeopleFill className="me-2" /> Recent Applications</h5>
-                </Card.Header>
-                <Card.Body>
+                <div className="mt-5">
+                    <h4 className="fw-bold d-flex align-items-center gap-2 mb-4">
+                        <BarChartFill /> Job Statistics & Insights
+                    </h4>
                     {loadingApplications ? (
-                        <div className="text-center py-4"><Spinner animation="border" /></div>
+                        <div className="text-center py-5">
+                            <Spinner animation="border" />
+                        </div>
                     ) : errorApplications ? (
                         <>
                             <Alert variant="danger">{errorApplications}</Alert>
@@ -193,34 +219,54 @@ const CompanyDashboard = () => {
                                 <Button variant="primary" onClick={fetchApplications}>Retry</Button>
                             </div>
                         </>
-                    ) : applications.length === 0 ? (
-                        <Alert variant="info" className="text-center">No applications received yet.</Alert>
                     ) : (
-                        <ListGroup variant="flush">
-                            {applications.slice(0, 5).map((app) => (
-                                <ListGroup.Item key={app.id} className="p-3">
-                                    <strong>{app.applicantName}</strong> applied for <em>{app.jobTitle}</em>
-                                    <p className="mb-0 text-muted">Email: {app.applicantEmail}</p>
-                                </ListGroup.Item>
-                            ))}
-                        </ListGroup>
+                        <Row className="g-4">
+                            <Col xs={12} md={4}>
+                                <motion.div whileHover={{ scale: 1.05 }}>
+                                    <Card className="border-0 shadow-lg rounded-4 text-center p-4">
+                                        <h5>Total Jobs</h5>
+                                        <h2 className="fw-bold text-primary">{totalJobs}</h2>
+                                    </Card>
+                                </motion.div>
+                            </Col>
+                            <Col xs={12} md={4}>
+                                <motion.div whileHover={{ scale: 1.05 }}>
+                                    <Card className="border-0 shadow-lg rounded-4 text-center p-4">
+                                        <h5>Total Applications</h5>
+                                        <h2 className="fw-bold text-success">{totalApplications}</h2>
+                                    </Card>
+                                </motion.div>
+                            </Col>
+                            <Col xs={12} md={4}>
+                                <motion.div whileHover={{ scale: 1.05 }}>
+                                    <Card className="border-0 shadow-lg rounded-4 text-center p-4">
+                                        <h5>Avg Applications / Job</h5>
+                                        <h2 className="fw-bold text-warning">{avgApplications}</h2>
+                                    </Card>
+                                </motion.div>
+                            </Col>
+                        </Row>
                     )}
-                </Card.Body>
-            </Card>
+                </div>
+            </Container>
 
-            <Modal show={showDeleteModal} onHide={cancelDelete} centered>
+            <Modal show={showDeleteModal} onHide={cancelDelete}>
                 <Modal.Header closeButton>
                     <Modal.Title>Confirm Delete</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    Are you sure you want to delete <strong>{jobToDelete?.title}</strong>? This action cannot be undone.
+                    Are you sure you want to delete <strong>{jobToDelete?.title}</strong>?
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={cancelDelete}>Cancel</Button>
-                    <Button variant="danger" onClick={handleDeleteJob}>Delete</Button>
+                    <Button variant="secondary" onClick={cancelDelete}>
+                        Cancel
+                    </Button>
+                    <Button variant="danger" onClick={handleDeleteJob}>
+                        Delete
+                    </Button>
                 </Modal.Footer>
             </Modal>
-        </Container>
+        </>
     );
 };
 

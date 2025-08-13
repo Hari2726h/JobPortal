@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Card, Button, Spinner, Alert, Badge, ListGroup, Modal } from 'react-bootstrap';
+import { Container, Row, Col, Card, Button, Spinner, Alert, Badge, Modal } from 'react-bootstrap';
 import { PeopleFill, ArrowLeft, CheckCircleFill } from 'react-bootstrap-icons';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import * as api from '../utils/api';
@@ -31,7 +31,7 @@ const ApplicationsPage = () => {
         setError('');
         try {
             const allApplications = await api.getApplicationsByCompany(company.id);
-            const jobApplications = allApplications.filter(app => app.jobId === parseInt(jobId));
+            const jobApplications = allApplications.filter(app => app.job?.id === parseInt(jobId));
             setApplications(jobApplications);
         } catch {
             setError('Failed to load applications. Please try again later.');
@@ -77,33 +77,36 @@ const ApplicationsPage = () => {
                     No applications received for this job yet.
                 </Alert>
             ) : (
-                <Card className="shadow-sm border-0">
-                    <ListGroup variant="flush">
-                        {applications.map(app => (
-                            <ListGroup.Item key={app.id} className="d-flex justify-content-between align-items-center p-3">
-                                <div>
-                                    <strong>{app.applicantName}</strong> <br />
-                                    <small className="text-muted">{app.applicantEmail}</small>
-                                </div>
-                                <div className="text-end">
-                                    <Badge bg={app.status === 'Reviewed' ? 'success' : 'warning'}>
-                                        {app.status}
-                                    </Badge>
+                <Row xs={1} md={2} lg={3} className="g-4">
+                    {applications.map(app => (
+                        <Col key={app.id}>
+                            <Card className="shadow-sm border-0 h-100">
+                                <Card.Body>
+                                    <div className="d-flex justify-content-between align-items-start">
+                                        <div>
+                                            <h5 className="fw-bold mb-1">{app.user?.name}</h5>
+                                            <small className="text-muted">{app.user?.email}</small>
+                                        </div>
+                                        <Badge bg={app.status === 'Reviewed' ? 'success' : 'warning'}>
+                                            {app.status || 'Pending'}
+                                        </Badge>
+                                    </div>
+                                    <p className="mt-3 mb-2">
+                                        <strong>Applied:</strong> {app.appliedDate}
+                                    </p>
                                     <Button
                                         variant="outline-primary"
                                         size="sm"
-                                        className="ms-3"
                                         onClick={() => handleViewDetails(app)}
                                     >
                                         View Details
                                     </Button>
-                                </div>
-                            </ListGroup.Item>
-                        ))}
-                    </ListGroup>
-                </Card>
+                                </Card.Body>
+                            </Card>
+                        </Col>
+                    ))}
+                </Row>
             )}
-
             <Modal show={showModal} onHide={closeModal} centered>
                 <Modal.Header closeButton>
                     <Modal.Title>Application Details</Modal.Title>
@@ -111,11 +114,19 @@ const ApplicationsPage = () => {
                 <Modal.Body>
                     {selectedApp && (
                         <>
-                            <p><strong>Name:</strong> {selectedApp.applicantName}</p>
-                            <p><strong>Email:</strong> {selectedApp.applicantEmail}</p>
-                            <p><strong>Status:</strong> {selectedApp.status}</p>
-                            <p><strong>Resume:</strong> <a href={selectedApp.resumeLink} target="_blank" rel="noopener noreferrer">View Resume</a></p>
-                            <p><strong>Cover Letter:</strong> {selectedApp.coverLetter}</p>
+                            <p><strong>Name:</strong> {selectedApp.user?.name}</p>
+                            <p><strong>Email:</strong> {selectedApp.user?.email}</p>
+                            <p><strong>Status:</strong> {selectedApp.status || 'Pending'}</p>
+                            <p><strong>Applied Date:</strong> {selectedApp.appliedDate}</p>
+                            <p>
+                                <strong>Resume:</strong>{' '}
+                                {selectedApp.resumeUrl ? (
+                                    <a href={selectedApp.resumeUrl} target="_blank" rel="noopener noreferrer">View Resume</a>
+                                ) : (
+                                    'No resume uploaded'
+                                )}
+                            </p>
+                            <p><strong>Cover Letter:</strong> {selectedApp.coverLetter || 'No cover letter'}</p>
                         </>
                     )}
                 </Modal.Body>
@@ -126,10 +137,12 @@ const ApplicationsPage = () => {
                             variant="success"
                             onClick={async () => {
                                 try {
-                                    await api.updateApplication(selectedApp.id, selectedApp.userId, { ...selectedApp, status: 'Reviewed' });
-                                    setApplications(prev => prev.map(app =>
-                                        app.id === selectedApp.id ? { ...app, status: 'Reviewed' } : app
-                                    ));
+                                    await api.updateApplication(selectedApp.id, selectedApp.user?.id, { ...selectedApp, status: 'Reviewed' });
+                                    setApplications(prev =>
+                                        prev.map(app =>
+                                            app.id === selectedApp.id ? { ...app, status: 'Reviewed' } : app
+                                        )
+                                    );
                                     closeModal();
                                 } catch {
                                     alert('Failed to update application status.');
