@@ -57,8 +57,8 @@ const AdminSidebar = () => {
                                     navigate(item.path);
                                     setShow(false);
                                 }}
-                                className={`d - flex align-items-center px-3 py-2 sidebar-link ${location.pathname === item.path ? 'active' : ''}`}
-                                style={{ cursor: 'pointer', borderRadius: '0.375rem', margin: '0.25rem' }}
+                                className={`d-flex align-items-center px-3 py-2 sidebar-link ${location.pathname === item.path ? 'active' : ''}`}
+                                style={{ cursor: 'pointer', borderRadius: '0.375rem', margin: '0.25rem 0' }}
                             >
                                 <span className="me-2">{item.icon}</span>
                                 {item.name}

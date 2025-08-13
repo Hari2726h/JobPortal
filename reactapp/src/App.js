@@ -13,6 +13,7 @@ import CompanyProfile from './company/CompanyProfile';
 import AppliedJobsPage from './pages/AppliedJobsPage';
 import AdminLogin from './admin/AdminLogin';
 import AdminDashboard from './admin/AdminDashboard';
+import UserManagement from './admin/UserManagement';
 import CompanyLogin from './company/CompanyLogin';
 import ApplicationsPage from './company/ApplicationsPage';
 import CompanyRegister from './company/CompanyRegister';
@@ -58,6 +59,7 @@ function App() {
                 <Route path="/register" element={<Register />} />
                 <Route path="/company/update-job/:id" element={<UpdateJob />} />
                 <Route path="/profile" element={<Profile />} />
+                <Route path="/admin/users" element={<UserManagement />} />
                 <Route path="/admin/dashboard" element={<AdminDashboard />} />
             </Routes>
             {!hideHeaderFooter && <Footer />}

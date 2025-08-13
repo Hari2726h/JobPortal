@@ -254,15 +254,15 @@ export const createJobForCompany = async (companyId, jobData) => {
 };
 
 export const updateJob = async (id, jobData) => {
-            try {
-                    const response = await jobsApi.put(`/${id}`, jobData);
-                            return response.data;
-                                } catch (error) {
-                                        console.error('API Error in updateJob:', error);
-                                                throw error;
-                                                    }
-                                                    };
-                                                    
+        try {
+                const response = await jobsApi.put(`/${id}`, jobData);
+                return response.data;
+        } catch (error) {
+                console.error('API Error in updateJob:', error);
+                throw error;
+        }
+};
+
 export const updateApplication = async (id, userId, applicationData) => {
         try {
                 const response = await applicationsApi.put(`/${id}/${userId}`, applicationData);
