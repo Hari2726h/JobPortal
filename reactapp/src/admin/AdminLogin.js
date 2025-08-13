@@ -1,38 +1,40 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Form, Button, Card, Alert, Container } from 'react-bootstrap';
-import * as api from '../utils/api';
 import { BoxArrowInRight } from 'react-bootstrap-icons';
 
-const CompanyLogin = () => {
+const AdminLogin = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const navigate = useNavigate();
 
-    const handleLogin = async (e) => {
+    const ADMIN_EMAIL = 'admin@example.com';
+    const ADMIN_PASSWORD = 'admin123';
+
+    const handleLogin = (e) => {
         e.preventDefault();
         setError('');
-        try {
-            const company = await api.loginCompany({ email, password });
-            localStorage.setItem('company', JSON.stringify(company));
-            navigate('/company/dashboard');
-        } catch {
-            setError('Invalid email or password');
+
+        if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
+            localStorage.setItem('admin', JSON.stringify({ email }));
+            navigate('/admin/dashboard');
+        } else {
+            setError('Invalid admin credentials');
         }
     };
 
     return (
         <Container className="d-flex justify-content-center align-items-center" style={{ minHeight: '80vh' }}>
             <Card className="p-4 shadow-lg" style={{ maxWidth: '400px', width: '100%' }}>
-                <h3 className="text-center mb-4">Company Login</h3>
+                <h3 className="text-center mb-4">Admin Login</h3>
                 {error && <Alert variant="danger">{error}</Alert>}
                 <Form onSubmit={handleLogin}>
                     <Form.Group className="mb-3">
                         <Form.Label>Email Address</Form.Label>
                         <Form.Control
                             type="email"
-                            placeholder="Enter email"
+                            placeholder="Enter admin email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             required
@@ -50,27 +52,19 @@ const CompanyLogin = () => {
                         />
                     </Form.Group>
 
-                    <Button type="submit" variant="warning" className="w-100">
-                        <BoxArrowInRight size={18} className="me-2" /> Login
+                    <Button type="submit" variant="dark" className="w-100">
+                        <BoxArrowInRight size={18} className="me-2" /> Login as Admin
                     </Button>
                 </Form>
                 <div className="text-center mt-3">
                     <small>
-                        Don't have an account?{' '}
+                        Go back to{' '}
                         <span
                             className="text-primary"
                             style={{ cursor: 'pointer' }}
-                            onClick={() => navigate('/company/register')}
+                            onClick={() => navigate('/company/login')}
                         >
-                            Register here
-                        </span>
-                        <br />
-                        <span
-                            className="text-success"
-                            style={{ cursor: 'pointer', fontWeight: '500' }}
-                            onClick={() => navigate('/admin/login')}
-                        >
-                            Login as Admin
+                            Company Login
                         </span>
                     </small>
                 </div>
@@ -79,4 +73,4 @@ const CompanyLogin = () => {
     );
 };
 
-export default CompanyLogin;
+export default AdminLogin;

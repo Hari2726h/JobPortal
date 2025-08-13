@@ -31,6 +31,14 @@ public class CompanyController {
     @Autowired
     private UserService userService;
 
+    @PutMapping("/{companyId}")
+    public ResponseEntity<Company> updateCompany(
+            @PathVariable Long companyId,
+            @RequestBody Company companyData) {
+        Company updatedCompany = companyService.updateCompany(companyId, companyData);
+        return ResponseEntity.ok(updatedCompany);
+    }
+
     @PostMapping("/create/{userId}")
     public ResponseEntity<?> createCompany(@PathVariable Long userId, @RequestBody Company company) {
         User user = userService.getUserById(userId);

@@ -162,36 +162,48 @@ const CompanyDashboard = () => {
                                         transition={{ delay: index * 0.1 }}
                                         whileHover={{ scale: 1.03 }}
                                     >
-                                        <Card className="border-0 shadow-lg rounded-4 h-100 p-3">
+                                        <Card
+                                            className="border-0 shadow-lg rounded-4 h-100 p-3"
+                                            style={{ cursor: 'pointer' }}
+                                            onClick={() => navigate(`/company/update-job/${job.id}`)}
+                                        >
                                             <div className="mb-2 d-flex align-items-center gap-2">
                                                 <BriefcaseFill className="text-primary" />
                                                 <h6 className="fw-bold mb-0">{job.title}</h6>
                                             </div>
+
                                             <small className="text-muted">{job.location}</small>
+
                                             <p className="text-truncate mt-2">
                                                 {job.description.length > 100
                                                     ? job.description.slice(0, 100) + "..."
                                                     : job.description}
                                             </p>
+
                                             <div className="mt-auto d-flex justify-content-between">
                                                 <Button
                                                     variant="outline-primary"
                                                     size="sm"
-                                                    onClick={() =>
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
                                                         navigate(`/company/job/${job.id}/applications`, {
                                                             state: { jobTitle: job.title }
-                                                        })
-                                                    }
+                                                        });
+                                                    }}
                                                 >
                                                     <PeopleFill /> Applications{" "}
                                                     {job.applicationsCount > 0 && (
                                                         <Badge bg="secondary">{job.applicationsCount}</Badge>
                                                     )}
                                                 </Button>
+
                                                 <Button
                                                     variant="outline-danger"
                                                     size="sm"
-                                                    onClick={() => confirmDeleteJob(job)}
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        confirmDeleteJob(job);
+                                                    }}
                                                 >
                                                     <TrashFill /> Delete
                                                 </Button>

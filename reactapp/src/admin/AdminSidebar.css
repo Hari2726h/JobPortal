@@ -1,0 +1,28 @@
+
+.sidebar-link {
+        color: #FFD700 !important;
+            transition: all 0.3s ease;
+            }
+
+            .sidebar-link:hover {
+                    background-color: rgba(255, 215, 0, 0.2);
+                        color: #FFFF00 !important; 
+                        }
+
+                        .sidebar-link.active {
+                            background-color: rgba(255, 215, 0, 0.4); 
+                                color: #FFFF00 !important;
+                                }
+
+                                button.btn-outline-light {
+                                    border-color: #FFD700 !important;
+                                        color: #FFD700 !important;
+                                            transition: all 0.3s ease;
+                                            }
+
+                                            button.btn-outline-light:hover {
+                                                background-color: #FFD700;
+                                                    color: #000 !important;
+                                                        border-color: #FFD700 !important;
+                                                        }
+                                                        

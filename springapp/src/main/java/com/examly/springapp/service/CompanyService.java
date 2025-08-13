@@ -29,6 +29,19 @@ public class CompanyService {
         return companyRepository.save(company);
     }
 
+    public Company updateCompany(Long companyId, Company updatedCompany) {
+        return companyRepository.findById(companyId)
+                .map(existingCompany -> {
+                    existingCompany.setName(updatedCompany.getName());
+                    existingCompany.setDescription(updatedCompany.getDescription());
+                    existingCompany.setLocation(updatedCompany.getLocation());
+                    existingCompany.setWebsite(updatedCompany.getWebsite());
+                    existingCompany.setIndustry(updatedCompany.getIndustry());
+                    return companyRepository.save(existingCompany);
+                })
+                .orElseThrow(() -> new RuntimeException("Company not found with ID: " + companyId));
+    }
+
     public Company loginCompany(String email, String password) {
         Optional<User> optionalUser = userRepository.findByEmail(email);
         if (!optionalUser.isPresent()) {

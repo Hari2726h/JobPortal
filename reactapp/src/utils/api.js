@@ -223,6 +223,15 @@ export const fetchAppliedJobs = async (userId) => {
                 throw error;
         }
 };
+export const updateCompany = async (companyId, companyData) => {
+        try {
+                const response = await companiesApi.put(`/${companyId}`, companyData);
+                return response.data;
+        } catch (error) {
+                console.error('API Error in updateCompany:', error);
+                throw error;
+        }
+};
 
 
 export const deleteApplicationById = async (id, userId) => {
@@ -244,7 +253,16 @@ export const createJobForCompany = async (companyId, jobData) => {
         }
 };
 
-
+export const updateJob = async (id, jobData) => {
+            try {
+                    const response = await jobsApi.put(`/${id}`, jobData);
+                            return response.data;
+                                } catch (error) {
+                                        console.error('API Error in updateJob:', error);
+                                                throw error;
+                                                    }
+                                                    };
+                                                    
 export const updateApplication = async (id, userId, applicationData) => {
         try {
                 const response = await applicationsApi.put(`/${id}/${userId}`, applicationData);

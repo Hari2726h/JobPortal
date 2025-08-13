@@ -18,7 +18,7 @@ const Login = () => {
             if (loginType === 'user') {
                 const user = await api.loginUser({ email, password });
                 localStorage.setItem('user', JSON.stringify(user));
-                navigate('/'); 
+                navigate('/');
             } else {
                 const company = await api.loginCompany({ email, password });
                 localStorage.setItem('company', JSON.stringify(company));
@@ -99,6 +99,14 @@ const Login = () => {
                                 Register your company
                             </span>
                         )}
+                        <br />
+                        <span
+                            className="text-success"
+                            style={{ cursor: 'pointer', fontWeight: '500' }}
+                            onClick={() => navigate('/admin/login')}
+                        >
+                            Login as Admin
+                        </span>
                     </small>
                 </div>
             </Card>

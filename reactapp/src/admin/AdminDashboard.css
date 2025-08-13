@@ -1,0 +1,16 @@
+.admin-dashboard-content {
+      margin-left: 240px;
+        background-color: #f8f9fa;
+          min-height: 100vh;
+          }
+
+          .stat-card {
+            background: white;
+              border-radius: 10px;
+                transition: transform 0.2s ease;
+                }
+
+                .stat-card:hover {
+                  transform: translateY(-3px);
+                  }
+                  

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Navbar, Nav, Container } from 'react-bootstrap';
-import { HouseDoorFill, PersonFill, BriefcaseFill, BoxArrowInRight, ClipboardCheck } from 'react-bootstrap-icons';
+import { HouseDoorFill, PersonFill, BriefcaseFill, BoxArrowInRight, ClipboardCheck, Building } from 'react-bootstrap-icons';
 import { useNavigate } from 'react-router-dom';
 import JobSearch from './JobSearch';
 
@@ -46,28 +46,36 @@ const Header = ({ setJobs }) => {
                             <HouseDoorFill size={20} className="me-1" /> Home
                         </Nav.Link>
 
-                        {!company && (
-                            <>
-                                
-                                <Nav.Link
-                                    onClick={() => navigate('/applied-jobs')}
-                                    className="text-light px-3 d-flex align-items-center"
-                                    {...hoverHandlers}
-                                >
-                                    <ClipboardCheck size={20} className="me-1" /> Applied Jobs
-                                </Nav.Link>
-                            </>
+                        {!company && user && (
+                            <Nav.Link
+                                onClick={() => navigate('/applied-jobs')}
+                                className="text-light px-3 d-flex align-items-center"
+                                {...hoverHandlers}
+                            >
+                                <ClipboardCheck size={20} className="me-1" /> Applied Jobs
+                            </Nav.Link>
                         )}
 
                         {user || company ? (
                             <>
-                                <Nav.Link
-                                    onClick={() => navigate(company ? '/company/dashboard' : '/profile')}
-                                    className="text-light px-3 d-flex align-items-center"
-                                    {...hoverHandlers}
-                                >
-                                    <PersonFill size={20} className="me-1" /> {user?.name || company?.name || 'Profile'}
-                                </Nav.Link>
+                                {company ? (
+                                    <Nav.Link
+                                        onClick={() => navigate('/company/profile')}
+                                        className="text-light px-3 d-flex align-items-center"
+                                        {...hoverHandlers}
+                                    >
+                                        <Building size={20} className="me-1" /> {company?.name || 'Company Profile'}
+                                    </Nav.Link>
+                                ) : (
+                                    <Nav.Link
+                                        onClick={() => navigate('/profile')}
+                                        className="text-light px-3 d-flex align-items-center"
+                                        {...hoverHandlers}
+                                    >
+                                        <PersonFill size={20} className="me-1" /> {user?.name || 'Profile'}
+                                    </Nav.Link>
+                                )}
+
                                 <Nav.Link
                                     onClick={handleLogout}
                                     className="text-light px-3 d-flex align-items-center"
