@@ -29,6 +29,10 @@ public class CompanyService {
         return companyRepository.save(company);
     }
 
+    public List<Company> searchCompanies(String name) {
+        return companyRepository.findByNameContainingIgnoreCase(name);
+    }
+
     public Company updateCompany(Long companyId, Company updatedCompany) {
         return companyRepository.findById(companyId)
                 .map(existingCompany -> {

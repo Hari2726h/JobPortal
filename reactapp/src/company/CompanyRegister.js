@@ -9,36 +9,57 @@ const CompanyRegister = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
     const handleRegister = async (e) => {
         e.preventDefault();
         setError('');
+        setLoading(true);
+
         try {
-            const user = await api.registerUser({ email, password });
+            const userPayload = {
+                name: companyName,
+                email,
+                password,
+                role: 'EMPLOYER'
+            };
+
+            const user = await api.registerUser(userPayload);
+            if (!user?.id) {
+                throw new Error('User registration failed');
+            }
+
             localStorage.setItem('user', JSON.stringify(user));
 
-            const companyName = prompt("Enter your company name");
-            const companyData = {
+            const companyPayload = {
                 name: companyName,
-                description: "",
-                location: ""
+                description: '',
+                location: ''
             };
-            const company = await api.createCompany(user.id, companyData);
+
+            const company = await api.createCompany(user.id, companyPayload);
+            if (!company?.id) {
+                throw new Error('Company creation failed');
+            }
+
             localStorage.setItem('company', JSON.stringify(company));
 
             navigate('/company/dashboard');
-        } catch {
-            setError('Registration failed');
+        } catch (err) {
+            console.error('Registration error:', err);
+            setError(err.response?.data || err.message || 'Registration failed');
+        } finally {
+            setLoading(false);
         }
     };
-
 
     return (
         <Container className="d-flex justify-content-center align-items-center" style={{ minHeight: '80vh' }}>
             <Card className="p-4 shadow-lg" style={{ maxWidth: '400px', width: '100%' }}>
                 <h3 className="text-center mb-4">Register Company</h3>
                 {error && <Alert variant="danger">{error}</Alert>}
+
                 <Form onSubmit={handleRegister}>
                     <Form.Group className="mb-3">
                         <Form.Label>Company Name</Form.Label>
@@ -73,10 +94,12 @@ const CompanyRegister = () => {
                         />
                     </Form.Group>
 
-                    <Button type="submit" variant="warning" className="w-100">
-                        <PersonPlusFill size={18} className="me-2" /> Register
+                    <Button type="submit" variant="warning" className="w-100" disabled={loading}>
+                        <PersonPlusFill size={18} className="me-2" />
+                        {loading ? 'Registering...' : 'Register'}
                     </Button>
                 </Form>
+
                 <div className="text-center mt-3">
                     <small>
                         Already have an account?{' '}

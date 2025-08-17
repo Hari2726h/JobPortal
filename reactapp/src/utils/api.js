@@ -10,6 +10,17 @@ const usersApi = axios.create({ baseURL: USERS_API_BASE_URL, headers: { 'Content
 const companiesApi = axios.create({ baseURL: COMPANIES_API_BASE_URL, headers: { 'Content-Type': 'application/json' } });
 const applicationsApi = axios.create({ baseURL: APPLICATIONS_API_BASE_URL, headers: { 'Content-Type': 'application/json' } });
 
+export const searchApplications = async (keyword) => {
+            try {
+                    const response = await applicationsApi.get('/search', {
+                                    params: { keyword }
+                                            });
+                                                    return Array.isArray(response.data) ? response.data : [];
+                                                        } catch (error) {
+                                                                console.error("API Error in searchApplications:", error);
+                                                                        return [];
+                                                                            }
+                                                                            };
 export const fetchJobs = async () => {
         try {
                 const response = await jobsApi.get();
@@ -259,6 +270,50 @@ export const updateJob = async (id, jobData) => {
                 return response.data;
         } catch (error) {
                 console.error('API Error in updateJob:', error);
+                throw error;
+        }
+};
+export const searchUsers = async (keyword) => {
+        try {
+                const response = await usersApi.get('/search', { params: { keyword } });
+                return response.data;
+        } catch (error) {
+                console.error('API Error in searchUsers:', error);
+                throw error;
+        }
+};
+
+export const fetchPaginatedUsers = async (page = 0, size = 10, sortBy = 'id', sortDir = 'asc') => {
+        try {
+                const response = await usersApi.get('/paginated', {
+                        params: { page, size, sortBy, sortDir }
+                });
+                return response.data;
+        } catch (error) {
+                console.error('API Error in fetchPaginatedUsers:', error);
+                throw error;
+        }
+};
+export const searchCompanies = async (query) => {
+        try {
+                const response = await companiesApi.get('/search', {
+                        params: { name: query }
+                });
+                return response.data;
+        } catch (error) {
+                console.error('API Error in searchCompanies:', error);
+                throw error;
+        }
+};
+
+export const searchUsersPaginated = async (keyword, page = 0, size = 10, sortBy = 'id', sortDir = 'asc') => {
+        try {
+                const response = await usersApi.get('/search-paginated', {
+                        params: { keyword, page, size, sortBy, sortDir }
+                });
+                return response.data;
+        } catch (error) {
+                console.error('API Error in searchUsersPaginated:', error);
                 throw error;
         }
 };

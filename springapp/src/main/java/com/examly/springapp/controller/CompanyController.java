@@ -48,6 +48,12 @@ public class CompanyController {
         return ResponseEntity.status(403).body("Only EMPLOYERs can create companies.");
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<List<Company>> searchCompanies(@RequestParam String name) {
+        List<Company> companies = companyService.searchCompanies(name);
+        return ResponseEntity.ok(companies);
+    }
+
     @PostMapping("/login")
     public ResponseEntity<?> loginCompany(@RequestBody Map<String, String> loginData) {
         String email = loginData.get("email");

@@ -23,9 +23,10 @@ public class ApplicationService {
      public Application createApplication(Application application) {
           return applicationRepository.save(application);
      }
+
      public List<Application> getApplicationsByCompanyId(Long companyId) {
-              return applicationRepository.findByJobCompanyyId(companyId);
-              }
+          return applicationRepository.findByJobCompanyyId(companyId);
+     }
 
      public List<Application> getAllApplications() {
           return applicationRepository.findAll();
@@ -51,4 +52,9 @@ public class ApplicationService {
      public void deleteApplicationById(Long id) {
           applicationRepository.deleteById(id);
      }
+
+     public List<Application> searchApplications(String keyword) {
+          return applicationRepository.searchByApplicantName(keyword);
+     }
+
 }

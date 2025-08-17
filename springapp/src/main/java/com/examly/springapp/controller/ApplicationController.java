@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.examly.springapp.model.Application;
@@ -47,6 +48,30 @@ public class ApplicationController {
         return applicationService.getAllApplications();
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<List<Map<String, Object>>> searchApplications(
+            @RequestParam(required = false) String keyword) {
+
+        List<Application> apps;
+        if (keyword == null || keyword.isBlank()) {
+            apps = applicationService.getAllApplications();
+        } else {
+            apps = applicationService.searchApplications(keyword);
+        }
+
+        List<Map<String, Object>> results = apps.stream().map(app -> {
+            Map<String, Object> map = new HashMap<>();
+            map.put("id", app.getId());
+            map.put("applicantName", app.getUser() != null ? app.getUser().getName() : "");
+            map.put("email", app.getUser() != null ? app.getUser().getEmail() : "");
+            map.put("jobTitle", app.getJob() != null ? app.getJob().getTitle() : "Job missing");
+            map.put("status", app.getStatus() != null ? app.getStatus() : "Pending");
+            return map;
+        }).collect(Collectors.toList());
+
+        return ResponseEntity.ok(results);
+    }
+
     @GetMapping("/user/{userId}")
     public ResponseEntity<?> getApplicationsByUser(@PathVariable Long userId) {
         User user = userService.getUserById(userId);
@@ -75,12 +100,12 @@ public class ApplicationController {
         }
         return ResponseEntity.status(403).body("Only USER or ADMIN can view applications.");
     }
+
     @GetMapping("/company/{companyId}")
     public ResponseEntity<?> getApplicationsByCompany(@PathVariable Long companyId) {
         List<Application> applications = applicationService.getApplicationsByCompanyId(companyId);
-            return ResponseEntity.ok(applications);
-            }
-            
+        return ResponseEntity.ok(applications);
+    }
 
     @DeleteMapping("/{id}/{userId}")
     public ResponseEntity<?> deleteApplicationById(@PathVariable Long id, @PathVariable Long userId) {

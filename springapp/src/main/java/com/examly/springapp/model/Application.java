@@ -26,7 +26,7 @@ public class Application {
     private String resumeUrl;
     private String status;
     private LocalDate appliedDate;
-  
+    private String name;
     @ManyToOne
     private User user;
 

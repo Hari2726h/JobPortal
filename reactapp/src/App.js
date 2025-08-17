@@ -14,6 +14,9 @@ import AppliedJobsPage from './pages/AppliedJobsPage';
 import AdminLogin from './admin/AdminLogin';
 import AdminDashboard from './admin/AdminDashboard';
 import UserManagement from './admin/UserManagement';
+import CompanyManagement from './admin/CompanyManagement';
+import JobManagement from './admin/JobManagement';
+import ApplicationManagement from './admin/ApplicationManagement';
 import CompanyLogin from './company/CompanyLogin';
 import ApplicationsPage from './company/ApplicationsPage';
 import CompanyRegister from './company/CompanyRegister';
@@ -60,6 +63,9 @@ function App() {
                 <Route path="/company/update-job/:id" element={<UpdateJob />} />
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/admin/users" element={<UserManagement />} />
+                <Route path="/admin/companies" element={<CompanyManagement />} />
+                <Route path="/admin/applications" element={<ApplicationManagement />} />
+                <Route path="/admin/jobs" element={<JobManagement />} />
                 <Route path="/admin/dashboard" element={<AdminDashboard />} />
             </Routes>
             {!hideHeaderFooter && <Footer />}

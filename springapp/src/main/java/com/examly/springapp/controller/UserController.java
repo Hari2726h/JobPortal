@@ -1,8 +1,25 @@
+
+// @PostMapping
+// public String registerUser(@RequestBody User user){
+// . userService.createUser(user);
+// . return "User Registered Succesfully";
+// }
+
+// @PostMapping("/login")
+// public ResponseEntity<?> login(@RequestBody User user){
+// . try{
+// . String token=userService.loginUser(user);
+// . return ResponseEntity.ok(token);
+// . }catch(UserNotFoundException e){
+// . return ResponseEntity.status(401).body(e.getMessage());
+// . }
+// }
 package com.examly.springapp.controller;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,14 +50,34 @@ public class UserController {
         return userService.loginUser(user);
     }
 
-    @DeleteMapping("/{id}/{adminId}")
-    public ResponseEntity<?> deleteUserById(@PathVariable Long id, @PathVariable Long adminId) {
-        User admin = userService.getUserById(adminId);
-        if (admin.getRole() == Role.ADMIN) {
-            userService.deleteUserById(id);
-            return ResponseEntity.ok("User deleted");
-        }
-        return ResponseEntity.status(403).body("Only ADMINs can delete users.");
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteUserById(@PathVariable Long id) {
+        userService.deleteUserById(id);
+        return ResponseEntity.ok("User deleted");
+    }
+
+    @GetMapping("/search")
+    public List<User> searchUsers(@RequestParam(required = false) String keyword) {
+        return userService.searchUsers(keyword);
+    }
+
+    @GetMapping("/paginated")
+    public Page<User> getPaginatedUsers(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "asc") String sortDir) {
+        return userService.getUsers(page, size, sortBy, sortDir);
+    }
+
+    @GetMapping("/search-paginated")
+    public Page<User> searchUsersPaginated(
+            @RequestParam String keyword,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "asc") String sortDir) {
+        return userService.searchUsers(keyword, page, size, sortBy, sortDir);
     }
 
     @GetMapping("/{id}")
@@ -57,19 +94,4 @@ public class UserController {
         return ResponseEntity.status(403).body("Only ADMINs can update user data.");
     }
 
-    // @PostMapping
-    // public String registerUser(@RequestBody User user){
-    // . userService.createUser(user);
-    // . return "User Registered Succesfully";
-    // }
-
-    // @PostMapping("/login")
-    // public ResponseEntity<?> login(@RequestBody User user){
-    // . try{
-    // . String token=userService.loginUser(user);
-    // . return ResponseEntity.ok(token);
-    // . }catch(UserNotFoundException e){
-    // . return ResponseEntity.status(401).body(e.getMessage());
-    // . }
-    // }
 }
