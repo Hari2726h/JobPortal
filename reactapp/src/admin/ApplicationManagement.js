@@ -33,11 +33,21 @@ const ApplicationManagement = () => {
         fetchApplications();
     }, []);
 
+    const normalizeApplications = (data) => {
+        return data.map((app) => ({
+            ...app,
+            applicantName: app.applicantName || (app.user ? app.user.name : ""),
+            email: app.email || (app.user ? app.user.email : ""),
+            jobTitle: app.jobTitle || (app.job ? app.job.title : ""),
+            status: app.status || "Pending",
+        }));
+    };
+
     const fetchApplications = async () => {
         try {
             setLoading(true);
             const data = await getAllApplications();
-            setApplications(Array.isArray(data) ? data : []);
+            setApplications(Array.isArray(data) ? normalizeApplications(data) : []);
         } catch (err) {
             console.error("Error fetching applications:", err);
             setError("Failed to load applications.");
@@ -55,7 +65,7 @@ const ApplicationManagement = () => {
         try {
             setLoading(true);
             const data = await searchApplications(searchTerm);
-            setApplications(Array.isArray(data) ? data : []);
+            setApplications(Array.isArray(data) ? normalizeApplications(data) : []);
         } catch (err) {
             console.error("Error searching applications:", err);
             setError("Search failed.");

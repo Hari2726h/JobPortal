@@ -17,9 +17,11 @@ const AdminLogin = () => {
         setError('');
 
         if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
-            localStorage.setItem('admin', JSON.stringify({ email }));
+            const adminIdFromDB = 1;
+            localStorage.setItem('admin', JSON.stringify({ id: adminIdFromDB, email }));
             navigate('/admin/dashboard');
-        } else {
+        }
+        else {
             setError('Invalid admin credentials');
         }
     };
@@ -56,15 +58,16 @@ const AdminLogin = () => {
                         <BoxArrowInRight size={18} className="me-2" /> Login as Admin
                     </Button>
                 </Form>
+
                 <div className="text-center mt-3">
                     <small>
                         Go back to{' '}
                         <span
                             className="text-primary"
                             style={{ cursor: 'pointer' }}
-                            onClick={() => navigate('/company/login')}
+                            onClick={() => navigate('/login')}
                         >
-                            Company Login
+                            User Login
                         </span>
                     </small>
                 </div>

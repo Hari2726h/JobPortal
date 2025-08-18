@@ -10,15 +10,6 @@ const usersApi = axios.create({ baseURL: USERS_API_BASE_URL, headers: { 'Content
 const companiesApi = axios.create({ baseURL: COMPANIES_API_BASE_URL, headers: { 'Content-Type': 'application/json' } });
 const applicationsApi = axios.create({ baseURL: APPLICATIONS_API_BASE_URL, headers: { 'Content-Type': 'application/json' } });
 
-export const updateUser = async (id, userData) => {
-        try {
-                const response = await usersApi.put(`/${id}`, userData);
-                return response.data;
-        } catch (error) {
-                console.error('API Error in updateUser:', error);
-                throw error;
-        }
-};
 export const searchApplications = async (keyword) => {
         try {
                 const response = await applicationsApi.get('/search', {
@@ -28,6 +19,15 @@ export const searchApplications = async (keyword) => {
         } catch (error) {
                 console.error("API Error in searchApplications:", error);
                 return [];
+        }
+};
+export const updateUser = async (id, userData) => {
+        try {
+                const response = await usersApi.put(`/${id}`, userData);
+                return response.data;
+        } catch (error) {
+                console.error('API Error in updateUser:', error);
+                throw error;
         }
 };
 export const fetchJobs = async () => {
