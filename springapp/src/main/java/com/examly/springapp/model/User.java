@@ -24,8 +24,10 @@ public class User {
     private String name;
     @Column(unique = true, nullable=false)
     private String email;
+    private String phNo;
     // @JsonIgnore
     private String password;
+    private String bio;
     @Enumerated(EnumType.STRING)
     private Role role;
     

@@ -8,6 +8,7 @@ import {
 } from 'react-bootstrap-icons';
 import { getAllUsers, getAllCompanies, fetchJobs, getAllApplications } from '../utils/api';
 import AdminSidebar from './AdminSidebar';
+import { useNavigate } from 'react-router-dom';
 
 const AdminDashboard = () => {
     const [stats, setStats] = useState({
@@ -21,6 +22,7 @@ const AdminDashboard = () => {
     const [recentApplications, setRecentApplications] = useState([]);
     const [topCompanies, setTopCompanies] = useState([]);
     const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const loadDashboardData = async () => {
@@ -31,18 +33,15 @@ const AdminDashboard = () => {
                     fetchJobs(),
                     getAllApplications(),
                 ]);
-
                 setStats({
                     users: users.length,
                     companies: companies.length,
                     jobs: jobs.length,
                     applications: applications.length,
                 });
-
                 setRecentUsers(users.slice(-5).reverse());
                 setRecentJobs(jobs.slice(-5).reverse());
                 setRecentApplications(applications.slice(-5).reverse());
-
                 const companyJobCounts = companies.map(company => {
                     const jobCount = jobs.filter(job => job.companyId === company.id).length;
                     return { ...company, jobCount };
@@ -54,7 +53,6 @@ const AdminDashboard = () => {
                 setLoading(false);
             }
         };
-
         loadDashboardData();
     }, []);
 
@@ -106,13 +104,24 @@ const AdminDashboard = () => {
 
                         <Row className="mb-4">
                             <Col md={6} lg={3}>
-                                <Button variant="primary" style={{ width: '100%' }}>Create Job</Button>
+                                <Button
+                                    variant="primary"
+                                    style={{ width: '100%' }}
+                                    onClick={() => navigate('/company/post-job')}
+                                >
+                                    Create Job
+                                </Button>
                             </Col>
                             <Col md={6} lg={3}>
-                                <Button variant="success" style={{ width: '100%' }}>Register Company</Button>
+                                <Button
+                                    variant="success"
+                                    style={{ width: '100%' }}
+                                    onClick={() => navigate('/company/register')}
+                                >
+                                    Register Company
+                                </Button>
                             </Col>
                         </Row>
-
                         <Row>
                             <Col md={6}>
                                 <h5>Recent Users</h5>
@@ -199,8 +208,7 @@ const AdminDashboard = () => {
                     </>
                 )}
             </div>
-        </div >
+        </div>
     );
 };
-
 export default AdminDashboard;

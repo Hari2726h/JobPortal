@@ -9,6 +9,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import ApplicationPage from './pages/ApplicationPage';
 import Profile from './pages/Profile';
+import EditProfile from './pages/EditProfile';
 import CompanyProfile from './company/CompanyProfile';
 import AppliedJobsPage from './pages/AppliedJobsPage';
 import AdminLogin from './admin/AdminLogin';
@@ -62,6 +63,7 @@ function App() {
                 <Route path="/register" element={<Register />} />
                 <Route path="/company/update-job/:id" element={<UpdateJob />} />
                 <Route path="/profile" element={<Profile />} />
+                <Route path="/edit-profile" element={<EditProfile />} />
                 <Route path="/admin/users" element={<UserManagement />} />
                 <Route path="/admin/companies" element={<CompanyManagement />} />
                 <Route path="/admin/applications" element={<ApplicationManagement />} />

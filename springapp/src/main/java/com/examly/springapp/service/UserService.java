@@ -72,10 +72,11 @@ public class UserService {
         User oldUser = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
 
-        oldUser.setEmail(user.getEmail());
         oldUser.setName(user.getName());
-        return userRepository.save(oldUser);
+        oldUser.setPhNo(user.getPhNo());
+        oldUser.setBio(user.getBio());
 
+        return userRepository.save(oldUser);
     }
 
     public User getUserById(Long id) {

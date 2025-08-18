@@ -17,7 +17,6 @@ import {
     CalendarFill,
     PencilSquare,
     ArrowLeftCircle,
-    InfoCircle,
 } from 'react-bootstrap-icons';
 import { useNavigate } from 'react-router-dom';
 import { getUserById } from '../utils/api';
@@ -48,10 +47,6 @@ const Profile = () => {
 
         fetchProfile();
     }, [storedUser, navigate]);
-
-    const handleRequestUpdate = () => {
-        alert('Please contact support@example.com to request profile updates.');
-    };
 
     const renderTooltip = (props, text) => (
         <Tooltip id="button-tooltip" {...props}>
@@ -98,7 +93,6 @@ const Profile = () => {
                         }}
                     >
                         <Card.Body className="text-center d-flex flex-column align-items-center p-5">
-
                             <div
                                 style={{
                                     width: 100,
@@ -124,7 +118,6 @@ const Profile = () => {
                             <p className="text-primary fw-semibold mb-4" style={{ letterSpacing: '1px' }}>
                                 {userData?.role?.toUpperCase() || 'JOB SEEKER'}
                             </p>
-
                             <Card
                                 bg="white"
                                 text="dark"
@@ -137,10 +130,10 @@ const Profile = () => {
                                         {userData?.email || 'Email not provided'}
                                     </span>
                                 </div>
-                                {userData?.phone && (
+                                {userData?.phNo && (
                                     <div className="d-flex align-items-center mb-3">
                                         <TelephoneFill className="me-3 text-primary" size={22} />
-                                        <span>{userData.phone}</span>
+                                        <span>{userData.phNo}</span>
                                     </div>
                                 )}
                                 {userData?.createdAt && (
@@ -154,39 +147,20 @@ const Profile = () => {
                             </Card>
 
                             <div className="d-flex gap-3 mt-auto w-100 justify-content-center flex-wrap">
-                                {userData?.role === 'admin' ? (
-                                    <OverlayTrigger
-                                        placement="top"
-                                        delay={{ show: 250, hide: 400 }}
-                                        overlay={(props) => renderTooltip(props, 'Edit your profile')}
+                                <OverlayTrigger
+                                    placement="top"
+                                    delay={{ show: 250, hide: 400 }}
+                                    overlay={(props) => renderTooltip(props, 'Edit your profile')}
+                                >
+                                    <Button
+                                        variant="primary"
+                                        className="d-flex align-items-center gap-2 px-4"
+                                        onClick={() => navigate('/edit-profile')}
+                                        style={{ minWidth: 140 }}
                                     >
-                                        <Button
-                                            variant="primary"
-                                            className="d-flex align-items-center gap-2 px-4"
-                                            onClick={() => navigate('/edit-profile')}
-                                            style={{ minWidth: 140 }}
-                                        >
-                                            <PencilSquare /> Edit Profile
-                                        </Button>
-                                    </OverlayTrigger>
-                                ) : (
-                                    <OverlayTrigger
-                                        placement="top"
-                                        delay={{ show: 250, hide: 400 }}
-                                        overlay={(props) =>
-                                            renderTooltip(props, 'Request support to update your profile')
-                                        }
-                                    >
-                                        <Button
-                                            variant="outline-primary"
-                                            className="d-flex align-items-center gap-2 px-4"
-                                            onClick={handleRequestUpdate}
-                                            style={{ minWidth: 180 }}
-                                        >
-                                            <InfoCircle /> Request Profile Update
-                                        </Button>
-                                    </OverlayTrigger>
-                                )}
+                                        <PencilSquare /> Edit Profile
+                                    </Button>
+                                </OverlayTrigger>
 
                                 <OverlayTrigger
                                     placement="top"
@@ -200,7 +174,7 @@ const Profile = () => {
                                         style={{ minWidth: 130 }}
                                     >
                                         <ArrowLeftCircle /> Back to Home
-                                 </Button>
+                                    </Button>
                                 </OverlayTrigger>
                             </div>
                         </Card.Body>
@@ -208,14 +182,12 @@ const Profile = () => {
                 </Col>
             </Row>
 
-            
-
             <style>{`
-                  @keyframes fadeIn {
-                              0% { opacity: 0; transform: translateY(12px);}
-                                        100% { opacity: 1; transform: translateY(0);}
-                                                }
-            `} </style>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                @keyframes fadeIn {
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    0% { opacity: 0; transform: translateY(12px);}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        100% { opacity: 1; transform: translateY(0);}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        }
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    `}</style>
         </Container>
     );
 };

@@ -10,17 +10,26 @@ const usersApi = axios.create({ baseURL: USERS_API_BASE_URL, headers: { 'Content
 const companiesApi = axios.create({ baseURL: COMPANIES_API_BASE_URL, headers: { 'Content-Type': 'application/json' } });
 const applicationsApi = axios.create({ baseURL: APPLICATIONS_API_BASE_URL, headers: { 'Content-Type': 'application/json' } });
 
+export const updateUser = async (id, userData) => {
+        try {
+                const response = await usersApi.put(`/${id}`, userData);
+                return response.data;
+        } catch (error) {
+                console.error('API Error in updateUser:', error);
+                throw error;
+        }
+};
 export const searchApplications = async (keyword) => {
-            try {
-                    const response = await applicationsApi.get('/search', {
-                                    params: { keyword }
-                                            });
-                                                    return Array.isArray(response.data) ? response.data : [];
-                                                        } catch (error) {
-                                                                console.error("API Error in searchApplications:", error);
-                                                                        return [];
-                                                                            }
-                                                                            };
+        try {
+                const response = await applicationsApi.get('/search', {
+                        params: { keyword }
+                });
+                return Array.isArray(response.data) ? response.data : [];
+        } catch (error) {
+                console.error("API Error in searchApplications:", error);
+                return [];
+        }
+};
 export const fetchJobs = async () => {
         try {
                 const response = await jobsApi.get();
@@ -120,15 +129,6 @@ export const getUserById = async (id) => {
         }
 };
 
-export const updateUser = async (id, adminId, userData) => {
-        try {
-                const response = await usersApi.put(`/${id}/${adminId}`, userData);
-                return response.data;
-        } catch (error) {
-                console.error('API Error in updateUser:', error);
-                throw error;
-        }
-};
 
 export const loginCompany = async ({ email, password }) => {
         try {

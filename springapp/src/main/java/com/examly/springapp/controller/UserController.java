@@ -85,13 +85,16 @@ public class UserController {
         return userService.getUserById(id);
     }
 
-    @PutMapping("/{id}/{adminId}")
-    public ResponseEntity<?> updatedUser(@RequestBody User user, @PathVariable Long id, @PathVariable Long adminId) {
-        User admin = userService.getUserById(adminId);
-        if (admin.getRole() == Role.ADMIN) {
-            return ResponseEntity.ok(userService.updateUser(id, user));
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateUser(@RequestBody User user, @PathVariable Long id) {
+        try {
+            User updatedUser = userService.updateUser(id, user);
+            return ResponseEntity.ok(updatedUser);
+        } catch (UserNotFoundException e) {
+            return ResponseEntity.status(404).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Error updating profile: " + e.getMessage());
         }
-        return ResponseEntity.status(403).body("Only ADMINs can update user data.");
     }
 
 }
