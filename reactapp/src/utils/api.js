@@ -109,15 +109,16 @@ export const loginUser = async (userData) => {
         }
 };
 
-export const deleteUserById = async (id, adminId) => {
+export const deleteUserById = async (id) => {
         try {
-                const response = await usersApi.delete(`/${id}/${adminId}`);
-                return response.data;
+                const response = await usersApi.delete(`/${id}`);
+                            return response.data;
         } catch (error) {
                 console.error('API Error in deleteUserById:', error);
                 throw error;
         }
 };
+
 
 export const getUserById = async (id) => {
         try {
@@ -144,7 +145,6 @@ export const createCompany = async (userId, companyData) => {
         const response = await companiesApi.post(`/create/${userId}`, companyData);
         return response.data;
 };
-
 
 export const getAllCompanies = async () => {
         try {

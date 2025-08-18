@@ -67,7 +67,7 @@ const UserManagement = () => {
 
     const handleSave = async () => {
         try {
-            await updateUser(selectedUser.id, 1, formData);
+            await updateUser(selectedUser.id,formData);
             setShowModal(false);
             loadUsers();
         } catch (error) {
@@ -77,7 +77,7 @@ const UserManagement = () => {
 
     const toggleStatus = async (user) => {
         try {
-            await updateUser(user.id, 1, { ...user, active: !user.active });
+            await updateUser(user.id, { ...user, active: !user.active });
             loadUsers();
         } catch (error) {
             console.error('Error toggling status:', error);

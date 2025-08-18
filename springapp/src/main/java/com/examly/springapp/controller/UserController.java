@@ -50,51 +50,51 @@ public class UserController {
         return userService.loginUser(user);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteUserById(@PathVariable Long id) {
-        userService.deleteUserById(id);
-        return ResponseEntity.ok("User deleted");
-    }
-
+    
     @GetMapping("/search")
     public List<User> searchUsers(@RequestParam(required = false) String keyword) {
         return userService.searchUsers(keyword);
     }
-
+    
     @GetMapping("/paginated")
     public Page<User> getPaginatedUsers(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "id") String sortBy,
-            @RequestParam(defaultValue = "asc") String sortDir) {
-        return userService.getUsers(page, size, sortBy, sortDir);
-    }
-
-    @GetMapping("/search-paginated")
-    public Page<User> searchUsersPaginated(
+        @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "10") int size,
+        @RequestParam(defaultValue = "id") String sortBy,
+        @RequestParam(defaultValue = "asc") String sortDir) {
+            return userService.getUsers(page, size, sortBy, sortDir);
+        }
+        
+        @GetMapping("/search-paginated")
+        public Page<User> searchUsersPaginated(
             @RequestParam String keyword,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "id") String sortBy,
             @RequestParam(defaultValue = "asc") String sortDir) {
-        return userService.searchUsers(keyword, page, size, sortBy, sortDir);
-    }
-
-    @GetMapping("/{id}")
-    public User getUserById(@PathVariable Long id) {
-        return userService.getUserById(id);
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<?> updateUser(@RequestBody User user, @PathVariable Long id) {
-        try {
-            User updatedUser = userService.updateUser(id, user);
-            return ResponseEntity.ok(updatedUser);
-        } catch (UserNotFoundException e) {
-            return ResponseEntity.status(404).body(e.getMessage());
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body("Error updating profile: " + e.getMessage());
-        }
-    }
-
+                return userService.searchUsers(keyword, page, size, sortBy, sortDir);
+            }
+            
+            @GetMapping("/{id}")
+            public User getUserById(@PathVariable Long id) {
+                return userService.getUserById(id);
+            }
+            
+            @PutMapping("/{id}")
+            public ResponseEntity<?> updateUser(@RequestBody User user, @PathVariable Long id) {
+                try {
+                    User updatedUser = userService.updateUser(id, user);
+                    return ResponseEntity.ok(updatedUser);
+                } catch (UserNotFoundException e) {
+                    return ResponseEntity.status(404).body(e.getMessage());
+                } catch (Exception e) {
+                    return ResponseEntity.status(500).body("Error updating profile: " + e.getMessage());
+                }
+            }
+            @DeleteMapping("/{id}")
+            public ResponseEntity<?> deleteUserById(@PathVariable Long id) {
+                userService.deleteUserById(id);
+                return ResponseEntity.ok("User deleted");
+            }
+            
 }

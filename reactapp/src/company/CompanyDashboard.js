@@ -31,9 +31,32 @@ const CompanyDashboard = () => {
     const [errorApplications, setErrorApplications] = useState('');
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [jobToDelete, setJobToDelete] = useState(null);
+    const [newAppsCount, setNewAppsCount] = useState(0);
+    const [previousAppIds, setPreviousAppIds] = useState([]);
 
     const navigate = useNavigate();
     const company = JSON.parse(localStorage.getItem('company'));
+    useEffect(() => {
+        if (!company) return;
+
+        const interval = setInterval(async () => {
+            try {
+                const apps = await api.getApplicationsByCompany(company.id);
+                const currentIds = apps.map(app => app.id);
+
+                if (previousAppIds.length > 0) {
+                    const newApps = currentIds.filter(id => !previousAppIds.includes(id));
+                    setNewAppsCount(newApps.length);
+                }
+
+                setPreviousAppIds(currentIds);
+            } catch (error) {
+                console.error("Error fetching notifications:", error);
+            }
+        }, 10000); // poll every 10 seconds
+
+        return () => clearInterval(interval);
+    }, [company, previousAppIds]);
 
     useEffect(() => {
         if (!company) {
@@ -119,6 +142,7 @@ const CompanyDashboard = () => {
                         Logout
                     </Button>
                 </Container>
+                
             </section>
 
             <Container className="py-4">

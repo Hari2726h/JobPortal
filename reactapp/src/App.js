@@ -24,6 +24,7 @@ import CompanyRegister from './company/CompanyRegister';
 import CompanyDashboard from './company/CompanyDashboard';
 import UpdateJob from './company/UpdateJob';
 import PostJob from './company/PostJob';
+import Notifications from './company/Notifications';
 
 function JobDetailPage() {
     const { jobId } = useParams();
@@ -57,6 +58,7 @@ function App() {
                 <Route path="/company/job/:jobId/applications" element={<ApplicationsPage />} />
                 <Route path="/jobs/:jobId" element={<JobDetailPage />} />
                 <Route path="/company/profile" element={<CompanyProfile />} />
+                <Route path="/company/notification" element={<Notifications />} />
                 <Route path="/jobDetail/:jobId" element={<JobDetailsPage />} />
                 <Route path="/admin/login" element={<AdminLogin />} />
                 <Route path="/login" element={<Login />} />

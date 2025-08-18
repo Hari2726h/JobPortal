@@ -1,8 +1,9 @@
 import React from 'react';
 import { Navbar, Nav, Container } from 'react-bootstrap';
-import { HouseDoorFill, PersonFill, BriefcaseFill, BoxArrowInRight, ClipboardCheck, Building } from 'react-bootstrap-icons';
+import { HouseDoorFill, PersonFill, BoxArrowInRight, ClipboardCheck, Building } from 'react-bootstrap-icons';
 import { useNavigate } from 'react-router-dom';
 import JobSearch from './JobSearch';
+import Notifications from '../company/Notifications';
 
 const Header = ({ setJobs }) => {
     const navigate = useNavigate();
@@ -25,11 +26,13 @@ const Header = ({ setJobs }) => {
             <Container>
                 <Navbar.Brand
                     onClick={() => navigate(company ? '/company/dashboard' : '/')}
-                    className="fw-bold text-light"
-                    style={{ cursor: 'pointer', fontSize: '1.3rem' }}
+                    className="fw-bold"
+                    style={{ cursor: 'pointer', fontSize: '1.3rem', fontFamily: "'Inter', sans-serif" }}
                 >
-                    Job Portal
+                    <span style={{ color: '#facc15' }}>Job</span>
+                    <span style={{ color: '#2563eb' }}>Portal</span>
                 </Navbar.Brand>
+
                 <Navbar.Toggle aria-controls="navbar-content" />
                 <Navbar.Collapse id="navbar-content">
                     {!company && (
@@ -75,7 +78,6 @@ const Header = ({ setJobs }) => {
                                         <PersonFill size={20} className="me-1" /> {user?.name || 'Profile'}
                                     </Nav.Link>
                                 )}
-
                                 <Nav.Link
                                     onClick={handleLogout}
                                     className="text-light px-3 d-flex align-items-center"

@@ -74,11 +74,19 @@ const ApplicationManagement = () => {
             setLoading(false);
         }
     };
-
     const handleDelete = async (id) => {
         if (!window.confirm("Are you sure you want to delete this application?")) return;
+
         try {
-            await deleteApplicationById(id);
+            const user = JSON.parse(localStorage.getItem("user"));
+            const userId = user?.id;
+
+            if (!userId) {
+                alert("User not found. Please log in again.");
+                return;
+            }
+
+            await deleteApplicationById(id, userId);
             setApplications((prev) => prev.filter((app) => app.id !== id));
         } catch (err) {
             console.error("Error deleting application:", err);

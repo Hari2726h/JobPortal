@@ -110,7 +110,7 @@ public class ApplicationController {
     @DeleteMapping("/{id}/{userId}")
     public ResponseEntity<?> deleteApplicationById(@PathVariable Long id, @PathVariable Long userId) {
         User user = userService.getUserById(userId);
-        if (user.getRole() == Role.ADMIN || user.getRole() == Role.USER) {
+        if (user.getRole() == Role.ADMIN || user.getRole() == Role.USER || user.getRole() == Role.EMPLOYER) {
             applicationService.deleteApplicationById(id);
             return ResponseEntity.ok("Deleted successfully");
         }

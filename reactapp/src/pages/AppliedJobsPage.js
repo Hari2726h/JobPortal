@@ -45,7 +45,7 @@ const AppliedJobsPage = () => {
   }, [navigate]);
 
   return (
-                                                                                                                      <>
+    <>
       <section
         className="py-5 text-light"
         style={{
@@ -84,7 +84,6 @@ const AppliedJobsPage = () => {
             </Button>
           </Alert>
         )}
-
         <Row xs={1} md={2} lg={3} className="g-4">
           {appliedJobs.map((job) => (
             <Col key={job.id}>
@@ -102,9 +101,16 @@ const AppliedJobsPage = () => {
                     <span>{job.location}</span>
                   </div>
 
-                  <div className="mb-3 d-flex align-items-center text-muted" title="Applied Date">
+                  <div className="mb-2 d-flex align-items-center text-muted" title="Applied Date">
                     <CalendarCheck className="me-2" />
                     <span>{new Date(job.appliedDate).toLocaleDateString()}</span>
+                  </div>
+
+                  <div className="mb-3 d-flex align-items-center text-muted" title="Application Status">
+                    <span className="fw-semibold">Status:</span>
+                    <span className="ms-2">
+                      {job.status ? job.status : "Pending"}
+                    </span>
                   </div>
 
                   <div className="mt-auto">
@@ -114,8 +120,7 @@ const AppliedJobsPage = () => {
                       onClick={() => navigate(`/jobDetail/${job.id}`)}
                       className="w-100 d-flex align-items-center justify-content-center gap-2"
                     >
-                      <BoxArrowInRight />
-                      View Job
+                      <BoxArrowInRight /> View Job
                     </Button>
                   </div>
                 </Card.Body>
@@ -123,7 +128,8 @@ const AppliedJobsPage = () => {
             </Col>
           ))}
         </Row>
-<style>{`.job-card {
+
+        <style>{`.job-card {
               transition: transform 0.2s ease, box-shadow 0.2s ease;
                           cursor: pointer;
                                     }
@@ -131,9 +137,9 @@ const AppliedJobsPage = () => {
                                                           transform: translateY(-6px);
                                                                       box-shadow: 0 12px 24px rgb(13 110 253 / 0.3);
                                                                                 }`}</style>
-                                                                                      </Container>
-                                                                                          </>
-                                                                                            );
-                                                                                            };
+      </Container >
+    </>
+  );
+};
 
-                                                                                            export default AppliedJobsPage;
+export default AppliedJobsPage;
