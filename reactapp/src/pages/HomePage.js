@@ -133,6 +133,39 @@ const HomePage = ({ jobs, setJobs }) => {
                               Browse Jobs
                         </Button>
                   </section>
+{/* 
+                  <section
+                        className="py-5 text-light text-center"
+                        style={{
+                              backgroundImage: "url('https://www.nexus-analytics.com.my/wp-content/uploads/2020/10/career-banner.jpg')",
+                              backgroundSize: "cover",
+                              backgroundPosition: "center",
+                              backgroundRepeat: "no-repeat",
+                              minHeight: "250px",
+                              display: "flex",
+                              alignItems: "center",
+                              flexDirection: "column",
+                              justifyContent: "center",
+                        }}
+                  >
+                        <h1 className="fw-bold display-5 mb-3 animated-fade-slide animated-delay-1">
+                              Find Your <span className="text-warning">Dream Job</span>
+                        </h1>
+                        <p className="lead mb-4 animated-fade-slide animated-delay-2">
+                              Explore thousands of job opportunities and take the next step in your career.
+                        </p>
+                        <Button
+                              variant="warning"
+                              size="lg"
+                              className="fw-semibold shadow-sm animated-fade-slide animated-delay-3"
+                              onClick={() =>
+                                    window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" })
+                              }
+                        >
+                              Browse Jobs
+                        </Button>
+                  </section> */}
+
 
                   <section className="container my-5">
                         <h3 className="mb-4 text-center">Browse by Job Categories</h3>
@@ -206,8 +239,8 @@ const HomePage = ({ jobs, setJobs }) => {
                                                             </div>
                                                             <div className="mb-3 text-success" style={{ fontWeight: '600' }}>
                                                                   <CurrencyDollar className="me-1" />
-                                                                 {job.salaryRange && job.salaryRange.trim() !== '' ? job.salaryRange : 'Not specified'}
-                                                                                                                             </div>
+                                                                  {job.salaryRange && job.salaryRange.trim() !== '' ? job.salaryRange : 'Not specified'}
+                                                            </div>
 
 
                                                             <Card.Text className="text-truncate">{job.description}</Card.Text>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Form, Button, Card, Alert, Container } from 'react-bootstrap';
-import { BoxArrowInRight } from 'react-bootstrap-icons';
+import { BoxArrowInRight, ShieldLockFill } from 'react-bootstrap-icons';
 
 const AdminLogin = () => {
     const [email, setEmail] = useState('');
@@ -27,52 +27,85 @@ const AdminLogin = () => {
     };
 
     return (
-        <Container className="d-flex justify-content-center align-items-center" style={{ minHeight: '80vh' }}>
-            <Card className="p-4 shadow-lg" style={{ maxWidth: '400px', width: '100%' }}>
-                <h3 className="text-center mb-4">Admin Login</h3>
-                {error && <Alert variant="danger">{error}</Alert>}
-                <Form onSubmit={handleLogin}>
-                    <Form.Group className="mb-3">
-                        <Form.Label>Email Address</Form.Label>
-                        <Form.Control
-                            type="email"
-                            placeholder="Enter admin email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            required
-                        />
-                    </Form.Group>
+        <div
+            className="d-flex justify-content-center align-items-center"
+            style={{
+                minHeight: "100vh",
+                background: "linear-gradient(135deg, #1e3c72, #2a5298)"
+            }}
+        >
+            <Container className="d-flex justify-content-center">
+                <Card
+                    className="p-4 shadow-lg text-white"
+                    style={{
+                        maxWidth: '420px',
+                        width: '100%',
+                        borderRadius: '20px',
+                        background: 'rgba(255,255,255,0.1)',
+                        backdropFilter: 'blur(10px)',
+                        border: '1px solid rgba(255,255,255,0.2)'
+                    }}
+                >
+                    <div className="text-center mb-4">
+                        <ShieldLockFill size={40} className="mb-2 text-warning" />
+                        <h3 className="fw-bold">Admin Login</h3>
+                        <p className="small text-light">Secure access to the admin dashboard</p>
+                    </div>
 
-                    <Form.Group className="mb-4">
-                        <Form.Label>Password</Form.Label>
-                        <Form.Control
-                            type="password"
-                            placeholder="Enter password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            required
-                        />
-                    </Form.Group>
+                    {error && <Alert variant="danger" className="text-center">{error}</Alert>}
 
-                    <Button type="submit" variant="dark" className="w-100">
-                        <BoxArrowInRight size={18} className="me-2" /> Login as Admin
-                    </Button>
-                </Form>
+                    <Form onSubmit={handleLogin}>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Email Address</Form.Label>
+                            <Form.Control
+                                type="email"
+                                placeholder="Enter admin email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                required
+                                className="rounded-pill"
+                            />
+                        </Form.Group>
 
-                <div className="text-center mt-3">
-                    <small>
-                        Go back to{' '}
-                        <span
-                            className="text-primary"
-                            style={{ cursor: 'pointer' }}
-                            onClick={() => navigate('/login')}
+                        <Form.Group className="mb-4">
+                            <Form.Label>Password</Form.Label>
+                            <Form.Control
+                                type="password"
+                                placeholder="Enter password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                required
+                                className="rounded-pill"
+                            />
+                        </Form.Group>
+
+                        <Button
+                            type="submit"
+                            variant="warning"
+                            className="w-100 fw-bold rounded-pill shadow-sm"
+                            style={{ transition: '0.3s' }}
+                            onMouseOver={(e) => e.target.style.backgroundColor = '#e0a800'}
+                            onMouseOut={(e) => e.target.style.backgroundColor = ''}
                         >
-                            User Login
-                        </span>
-                    </small>
-                </div>
-            </Card>
-        </Container>
+                            <BoxArrowInRight size={18} className="me-2" /> Login as Admin
+                        </Button>
+                    </Form>
+
+                    <div className="text-center mt-4">
+                        <small>
+                            Not an admin?{' '}
+                            <span
+                                className="text-info fw-bold"
+                                style={{ cursor: 'pointer' }}
+                                onClick={() => navigate('/login')}
+                            >
+                                Go to User Login
+                            </span>
+                        </small>
+                    </div>
+                </Card>
+            </Container>
+        </div>
     );
 };
 

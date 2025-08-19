@@ -35,8 +35,6 @@ const JobDetail = ({ jobId, onBack }) => {
     if (!job) return null;
 
     const handleApply = (e) => {
-        // e.stopPropagation();
-        // navigate(`apply/${jobId}`);
     };
 
     return (

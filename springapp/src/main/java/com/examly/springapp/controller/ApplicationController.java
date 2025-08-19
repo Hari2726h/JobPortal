@@ -37,7 +37,11 @@ public class ApplicationController {
         User user = userService.getUserById(id);
         if (user.getRole() == Role.USER) {
             application.setUser(user);
-            return ResponseEntity.ok(applicationService.createApplication(application));
+            try {
+                return ResponseEntity.ok(applicationService.createApplication(application));
+            } catch (RuntimeException e) {
+                return ResponseEntity.status(409).body(e.getMessage());
+            }
         } else {
             return ResponseEntity.status(403).body("Only users can create applications");
         }
@@ -71,36 +75,16 @@ public class ApplicationController {
 
         return ResponseEntity.ok(results);
     }
-
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<?> getApplicationsByUser(@PathVariable Long userId) {
-        User user = userService.getUserById(userId);
+@GetMapping("/user/{userId}")
+public ResponseEntity<?> getApplicationsByUser(@PathVariable Long userId) {
+    User user = userService.getUserById(userId);
 
         if (user.getRole() == Role.USER || user.getRole() == Role.ADMIN) {
-            List<Application> applications = applicationService.getApplicationsByUserId(userId);
-
-            List<Map<String, Object>> result = applications.stream().map(app -> {
-                Map<String, Object> map = new HashMap<>();
-                if (app.getJob() != null) {
-                    map.put("id", app.getJob().getId());
-                    map.put("title", app.getJob().getTitle());
-                    map.put("company", app.getJob().getCompany());
-                    map.put("location", app.getJob().getLocation());
-                } else {
-                    map.put("id", null);
-                    map.put("title", "Job info missing");
-                    map.put("company", "");
-                    map.put("location", "");
-                }
-                map.put("appliedDate", app.getAppliedDate());
-                return map;
-            }).collect(Collectors.toList());
-
-            return ResponseEntity.ok(result);
-        }
-        return ResponseEntity.status(403).body("Only USER or ADMIN can view applications.");
-    }
-
+                return ResponseEntity.ok(applicationService.getApplicationsByUserId(userId));
+                    }
+                        return ResponseEntity.status(403).body("Only USER or ADMIN can view applications.");
+                        }
+                        
     @GetMapping("/company/{companyId}")
     public ResponseEntity<?> getApplicationsByCompany(@PathVariable Long companyId) {
         List<Application> applications = applicationService.getApplicationsByCompanyId(companyId);
@@ -121,10 +105,11 @@ public class ApplicationController {
     public ResponseEntity<?> updateApplication(@PathVariable Long id, @PathVariable Long userId,
             @RequestBody Application application) {
         User user = userService.getUserById(userId);
-        if (user.getRole() == Role.USER) {
+
+        if (user.getRole() == Role.USER || user.getRole() == Role.EMPLOYER || user.getRole() == Role.ADMIN) {
             return ResponseEntity.ok(applicationService.updateApplication(application, id));
         }
-        return ResponseEntity.status(403).body("Only USERs can update applications.");
+        return ResponseEntity.status(403).body("Only USER, EMPLOYER, or ADMIN can update applications.");
     }
 
     @GetMapping("/{id}")

@@ -156,7 +156,7 @@ const ApplicationManagement = () => {
                                                     <td>{app.jobTitle}</td>
                                                     <td>{app.status}</td>
                                                     <td>
-                                                        <OverlayTrigger overlay={<Tooltip>Edit</Tooltip>}>
+                                                        {/* <OverlayTrigger overlay={<Tooltip>Edit</Tooltip>}>
                                                             <Button
                                                                 variant="warning"
                                                                 size="sm"
@@ -174,7 +174,7 @@ const ApplicationManagement = () => {
                                                             >
                                                                 <Trash />
                                                             </Button>
-                                                        </OverlayTrigger>
+                                                        </OverlayTrigger> */}
                                                     </td>
                                                 </tr>
                                             ))

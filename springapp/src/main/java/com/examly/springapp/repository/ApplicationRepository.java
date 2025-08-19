@@ -16,5 +16,6 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
         List<Application> searchByApplicantName(@Param("keyword") String keyword);
 
         List<Application> findByNameContainingIgnoreCase(String name);
+        boolean existsByUserIdAndJobId(Long userId, Long jobId);
 
 }

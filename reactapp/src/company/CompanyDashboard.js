@@ -95,7 +95,7 @@ const CompanyDashboard = () => {
 
     const handleLogout = () => {
         localStorage.removeItem('company');
-        navigate('/company/login');
+        navigate('/login');
     };
 
     const confirmDeleteJob = (job) => {

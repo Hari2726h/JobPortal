@@ -18,7 +18,7 @@ const Header = ({ setJobs }) => {
     const handleLogout = () => {
         if (user) localStorage.removeItem('user');
         if (company) localStorage.removeItem('company');
-        navigate(company ? '/company/login' : '/login');
+        navigate('/login');
     };
 
     return (

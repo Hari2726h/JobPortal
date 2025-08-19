@@ -16,6 +16,7 @@ const ApplicationPage = () => {
     const [loadingSubmit, setLoadingSubmit] = useState(false);
     const [errorSubmit, setErrorSubmit] = useState('');
     const [success, setSuccess] = useState('');
+    const [alreadyApplied, setAlreadyApplied] = useState(false);
 
     useEffect(() => {
         const loadJob = async () => {
@@ -28,7 +29,22 @@ const ApplicationPage = () => {
                 setLoadingJob(false);
             }
         };
+
+        const checkIfApplied = async () => {
+            const loggedInUser = JSON.parse(localStorage.getItem('user'));
+            if (loggedInUser) {
+                try {
+                    const apps = await api.fetchAppliedJobs(loggedInUser.id);
+                    const applied = apps.some(app => app.job?.id === parseInt(jobId));
+                    setAlreadyApplied(applied);
+                } catch (err) {
+                    console.error("Error checking existing applications:", err);
+                }
+            }
+        };
+
         loadJob();
+        checkIfApplied();
     }, [jobId]);
 
     const handleSubmit = async (e) => {
@@ -51,24 +67,31 @@ const ApplicationPage = () => {
             return;
         }
 
+        if (alreadyApplied) {
+            setErrorSubmit('You have already applied for this job.');
+            setLoadingSubmit(false);
+            return;
+        }
+
         const applicationData = {
             job: { id: job.id },
             coverLetter,
-            resumeLink,
+            resumeUrl: resumeLink,
             appliedDate: new Date().toISOString(),
         };
 
         try {
             await api.createApplication(loggedInUser.id, applicationData);
             setSuccess('Application submitted successfully!');
+            setAlreadyApplied(true);
             setCoverLetter('');
             setResumeLink('');
 
             setTimeout(() => {
-                navigate('/');
+                navigate('/applied-jobs');
             }, 1500);
         } catch {
-            setErrorSubmit('Failed to submit application.');
+            setErrorSubmit('You have already applied for this job.');
         } finally {
             setLoadingSubmit(false);
         }
@@ -139,6 +162,11 @@ const ApplicationPage = () => {
                             </Alert>
                         )}
 
+                        {/* {alreadyApplied ? (
+                            <Alert variant="info" className="fw-semibold">
+                                You have already applied for this job.
+                            </Alert>
+                        ) : ( */}
                         <Form onSubmit={handleSubmit} noValidate>
                             <Form.Group className="mb-4" controlId="coverLetter">
                                 <Form.Label className="fw-semibold">Cover Letter</Form.Label>
@@ -157,7 +185,7 @@ const ApplicationPage = () => {
                             <Form.Group className="mb-4" controlId="resumeLink">
                                 <Form.Label className="fw-semibold">Resume Link</Form.Label>
                                 <Form.Control
-                                    type="url"
+                                    type="text"
                                     placeholder="Google Drive, Dropbox, or any public link"
                                     value={resumeLink}
                                     onChange={(e) => setResumeLink(e.target.value)}
@@ -189,7 +217,7 @@ const ApplicationPage = () => {
                                 )}
                             </Button>
                         </Form>
-                    </Card.Body>
+                                   </Card.Body>
                 </Card>
             </div>
         </>

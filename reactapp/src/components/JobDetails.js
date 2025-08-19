@@ -101,6 +101,7 @@ const JobDetails = ({ jobId, onBack }) => {
                     </div>
                 </div>
                 <div className="col-lg-4">
+                {/* 
                     <div className="card shadow-sm border-0 p-4 mb-4">
                         <h5 className="mb-3 text-secondary">About Company</h5>
                         {company?.logo ? (
@@ -119,7 +120,7 @@ const JobDetails = ({ jobId, onBack }) => {
                                 Visit Website &rarr;
                             </a>
                         )}
-                    </div>
+                    </div> */}
 
                     <div className="card shadow-sm border-0 p-4 mb-4">
                         <h5 className="mb-3 text-secondary">Similar Jobs</h5>

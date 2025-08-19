@@ -10,6 +10,24 @@ const usersApi = axios.create({ baseURL: USERS_API_BASE_URL, headers: { 'Content
 const companiesApi = axios.create({ baseURL: COMPANIES_API_BASE_URL, headers: { 'Content-Type': 'application/json' } });
 const applicationsApi = axios.create({ baseURL: APPLICATIONS_API_BASE_URL, headers: { 'Content-Type': 'application/json' } });
 
+export const fetchJobById = async (id) => {
+        try {
+                const response = await jobsApi.get(`/${id}`);
+                return response.data;
+        } catch (error) {
+                console.error('API Error in fetchJobById:', error);
+                throw error;
+        }
+};
+export const fetchJobs = async () => {
+        try {
+                const response = await jobsApi.get();
+                return response.data;
+        } catch (error) {
+                console.error('API Error in fetchJobs:', error);
+                throw error;
+        }
+};
 export const searchApplications = async (keyword) => {
         try {
                 const response = await applicationsApi.get('/search', {
@@ -30,15 +48,6 @@ export const updateUser = async (id, userData) => {
                 throw error;
         }
 };
-export const fetchJobs = async () => {
-        try {
-                const response = await jobsApi.get();
-                return response.data;
-        } catch (error) {
-                console.error('API Error in fetchJobs:', error);
-                throw error;
-        }
-};
 export const createJob = async (jobData) => {
         try {
                 const response = await jobsApi.post('', jobData);
@@ -49,15 +58,6 @@ export const createJob = async (jobData) => {
         }
 };
 
-export const fetchJobById = async (id) => {
-        try {
-                const response = await jobsApi.get(`/${id}`);
-                return response.data;
-        } catch (error) {
-                console.error('API Error in fetchJobById:', error);
-                throw error;
-        }
-};
 
 export const searchJobs = async (keyword) => {
         try {

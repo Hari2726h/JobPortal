@@ -12,7 +12,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
 @Getter
 @Setter
 @NoArgsConstructor
@@ -33,6 +32,7 @@ public class Job {
     private List<String> skills;
     private String salaryRange;
     private LocalDate applicationDeadline;
+    private String status;
 
     public Job(String title,String company ,String location , String type , LocalDate postedDate, String description, List<String> skills, String salaryRange, LocalDate applicationDeadline){
         this.title= title;
