@@ -62,7 +62,7 @@ public class Job {
     
 @ManyToOne
 @JoinColumn(name="company_id")
-@JsonIgnore
+// @JsonIgnore
 private Company companyy;
 @OneToMany(mappedBy="job",cascade=CascadeType.ALL)
 @JsonIgnore

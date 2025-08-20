@@ -9,6 +9,30 @@ const jobsApi = axios.create({ baseURL: JOBS_API_BASE_URL, headers: { 'Content-T
 const usersApi = axios.create({ baseURL: USERS_API_BASE_URL, headers: { 'Content-Type': 'application/json' } });
 const companiesApi = axios.create({ baseURL: COMPANIES_API_BASE_URL, headers: { 'Content-Type': 'application/json' } });
 const applicationsApi = axios.create({ baseURL: APPLICATIONS_API_BASE_URL, headers: { 'Content-Type': 'application/json' } });
+const MESSAGES_API_BASE_URL = 'https://8080-cdebacccbffbdbcabdecffaffdabdbbe.premiumproject.examly.io/api/messages';
+const messagesApi = axios.create({ baseURL: MESSAGES_API_BASE_URL, headers: { 'Content-Type': 'application/json' } });
+
+export const fetchMessages = async (user1, user2) => {
+        try {
+                const response = await messagesApi.get('', { params: { user1, user2 } });
+                return response.data;
+        } catch (error) {
+                console.error('API Error in fetchMessages:', error);
+                throw error;
+        }
+};
+
+export const sendMessage = async (message) => {
+        try {
+                const response = await messagesApi.post('', message);
+                console.log('Message sent response:', response.data);
+                return response.data;
+        } catch (error) {
+                console.error('API Error in sendMessage:', error);
+                throw error;
+        }
+};
+
 
 export const fetchJobById = async (id) => {
         try {
@@ -112,7 +136,7 @@ export const loginUser = async (userData) => {
 export const deleteUserById = async (id) => {
         try {
                 const response = await usersApi.delete(`/${id}`);
-                            return response.data;
+                return response.data;
         } catch (error) {
                 console.error('API Error in deleteUserById:', error);
                 throw error;

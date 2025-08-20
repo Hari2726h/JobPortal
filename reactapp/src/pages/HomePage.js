@@ -30,6 +30,44 @@ const HomePage = ({ jobs, setJobs }) => {
       const [filteredJobs, setFilteredJobs] = useState([]);
       const [activeCategory, setActiveCategory] = useState(null);
       const navigate = useNavigate();
+      // useEffect(() => {
+      //       let isMounted = true;
+
+      //       api.getAllCompanies()
+      //             .then((data) => {
+      //                   if (isMounted) setCompanies(data.slice(0, 5));
+      //             })
+      //             .catch(() => {
+      //                   if (isMounted) setCompanies([]);
+      //             });
+
+      //       return () => { isMounted = false; };
+      // }, []);
+      // useEffect(() => {
+      //       let isMounted = true;
+
+      //       if (jobs && jobs.length > 0) {
+      //             setLoading(false);
+      //             setFilteredJobs(jobs);
+      //       } else {
+      //             api.fetchJobs()
+      //                   .then((data) => {
+      //                         if (isMounted) {
+      //                               setJobs(data);
+      //                               setLoading(false);
+      //                               setFilteredJobs(data);
+      //                         }
+      //                   })
+      //                   .catch(() => {
+      //                         if (isMounted) {
+      //                               setError('Failed to load jobs.');
+      //                               setLoading(false);
+      //                         }
+      //                   });
+      //       }
+
+      //       return () => { isMounted = false; };
+      // }, [jobs, setJobs]);
 
       useEffect(() => {
             let isMounted = true;
@@ -133,7 +171,7 @@ const HomePage = ({ jobs, setJobs }) => {
                               Browse Jobs
                         </Button>
                   </section>
-{/* 
+                  {/* 
                   <section
                         className="py-5 text-light text-center"
                         style={{
@@ -257,32 +295,32 @@ const HomePage = ({ jobs, setJobs }) => {
                                                 </Card>
                                           </div>
                                     ))}
-                              {(companies.length > 0 || fallbackCompanies.length > 0) && (
-                                    <section className="container my-5">
-                                          <h3 className="mb-4 text-center">Top Hiring Companies</h3>
-                                          <Carousel
-                                                indicators={false}
-                                                interval={3000}
-                                                controls={(companies.length || fallbackCompanies.length) > 1}
-                                          >
-                                                {(companies.length ? companies : fallbackCompanies).map((company) => (
-                                                      <Carousel.Item key={company.id}>
-                                                            <div className="d-flex justify-content-center align-items-center" style={{ height: 120 }}>
-                                                                  {company.logoUrl ? (
-                                                                        <img
-                                                                              src={company.logoUrl}
-                                                                              style={{ maxHeight: 100, maxWidth: '100%', objectFit: 'contain' }}
-                                                                        />
-                                                                  ) : (
-                                                                        <Building size={80} />
-                                                                  )}
-                                                            </div>
-                                                      </Carousel.Item>
-                                                ))}
-                                          </Carousel>
-                                    </section>
-                              )}
                         </div>
+                        {(companies.length > 0 || fallbackCompanies.length > 0) && (
+                              <section className="container my-5">
+                                    <h3 className="mb-4 text-center">Top Hiring Companies</h3>
+                                    <Carousel
+                                          indicators={false}
+                                          interval={3000}
+                                          controls={(companies.length || fallbackCompanies.length) > 1}
+                                    >
+                                          {(companies.length ? companies : fallbackCompanies).map((company) => (
+                                                <Carousel.Item key={company.id}>
+                                                      <div className="d-flex justify-content-center align-items-center" style={{ height: 120 }}>
+                                                            {company.logoUrl ? (
+                                                                  <img
+                                                                        src={company.logoUrl}
+                                                                        style={{ maxHeight: 100, maxWidth: '100%', objectFit: 'contain' }}
+                                                                  />
+                                                            ) : (
+                                                                  <Building size={80} />
+                                                            )}
+                                                      </div>
+                                                </Carousel.Item>
+                                          ))}
+                                    </Carousel>
+                              </section>
+                        )}
                   </div>
             </>
       );
