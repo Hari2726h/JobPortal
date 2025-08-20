@@ -30,45 +30,6 @@ const HomePage = ({ jobs, setJobs }) => {
       const [filteredJobs, setFilteredJobs] = useState([]);
       const [activeCategory, setActiveCategory] = useState(null);
       const navigate = useNavigate();
-      // useEffect(() => {
-      //       let isMounted = true;
-
-      //       api.getAllCompanies()
-      //             .then((data) => {
-      //                   if (isMounted) setCompanies(data.slice(0, 5));
-      //             })
-      //             .catch(() => {
-      //                   if (isMounted) setCompanies([]);
-      //             });
-
-      //       return () => { isMounted = false; };
-      // }, []);
-      // useEffect(() => {
-      //       let isMounted = true;
-
-      //       if (jobs && jobs.length > 0) {
-      //             setLoading(false);
-      //             setFilteredJobs(jobs);
-      //       } else {
-      //             api.fetchJobs()
-      //                   .then((data) => {
-      //                         if (isMounted) {
-      //                               setJobs(data);
-      //                               setLoading(false);
-      //                               setFilteredJobs(data);
-      //                         }
-      //                   })
-      //                   .catch(() => {
-      //                         if (isMounted) {
-      //                               setError('Failed to load jobs.');
-      //                               setLoading(false);
-      //                         }
-      //                   });
-      //       }
-
-      //       return () => { isMounted = false; };
-      // }, [jobs, setJobs]);
-
       useEffect(() => {
             let isMounted = true;
 
@@ -94,7 +55,7 @@ const HomePage = ({ jobs, setJobs }) => {
 
             api.getAllCompanies()
                   .then((data) => {
-                        if (isMounted) setCompanies(data.slice(0, 5));
+                        if (isMounted && data.length > 0) setCompanies(data.slice(0, 5));
                   })
                   .catch(() => {
                         if (isMounted) setCompanies([]);
@@ -118,29 +79,31 @@ const HomePage = ({ jobs, setJobs }) => {
             setFilteredJobs(filtered);
       };
 
-      const fallbackCompanies = [
+
+      const logos = [
             {
-                  id: 'g1',
-                  name: 'Google',
-                  logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg',
+                  name: "Google",
+                  src: "https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg",
             },
             {
-                  id: 'a1',
-                  name: 'Amazon',
-                  logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg',
+                  name: "Amazon",
+                  src: "https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg",
             },
             {
-                  id: 'm1',
-                  name: 'Microsoft',
-                  logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg',
-            },
-            {
-                  id: 'f1',
-                  name: 'Facebook',
-                  logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/0/05/Facebook_Logo_(2019).png',
+                  name: "Microsoft",
+                  src: "https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg",
             },
       ];
 
+      const [currentIndex, setCurrentIndex] = useState(0);
+
+      useEffect(() => {
+            const interval = setInterval(() => {
+                  setCurrentIndex((prev) => (prev + 1) % logos.length);
+            }, 2000);
+
+            return () => clearInterval(interval);
+      }, [logos.length]);
       return (
             <>
                   <section
@@ -171,40 +134,6 @@ const HomePage = ({ jobs, setJobs }) => {
                               Browse Jobs
                         </Button>
                   </section>
-                  {/* 
-                  <section
-                        className="py-5 text-light text-center"
-                        style={{
-                              backgroundImage: "url('https://www.nexus-analytics.com.my/wp-content/uploads/2020/10/career-banner.jpg')",
-                              backgroundSize: "cover",
-                              backgroundPosition: "center",
-                              backgroundRepeat: "no-repeat",
-                              minHeight: "250px",
-                              display: "flex",
-                              alignItems: "center",
-                              flexDirection: "column",
-                              justifyContent: "center",
-                        }}
-                  >
-                        <h1 className="fw-bold display-5 mb-3 animated-fade-slide animated-delay-1">
-                              Find Your <span className="text-warning">Dream Job</span>
-                        </h1>
-                        <p className="lead mb-4 animated-fade-slide animated-delay-2">
-                              Explore thousands of job opportunities and take the next step in your career.
-                        </p>
-                        <Button
-                              variant="warning"
-                              size="lg"
-                              className="fw-semibold shadow-sm animated-fade-slide animated-delay-3"
-                              onClick={() =>
-                                    window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" })
-                              }
-                        >
-                              Browse Jobs
-                        </Button>
-                  </section> */}
-
-
                   <section className="container my-5">
                         <h3 className="mb-4 text-center">Browse by Job Categories</h3>
                         <div className="d-flex flex-wrap justify-content-center gap-3">
@@ -296,7 +225,23 @@ const HomePage = ({ jobs, setJobs }) => {
                                           </div>
                                     ))}
                         </div>
-                        {(companies.length > 0 || fallbackCompanies.length > 0) && (
+
+
+
+                        <section className="container my-5">
+                              <h3 className="mb-4 text-center">Top Hiring Companies</h3>
+                              <div className="d-flex justify-content-center align-items-center">
+                                    <img
+                                          src={logos[currentIndex].src}
+                                          alt={logos[currentIndex].name}
+                                          style={{ maxHeight: 100, maxWidth: "100%", objectFit: "contain" }}
+                                    />
+                              </div>
+                        </section>
+
+
+                        {/*                                                               
+                        {/* {(companies.length > 0 || fallbackCompanies.length > 0) && (
                               <section className="container my-5">
                                     <h3 className="mb-4 text-center">Top Hiring Companies</h3>
                                     <Carousel
@@ -320,7 +265,9 @@ const HomePage = ({ jobs, setJobs }) => {
                                           ))}
                                     </Carousel>
                               </section>
-                        )}
+                        )} */}
+
+
                   </div>
             </>
       );

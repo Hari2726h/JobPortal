@@ -1,8 +1,28 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import * as api from '../utils/api';
+import { Alert } from "react-bootstrap";
 
 const JobDetails = ({ jobId, onBack }) => {
+    
+    const [alreadyApplied, setAlreadyApplied] = useState(false);
+    
+    useEffect(() => {
+        const checkIfApplied = async () => {
+            const loggedInUser = JSON.parse(localStorage.getItem("user"));
+            if (loggedInUser) {
+                try {
+                    const apps = await api.fetchAppliedJobs(loggedInUser.id);
+                    const applied = apps.some(app => app.job?.id === parseInt(jobId));
+                    setAlreadyApplied(applied);
+                } catch (err) {
+                    console.error("Error checking applied status:", err);
+                }
+            }
+        };
+    
+        checkIfApplied();
+    }, [jobId]);
     const [job, setJob] = useState(null);
     const [company, setCompany] = useState(null);
     const [similarJobs, setSimilarJobs] = useState([]);
@@ -35,11 +55,11 @@ const JobDetails = ({ jobId, onBack }) => {
 
                 const similarByCategory = allJobs
                     .filter(j => j.id !== jobId && j.category === jobData.category)
-                    .slice(0, 3); 
+                    .slice(0, 3);
                 setSimilarJobs(similarByCategory);
 
-                const applications = jobData.companyId
-                    ? await api.getApplicationsByCompany(jobData.companyId)
+                const applications = jobData.companyyId
+                    ? await api.getApplicationsByCompany(jobData.companyyId)
                     : [];
                 if (!isMounted) return;
                 setApplicationsCount(applications.length);
@@ -101,7 +121,7 @@ const JobDetails = ({ jobId, onBack }) => {
                     </div>
                 </div>
                 <div className="col-lg-4">
-                {/* 
+                    {/* 
                     <div className="card shadow-sm border-0 p-4 mb-4">
                         <h5 className="mb-3 text-secondary">About Company</h5>
                         {company?.logo ? (
@@ -140,13 +160,22 @@ const JobDetails = ({ jobId, onBack }) => {
                             ))
                         )}
                     </div>
-
+                    {alreadyApplied ? (
+                        <Alert variant="info" className="fw-semibold">
+                            ✅ You have already applied for this job. Track your application in <a href="/applied-jobs">Applied Jobs</a>.
+                        </Alert>
+                    ) : (
+                        <Alert variant="secondary" className="fw-semibold">
+                            📌 Tip: Add a strong cover letter highlighting your {job?.skillsRequired?.join(", ")} skills.
+                        </Alert>
+                    )}
+{/* 
                     <div className="card shadow-sm border-0 p-4">
                         <h5 className="mb-3 text-secondary">Application Info</h5>
                         <p><strong>Applicants:</strong> {applicationsCount}</p>
                         <p><strong>Views:</strong> {job.views ?? 'N/A'}</p>
                         <p className="text-muted">Apply before the deadline to increase your chances!</p>
-                    </div>
+                    </div> */}
                 </div>
             </div>
         </div>

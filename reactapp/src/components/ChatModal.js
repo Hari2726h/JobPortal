@@ -1,11 +1,11 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Modal, ListGroup, Form, Button } from 'react-bootstrap';
+import { Modal, ListGroup, Form, Button, Image } from 'react-bootstrap';
 import {
     fetchMessages,
     sendMessage,
     getApplicationsByCompany,
-    fetchAppliedJobs,
-    getCompanyById
+    getCompanyById,
+    fetchAllMessagesForUser
 } from '../utils/api';
 
 const ChatModal = ({ show, handleClose, currentUser, currentType }) => {
@@ -19,37 +19,26 @@ const ChatModal = ({ show, handleClose, currentUser, currentType }) => {
         const loadContacts = async () => {
             try {
                 if (currentType === 'company') {
-                    // Company side: get all users who applied to this company's jobs
                     const applications = await getApplicationsByCompany(currentUser.id);
                     const uniqueUsers = Array.from(
                         new Map(applications.map(app => [app.user.id, app.user])).values()
                     );
                     setContacts(uniqueUsers);
                 } else {
-                    // User side: get all companies for jobs this user applied to
-                    const appliedJobs = await fetchAppliedJobs(currentUser.id);
-                    if (!appliedJobs || appliedJobs.length === 0) {
-                        setContacts([]);
-                        return;
+                    const allMessages = await fetchAllMessagesForUser(currentUser.id);
+                    const companyIds = [...new Set(allMessages.map(msg => msg.senderId))];
+                    const companiesWithMessages = [];
+
+                    for (const id of companyIds) {
+                        try {
+                            const company = await getCompanyById(id);
+                            if (company) companiesWithMessages.push(company);
+                        } catch (err) {
+                            console.error(`Failed to fetch company ${id}`, err);
+                        }
                     }
 
-                    const companyIds = appliedJobs
-                        .map(job => job.companyId || job.company?.id)
-                        .filter(Boolean);
-                    const uniqueCompanyIds = [...new Set(companyIds)];
-
-                    const companies = await Promise.all(
-                        uniqueCompanyIds.map(async id => {
-                            try {
-                                return await getCompanyById(id);
-                            } catch (err) {
-                                console.error(`Failed to fetch company ${id}`, err);
-                                return null;
-                            }
-                        })
-                    );
-
-                    setContacts(companies.filter(Boolean));
+                    setContacts(companiesWithMessages);
                 }
             } catch (error) {
                 console.error('Error loading contacts:', error);
@@ -70,7 +59,7 @@ const ChatModal = ({ show, handleClose, currentUser, currentType }) => {
 
     const loadMessages = async (contactId) => {
         try {
-            const msgs = await fetchMessages(currentUser.id, contactId);
+            const msgs = await fetchMessages(contactId, currentUser.id);
             setMessages(msgs || []);
             scrollToBottom();
         } catch (error) {
@@ -106,12 +95,13 @@ const ChatModal = ({ show, handleClose, currentUser, currentType }) => {
     };
 
     return (
-        <Modal show={show} onHide={handleClose} size="lg">
-            <Modal.Header closeButton>
-                <Modal.Title>Chat</Modal.Title>
+        <Modal show={show} onHide={handleClose} size="lg" centered>
+            <Modal.Header closeButton className="bg-primary text-white">
+                <Modal.Title>💬 Messages</Modal.Title>
             </Modal.Header>
-            <Modal.Body style={{ display: 'flex', height: '400px' }}>
-                <ListGroup style={{ width: '30%', overflowY: 'auto', marginRight: '10px' }}>
+            <Modal.Body style={{ display: 'flex', height: '500px', borderRadius: '10px' }}>
+
+                <ListGroup style={{ width: '30%', overflowY: 'auto', marginRight: '10px', borderRight: '1px solid #ddd' }}>
                     {contacts.length === 0 ? (
                         <ListGroup.Item>No contacts found</ListGroup.Item>
                     ) : (
@@ -121,25 +111,43 @@ const ChatModal = ({ show, handleClose, currentUser, currentType }) => {
                                 action
                                 active={selectedContact?.id === contact.id}
                                 onClick={() => setSelectedContact(contact)}
+                                className="d-flex align-items-center"
+                                style={{ cursor: 'pointer' }}
                             >
-                                {contact.name || contact.companyName || 'Unknown'}
+                                <Image
+                                    src={`https://ui-avatars.com/api/?name=${contact.name || contact.companyName || 'U'}&background=0d6efd&color=fff`}
+                                roundedCircle
+                                width={35}
+                                height={35}
+                                className="me-2"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    />
+                                <span>{contact.name || contact.companyName || 'Unknown'}</span>
                             </ListGroup.Item>
                         ))
                     )}
                 </ListGroup>
-                <div style={{ width: '70%', display: 'flex', flexDirection: 'column', border: '1px solid #ccc', borderRadius: '5px' }}>
-                    <div style={{ flex: 1, overflowY: 'auto', padding: '10px' }}>
+
+                <div style={{ width: '70%', display: 'flex', flexDirection: 'column', background: '#f8f9fa', borderRadius: '10px' }}>
+
+                    {selectedContact && (
+                        <div style={{ padding: '10px', background: '#e9ecef', borderBottom: '1px solid #ddd', borderTopLeftRadius: '10px', borderTopRightRadius: '10px' }}>
+                            <strong>Chatting with:</strong> {selectedContact.name || selectedContact.companyName}
+                        </div>
+                    )}
+
+                    <div style={{ flex: 1, overflowY: 'auto', padding: '15px' }}>
                         {messages.map(msg => (
-                            <div key={msg.id} style={{ margin: '5px 0', textAlign: msg.senderId === currentUser.id ? 'right' : 'left' }}>
+                            <div key={msg.id} style={{ margin: '8px 0', textAlign: msg.senderId === currentUser.id ? 'right' : 'left' }}>
                                 <div
                                     style={{
                                         display: 'inline-block',
-                                        background: msg.senderId === currentUser.id ? '#0d6efd' : '#e9ecef',
+                                        background: msg.senderId === currentUser.id ? 'linear-gradient(135deg,#0d6efd,#1e90ff)' : '#e9ecef',
                                         color: msg.senderId === currentUser.id ? 'white' : 'black',
-                                        padding: '5px 10px',
-                                        borderRadius: '15px',
-                                        maxWidth: '70%',
-                                        wordBreak: 'break-word'
+                                        padding: '8px 14px',
+                                        borderRadius: '20px',
+                                        maxWidth: '75%',
+                                        wordBreak: 'break-word',
+                                        boxShadow: '0 2px 5px rgba(0,0,0,0.1)'
                                     }}
                                 >
                                     {msg.messageText}
@@ -148,16 +156,18 @@ const ChatModal = ({ show, handleClose, currentUser, currentType }) => {
                         ))}
                         <div ref={bottomRef} />
                     </div>
-                    <Form className="d-flex p-2">
+
+                    <Form className="d-flex p-3 border-top bg-white">
                         <Form.Control
                             type="text"
                             placeholder="Type your message..."
                             value={newMessage}
                             onChange={(e) => setNewMessage(e.target.value)}
                             onKeyDown={(e) => e.key === 'Enter' && handleSend()}
+                            className="me-2"
                         />
-                        <Button variant="primary" className="ms-2" onClick={handleSend}>
-                            Send
+                        <Button variant="primary" onClick={handleSend}>
+                            ➤
                         </Button>
                     </Form>
                 </div>

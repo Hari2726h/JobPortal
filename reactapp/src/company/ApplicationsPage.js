@@ -115,46 +115,62 @@ const ApplicationsPage = () => {
                     {selectedApp && (
                         <>
                             <p><strong>Name:</strong> {selectedApp.user?.name}</p>
-                            <p><strong>Email:</strong> {selectedApp.user?.email}</p>
-                            <p><strong>Status:</strong> {selectedApp.status || 'Pending'}</p>
-                            <p><strong>Applied Date:</strong> {selectedApp.appliedDate}</p>
                             <p>
-                                <strong>Resume:</strong>{' '}
-                                {selectedApp.resumeUrl ? (
-                                    <a href={selectedApp.resumeUrl} target="_blank" rel="noopener noreferrer">View Resume</a>
-                                ) : (
-                                    'No resume uploaded'
-                                )}
-                            </p>
-                            <p><strong>Cover Letter:</strong> {selectedApp.coverLetter || 'No cover letter'}</p>
-                        </>
+                                <strong>Email:</strong>{' '}
+                                {selectedApp.user?.email ? (
+                                    <a href={`mailto:${selectedApp.user.email}`}>
+                                {selectedApp.user.email}
+                            </a>
+                            ) : (
+                            'No email provided'
+                                                          )}
+                        </p>
+                    <p><strong>Status:</strong> {selectedApp.status || 'Pending'}</p>
+                    <p><strong>Applied Date:</strong> {selectedApp.appliedDate}</p>
+                    <p>
+                        <strong>Resume:</strong>{' '}
+                        {selectedApp.resumeUrl ? (
+                            <a
+                                href={selectedApp.resumeUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                View Resume
+                            </a>
+                        ) : (
+                            'No resume uploaded'
+                        )}
+                    </p>
+
+                    <p><strong>Cover Letter:</strong> {selectedApp.coverLetter || 'No cover letter'}</p>
+                </>
                     )}
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={closeModal}>Close</Button>
-                    {selectedApp?.status !== 'Reviewed' && (
-                        <Button
-                            variant="success"
-                            onClick={async () => {
-                                try {
-                                    await api.updateApplication(selectedApp.id, selectedApp.user?.id, { ...selectedApp, status: 'Reviewed' });
-                                    setApplications(prev =>
-                                        prev.map(app =>
-                                            app.id === selectedApp.id ? { ...app, status: 'Reviewed' } : app
-                                        )
-                                    );
-                                    closeModal();
-                                } catch {
-                                    alert('Failed to update application status.');
-                                }
-                            }}
-                        >
-                            <CheckCircleFill className="me-1" /> Mark as Reviewed
-                        </Button>
-                    )}
-                </Modal.Footer>
-            </Modal>
-        </Container>
+            </Modal.Body>
+            <Modal.Footer>
+                <Button variant="secondary" onClick={closeModal}>Close</Button>
+                {selectedApp?.status !== 'Reviewed' && (
+                    <Button
+                        variant="success"
+                        onClick={async () => {
+                            try {
+                                await api.updateApplication(selectedApp.id, selectedApp.user?.id, { ...selectedApp, status: 'Reviewed' });
+                                setApplications(prev =>
+                                    prev.map(app =>
+                                        app.id === selectedApp.id ? { ...app, status: 'Reviewed' } : app
+                                    )
+                                );
+                                closeModal();
+                            } catch {
+                                alert('Failed to update application status.');
+                            }
+                        }}
+                    >
+                        <CheckCircleFill className="me-1" /> Mark as Reviewed
+                    </Button>
+                )}
+            </Modal.Footer>
+        </Modal>
+        </Container >
     );
 };
 

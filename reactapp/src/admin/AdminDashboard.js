@@ -33,20 +33,46 @@ const AdminDashboard = () => {
                     fetchJobs(),
                     getAllApplications(),
                 ]);
+
                 setStats({
                     users: users.length,
                     companies: companies.length,
                     jobs: jobs.length,
                     applications: applications.length,
                 });
+
                 setRecentUsers(users.slice(-5).reverse());
-                setRecentJobs(jobs.slice(-5).reverse());
-                setRecentApplications(applications.slice(-5).reverse());
+
+                const jobsWithCompany = jobs.map(job => {
+                    const company = companies.find(c => c.id === job.companyId || c._id === job.companyId);
+                    return {
+                        ...job,
+                        companyName: company ? company.name : 'N/A'
+                    };
+                });
+                setRecentJobs(jobsWithCompany.slice(-5).reverse());
+
+                const applicationsWithDetails = applications.map(app => {
+                    const user = users.find(u => u.id === app.userId || u._id === app.userId);
+                    const job = jobs.find(j => j.id === app.jobId || j._id === app.jobId);
+                    return {
+                        ...app,
+                        userName: user ? user.name : 'N/A',
+                        jobTitle: job ? job.title : 'N/A',
+                    };
+                });
+                setRecentApplications(applicationsWithDetails.slice(-5).reverse());
+
                 const companyJobCounts = companies.map(company => {
-                    const jobCount = jobs.filter(job => job.companyId === company.id).length;
+                    const jobCount = jobs.filter(
+                        job => job.companyId === company.id || job.companyId === company._id
+                    ).length;
                     return { ...company, jobCount };
                 });
-                setTopCompanies(companyJobCounts.sort((a, b) => b.jobCount - a.jobCount).slice(0, 5));
+                setTopCompanies(
+                    companyJobCounts.sort((a, b) => b.jobCount - a.jobCount).slice(0, 5)
+                );
+
             } catch (error) {
                 console.error('Error loading dashboard data:', error);
             } finally {
@@ -82,133 +108,132 @@ const AdminDashboard = () => {
                                         className="shadow-sm"
                                         style={{
                                             borderLeft: `5px solid ${card.color}`,
-                                            cursor: 'pointer',
-                                            transition: 'transform 0.2s'
-                                        }}
-                                        onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.05)'}
-                                        onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
-                                    >
-                                        <Card.Body>
-                                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                                <div>
-                                                    <h5>{card.title}</h5>
-                                                    <h3 className="fw-bold">{card.value}</h3>
-                                                </div>
-                                                <div style={{ color: card.color }}>{card.icon}</div>
+                                    cursor: 'pointer',
+                                    transition: 'transform 0.2s'
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    }}
+                                    onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.05)'}
+                                    onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        >
+                                    <Card.Body>
+                                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                            <div>
+                                                <h5>{card.title}</h5>
+                                                <h3 className="fw-bold">{card.value}</h3>
                                             </div>
-                                        </Card.Body>
-                                    </Card>
-                                </Col>
-                            ))}
-                        </Row>
+                                            <div style={{ color: card.color }}>{card.icon}</div>
+                                        </div>
+                                    </Card.Body>
+                                </Card>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </Col>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        ))}
+                    </Row>
 
-                        <Row className="mb-4">
-                            <Col md={6} lg={3}>
-                                <Button
-                                    variant="primary"
-                                    style={{ width: '100%' }}
-                                    onClick={() => navigate('/company/post-job')}
-                                >
-                                    Create Job
-                                </Button>
-                            </Col>
-                            <Col md={6} lg={3}>
-                                <Button
-                                    variant="success"
-                                    style={{ width: '100%' }}
-                                    onClick={() => navigate('/company/register')}
-                                >
-                                    Register Company
-                                </Button>
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col md={6}>
-                                <h5>Recent Users</h5>
-                                <Table striped bordered hover size="sm" className="bg-white">
-                                    <thead>
-                                        <tr>
-                                            <th>Name</th>
-                                            <th>Email</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {recentUsers.map(user => (
-                                            <tr key={user.id}>
-                                                <td>{user.name}</td>
-                                                <td>{user.email}</td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </Table>
-                            </Col>
+                <Row className="mb-4">
+                    <Col md={6} lg={3}>
+                        <Button
+                            variant="primary"
+                            style={{ width: '100%' }}
+                            onClick={() => navigate('/company/post-job')}
+                        >
+                            Create Job
+                        </Button>
+                    </Col>
+                    <Col md={6} lg={3}>
+                        <Button
+                            variant="success"
+                            style={{ width: '100%' }}
+                            onClick={() => navigate('/company/register')}
+                        >
+                            Register Company
+                        </Button>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col md={6}>
+                        <h5>Recent Users</h5>
+                        <Table striped bordered hover size="sm" className="bg-white">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {recentUsers.map(user => (
+                                    <tr key={user.id || user._id}>
+                                        <td>{user.name}</td>
+                                        <td>{user.email}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </Table>
+                    </Col>
 
-                            <Col md={6}>
-                                <h5>Recent Jobs</h5>
-                                <Table striped bordered hover size="sm" className="bg-white">
-                                    <thead>
-                                        <tr>
-                                            <th>Title</th>
-                                            <th>Company</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {recentJobs.map(job => (
-                                            <tr key={job.id}>
-                                                <td>{job.title}</td>
-                                                <td>{job.companyName || 'N/A'}</td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </Table>
-                            </Col>
-                        </Row>
+                    <Col md={6}>
+                        <h5>Recent Jobs</h5>
+                        <Table striped bordered hover size="sm" className="bg-white">
+                            <thead>
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Company</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {recentJobs.map(job => (
+                                    <tr key={job.id || job._id}>
+                                        <td>{job.title}</td>
+                                        <td>{job.companyName}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </Table>
+                    </Col>
+                </Row>
+                <Row className="mt-3">
+                    <Col md={6}>
+                        <h5>Recent Applications</h5>
+                        <Table striped bordered hover size="sm" className="bg-white">
+                            <thead>
+                                <tr>
+                                    <th>User</th>
+                                    <th>Job</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {recentApplications.map(app => (
+                                    <tr key={app.id || app._id}>
+                                        <td>{app.userName}</td>
+                                        <td>{app.jobTitle}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </Table>
+                    </Col>
 
-                        <Row className="mt-3">
-                            <Col md={6}>
-                                <h5>Recent Applications</h5>
-                                <Table striped bordered hover size="sm" className="bg-white">
-                                    <thead>
-                                        <tr>
-                                            <th>User</th>
-                                            <th>Job</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {recentApplications.map(app => (
-                                            <tr key={app.id}>
-                                                <td>{app.userName || 'N/A'}</td>
-                                                <td>{app.jobTitle || 'N/A'}</td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </Table>
-                            </Col>
-
-                            <Col md={6}>
-                                <h5>Top Companies by Job Count</h5>
-                                <Table striped bordered hover size="sm" className="bg-white">
-                                    <thead>
-                                        <tr>
-                                            <th>Company</th>
-                                            <th>Jobs</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {topCompanies.map(company => (
-                                            <tr key={company.id}>
-                                                <td>{company.name}</td>
-                                                <td>{company.jobCount}</td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </Table>
-                            </Col>
-                        </Row>
-                    </>
-                )}
-            </div>
+                    <Col md={6}>
+                        <h5>Top Companies by Job Count</h5>
+                        <Table striped bordered hover size="sm" className="bg-white">
+                            <thead>
+                                <tr>
+                                    <th>Company</th>
+                                    <th>Jobs</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {topCompanies.map(company => (
+                                    <tr key={company.id || company._id}>
+                                        <td>{company.name}</td>
+                                        <td>{company.jobCount}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </Table>
+                    </Col>
+                </Row>
+            </>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    )}
         </div>
-    );
-};
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </div >
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            );
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            };
 export default AdminDashboard;

@@ -265,15 +265,17 @@ const JobManagement = () => {
                                             )}
                                         </Card.Title>
                                         <Card.Subtitle className="text-muted mb-2">
-                                            {(job.companyName || job.company?.name || "Unknown Company") +
-                                                "   " +
-                                                (job.location || "Location N/A")}
-                                        </Card.Subtitle>
+                                              {(job.company || job.companyy?.name || "Unknown Company") +
+                                                    "   " +
+                                                          (job.location || "Location N/A")}
+                                                          </Card.Subtitle>
+
                                         <Card.Text className="mb-1">
                                             <strong>Type:</strong> {job.type || "N/A"}
                                             {"  "} {"  "}
                                             <strong>Salary:</strong>{" "}
-                                            {job.salary != null ? job.salary : "N/A"}
+                                            {job.salaryRange ? job.salaryRange : "N/A"}
+                                            
                                         </Card.Text>
                                         {job.description && (
                                             <Card.Text className="text-truncate" style={{ maxWidth: 900 }}>

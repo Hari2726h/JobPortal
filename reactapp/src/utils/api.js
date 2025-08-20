@@ -72,6 +72,16 @@ export const updateUser = async (id, userData) => {
                 throw error;
         }
 };
+export const fetchAllMessagesForUser = async (userId) => {
+        try {
+                const response = await messagesApi.get(`/user/${userId}`); // backend endpoint
+                return response.data;
+        } catch (error) {
+                console.error('API Error in fetchAllMessagesForUser:', error);
+                return [];
+        }
+};
+
 export const createJob = async (jobData) => {
         try {
                 const response = await jobsApi.post('', jobData);

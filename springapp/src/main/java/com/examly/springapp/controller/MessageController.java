@@ -24,4 +24,9 @@ public class MessageController {
         return messageRepository.findBySenderIdAndReceiverIdOrReceiverIdAndSenderIdOrderByTimestampAsc(
                 user1, user2, user1, user2);
     }
+
+    @GetMapping("/user/{userId}")
+    public List<Message> getAllMessagesForUser(@PathVariable Long userId) {
+        return messageRepository.findByReceiverIdOrderByTimestampAsc(userId);
+    }
 }

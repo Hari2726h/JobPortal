@@ -64,6 +64,14 @@ const CompanyLogin = () => {
                         >
                             Register here
                         </span>
+                        <br/>
+                        <span
+                            className="text-success"
+                            style={{ cursor: 'pointer', fontWeight: '500' }}
+                            onClick={() => navigate('/login')}
+                        >
+                            Login as User
+                        </span>
                         <br />
                         <span
                             className="text-success"

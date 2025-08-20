@@ -7,7 +7,8 @@ import java.util.List;
 
 @Repository
 public interface MessageRepository extends JpaRepository<Message, Long> {
-
+    List<Message> findByReceiverIdOrderByTimestampAsc(Long receiverId);
+    
     List<Message> findBySenderIdAndReceiverIdOrReceiverIdAndSenderIdOrderByTimestampAsc(
             Long sender1, Long receiver1, Long sender2, Long receiver2);
 }
