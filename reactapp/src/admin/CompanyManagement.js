@@ -141,9 +141,9 @@ const CompanyManagement = () => {
                             <Card.Body>
                                 <Card.Title>{company.name}</Card.Title>
                                 <Card.Text>
-                                    <strong>Email:</strong> {company.email} <br />
+                                    <strong>Website:</strong> <a href={company.website}>{company.name}</a> <br />
                                     <strong>Location:</strong> {company.location} <br />
-                                    <strong>Status:</strong> {company.status || "Not specified"}
+                                    <strong>Industry:</strong> {company.industry || "Not specified"}
                                 </Card.Text>
                                 <OverlayTrigger overlay={renderTooltip("Edit")} placement="top">
                                     <Button
@@ -205,12 +205,12 @@ const CompanyManagement = () => {
                                     />
                                 </Form.Group>
                                 <Form.Group className="mb-3">
-                                    <Form.Label>Email</Form.Label>
+                                    <Form.Label>Website</Form.Label>
                                     <Form.Control
-                                        type="email"
-                                        value={editCompany.email}
+                                        type="text"
+                                        value={editCompany.website}
                                         onChange={(e) =>
-                                            setEditCompany({ ...editCompany, email: e.target.value })
+                                            setEditCompany({ ...editCompany, website: e.target.value })
                                         }
                                     />
                                 </Form.Group>
@@ -225,16 +225,16 @@ const CompanyManagement = () => {
                                     />
                                 </Form.Group>
                                 <Form.Group className="mb-3">
-                                    <Form.Label>Status</Form.Label>
+                                    <Form.Label>industry</Form.Label>
                                     <Form.Select
-                                        value={editCompany.status || ""}
+                                        value={editCompany.industry || ""}
                                         onChange={(e) =>
-                                            setEditCompany({ ...editCompany, status: e.target.value })
+                                            setEditCompany({ ...editCompany, industry: e.target.value })
                                         }
                                     >
-                                        <option value="">Select Status</option>
-                                        <option value="active">Active</option>
-                                        <option value="inactive">Inactive</option>
+                                        <option value="">Select Industry</option>
+                                        <option value="active">Software</option>
+                                        <option value="inactive">Core</option>
                                     </Form.Select>
                                 </Form.Group>
                             </Form>

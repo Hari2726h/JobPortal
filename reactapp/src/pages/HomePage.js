@@ -35,14 +35,14 @@ const HomePage = ({ jobs, setJobs }) => {
 
             if (jobs && jobs.length > 0) {
                   setLoading(false);
-                  setFilteredJobs(jobs);
+                  setFilteredJobs(jobs.reverse());
             } else {
                   api.fetchJobs()
                         .then((data) => {
                               if (isMounted) {
                                     setJobs(data);
                                     setLoading(false);
-                                    setFilteredJobs(data);
+                                    setFilteredJobs(data.reverse());
                               }
                         })
                         .catch(() => {
@@ -76,7 +76,7 @@ const HomePage = ({ jobs, setJobs }) => {
                   const titleLower = job.title.toLowerCase();
                   return keywords.some(keyword => titleLower.includes(keyword.toLowerCase()));
             });
-            setFilteredJobs(filtered);
+            setFilteredJobs(filtered.reverse());
       };
 
 

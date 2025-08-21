@@ -4,12 +4,12 @@ const JOBS_API_BASE_URL = 'https://8080-cdebacccbffbdbcabdecffaffdabdbbe.premium
 const USERS_API_BASE_URL = 'https://8080-cdebacccbffbdbcabdecffaffdabdbbe.premiumproject.examly.io/api/users';
 const COMPANIES_API_BASE_URL = 'https://8080-cdebacccbffbdbcabdecffaffdabdbbe.premiumproject.examly.io/api/companies';
 const APPLICATIONS_API_BASE_URL = 'https://8080-cdebacccbffbdbcabdecffaffdabdbbe.premiumproject.examly.io/api/applications';
+const MESSAGES_API_BASE_URL = 'https://8080-cdebacccbffbdbcabdecffaffdabdbbe.premiumproject.examly.io/api/messages';
 
 const jobsApi = axios.create({ baseURL: JOBS_API_BASE_URL, headers: { 'Content-Type': 'application/json' } });
 const usersApi = axios.create({ baseURL: USERS_API_BASE_URL, headers: { 'Content-Type': 'application/json' } });
 const companiesApi = axios.create({ baseURL: COMPANIES_API_BASE_URL, headers: { 'Content-Type': 'application/json' } });
 const applicationsApi = axios.create({ baseURL: APPLICATIONS_API_BASE_URL, headers: { 'Content-Type': 'application/json' } });
-const MESSAGES_API_BASE_URL = 'https://8080-cdebacccbffbdbcabdecffaffdabdbbe.premiumproject.examly.io/api/messages';
 const messagesApi = axios.create({ baseURL: MESSAGES_API_BASE_URL, headers: { 'Content-Type': 'application/json' } });
 
 export const fetchMessages = async (user1, user2) => {
