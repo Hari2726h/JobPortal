@@ -61,11 +61,13 @@ public class Job {
     
 @ManyToOne
 @JoinColumn(name="company_id")
-// @JsonIgnore
 private Company companyy;
 @OneToMany(mappedBy="job",cascade=CascadeType.ALL)
 @JsonIgnore
 private List<Application> applications;
+
+
+
     public void setCompanyy(Company companyy){
         this.companyy=companyy;
         if(companyy!=null){
