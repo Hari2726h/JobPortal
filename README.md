@@ -5,7 +5,20 @@ A full-stack Job Portal Platform that connects recruiters and job seekers, enabl
 🚀 Features
 👨‍💼 For Job Seekers
 
-User authentication (login/signup with JWT security).
+User authentication (login/signup with JWT <img width="1920" height="1020" alt="Screenshot 2025-08-21 203055" src="https://github.com/user-attachments/assets/2ae4918d-cd06-4e7e-b07c-ae995f623fd4" />
+<img width="1920" height="1020" alt="Screenshot 2025-08-21 203047" src="https://github.com/user-attachments/assets/59a86c0c-b21d-4a99-bdbf-87a2fbd900e6" />
+<img width="1920" height="1020" alt="Screenshot 2025-08-21 203042" src="https://github.com/user-attachments/assets/d8bb1340-1679-484c-84f4-6c5e1fae84bb" />
+<img width="1920" height="1020" alt="Screenshot 2025-08-21 203002" src="https://github.com/user-attachments/assets/79b3ea78-5b6d-47d0-b489-899337fbb83d" />
+<img width="1920" height="1020" alt="Screenshot 2025-08-21 202923" src="https://github.com/user-attachments/assets/b563c59b-7a1d-452d-978b-5def956ab249" />
+<img width="1920" height="1020" alt="Screenshot 2025-08-21 202907" src="https://github.com/user-attachments/assets/18785d44-7606-48b7-bd85-41cfdfac8031" />
+<img width="1920" height="1020" alt="Screenshot 2025-08-21 203113" src="https://github.com/user-attachments/assets/60594f01-97ab-4114-823c-e4188d7883c9" />
+<img width="1920" height="1020" alt="Screenshot 2025-08-21 203103" src="https://github.com/user-attachments/assets/a1dc0341-72c1-4355-99e2-5fcfc28b82b7" />
+s<img width="1920" height="1020" alt="Screenshot 2025-08-21 202736" src="https://github.com/user-attachments/assets/17fe0f8f-2b3d-4ab5-9d58-e0f552da6019" />
+<img width="1920" height="1020" alt="Screenshot 2025-08-20 144306" src="https://github.com/user-attachments/assets/9d05269d-8bf8-4670-866d-eb4e9ba81b75" />
+<img width="1920" height="1020" alt="Screenshot 2025-08-20 134709" src="https://github.com/user-attachments/assets/fa4ec774-4869-4384-92a0-abc019086639" />
+<img width="1920" height="1020" alt="Screenshot 2025-08-21 202858" src="https://github.com/user-attachments/assets/a5cbc2f0-ea01-49c0-9b0d-9835816fd55e" />
+<img width="1920" height="1020" alt="Screenshot 2025-08-21 202833" src="https://github.com/user-attachments/assets/104611d5-cfb3-46a2-9a1d-ae4ca341f85c" />
+ecurity).
 
 Browse jobs with search and filtering (by title, company, location, skills, etc.).
 
