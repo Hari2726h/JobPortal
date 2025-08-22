@@ -1,10 +1,10 @@
 import axios from 'axios';
 
-const JOBS_API_BASE_URL = 'https://8080-cdebacccbffbdbcabdecffaffdabdbbe.premiumproject.examly.io/api/jobs';
-const USERS_API_BASE_URL = 'https://8080-cdebacccbffbdbcabdecffaffdabdbbe.premiumproject.examly.io/api/users';
-const COMPANIES_API_BASE_URL = 'https://8080-cdebacccbffbdbcabdecffaffdabdbbe.premiumproject.examly.io/api/companies';
-const APPLICATIONS_API_BASE_URL = 'https://8080-cdebacccbffbdbcabdecffaffdabdbbe.premiumproject.examly.io/api/applications';
-const MESSAGES_API_BASE_URL = 'https://8080-cdebacccbffbdbcabdecffaffdabdbbe.premiumproject.examly.io/api/messages';
+const JOBS_API_BASE_URL = 'http://localhost:8080/api/jobs';
+const USERS_API_BASE_URL = 'http://localhost:8080/api/users';
+const COMPANIES_API_BASE_URL = 'http://localhost:8080/api/companies';
+const APPLICATIONS_API_BASE_URL = 'http://localhost:8080/api/applications';
+const MESSAGES_API_BASE_URL = 'http://localhost:8080/api/messages';
 
 const jobsApi = axios.create({ baseURL: JOBS_API_BASE_URL, headers: { 'Content-Type': 'application/json' } });
 const usersApi = axios.create({ baseURL: USERS_API_BASE_URL, headers: { 'Content-Type': 'application/json' } });
